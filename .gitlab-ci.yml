@@ -1,0 +1,36 @@
+stages:
+  - compile
+  - test
+  - deploy
+
+build:
+  stage: compile
+  script:
+    - "npm install"
+    - "npm prune"
+    - "npm run build"
+  cache:
+    key: "modysy-miniproject"
+    paths:
+      - node_modules/
+  artifacts:
+    paths:
+      - dist
+    expire_in: 2 days
+
+lint:
+  cache:
+    key: "modysy-miniproject"
+    policy: pull
+    paths:
+      - node_modules/
+  stage: test
+  script:
+    - "npm run lint"
+
+publish:
+  stage: deploy
+  script:
+  - "mkdir -p /server/$CI_PROJECT_PATH/$CI_COMMIT_REF_NAME/"
+  - "cp -r dist/* /server/$CI_PROJECT_PATH/$CI_COMMIT_REF_NAME/"
+  - "echo \"Uploaded files to https://pr.mtv.tu-berlin.de/$CI_PROJECT_PATH/$CI_COMMIT_REF_NAME/\""

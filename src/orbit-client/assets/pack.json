@@ -1,0 +1,46 @@
+{
+  "preload": {
+    "files": [
+      {
+        "type": "image",
+        "key": "planet",
+        "url": "assets/sprites/planet.png"
+      },
+      {
+        "type": "image",
+        "key": "satellite",
+        "url": "assets/sprites/satellite.png"
+      },
+      {
+        "type": "image",
+        "key": "star",
+        "url": "assets/sprites/star.png"
+      },
+      {
+        "type": "image",
+        "key": "moon",
+        "url": "assets/sprites/moon.png"
+      },
+      {
+        "type": "image",
+        "key": "particle",
+        "url": "assets/sprites/particle.png"
+      },
+      {
+        "type": "image",
+        "key": "asteroid",
+        "url": "assets/sprites/asteroid.png"
+      },
+      {
+        "type": "image",
+        "key": "debris",
+        "url": "assets/sprites/debris.png"
+      },
+      {
+        "type": "image",
+        "key": "stars",
+        "url": "assets/sprites/stars.png"
+      }
+    ]
+  }
+}
