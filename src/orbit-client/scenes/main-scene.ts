@@ -33,14 +33,20 @@ export class MainScene extends Phaser.Scene {
             "assets/pack.json",
             "preload"
         );
-    }
+        this.load.image('tiles','./assets/sprites/scifitiles-sheet.png');
+        this.load.tilemapTiledJSON('map','./assets/sprites/lvl.json');   
+     }
 
-    init(): void {
+     init(): void {
         this.data.set('playerScore', 0);
         this.data.set('playerWinningScore', 10);
     }
 
     create(): void {
+      //this.add.image(300,300,"tiles"); sanity check
+      var map = this.make.tilemap({ key: 'map', tileWidth: 32, tileHeight: 32});
+      var tileset = map.addTilesetImage('scifi', 'tiles');
+      var layer = map.createLayer('Tile Layer 1', tileset, 0, 0);
     }
 
     private setupWorld(): void {
