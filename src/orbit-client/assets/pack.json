@@ -3,43 +3,33 @@
     "files": [
       {
         "type": "image",
-        "key": "planet",
-        "url": "assets/sprites/planet.png"
+        "key": "actionfield",
+        "url": "assets/sprites/actionfield.png"
       },
       {
         "type": "image",
-        "key": "satellite",
-        "url": "assets/sprites/satellite.png"
+        "key": "empty",
+        "url": "assets/sprites/empty.png"
       },
       {
         "type": "image",
-        "key": "star",
-        "url": "assets/sprites/star.png"
+        "key": "end",
+        "url": "assets/sprites/end.png"
       },
       {
         "type": "image",
-        "key": "moon",
-        "url": "assets/sprites/moon.png"
+        "key": "start",
+        "url": "assets/sprites/start.png"
       },
       {
         "type": "image",
-        "key": "particle",
-        "url": "assets/sprites/particle.png"
+        "key": "wall",
+        "url": "assets/sprites/wall.png"
       },
       {
         "type": "image",
-        "key": "asteroid",
-        "url": "assets/sprites/asteroid.png"
-      },
-      {
-        "type": "image",
-        "key": "debris",
-        "url": "assets/sprites/debris.png"
-      },
-      {
-        "type": "image",
-        "key": "stars",
-        "url": "assets/sprites/stars.png"
+        "key": "border",
+        "url": "assets/sprites/border.png"
       }
     ]
   }
