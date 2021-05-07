@@ -30,6 +30,21 @@
         "type": "image",
         "key": "border",
         "url": "assets/sprites/border.png"
+      },
+      {
+        "type": "image",
+        "key": "border",
+        "url": "assets/sprites/flame.png"
+      },
+      {
+        "type": "image",
+        "key": "border",
+        "url": "assets/sprites/star32.png"
+      },
+      {
+        "type": "image",
+        "key": "border",
+        "url": "assets/sprites/zombie_character32x32.png"
       }
     ]
   }
