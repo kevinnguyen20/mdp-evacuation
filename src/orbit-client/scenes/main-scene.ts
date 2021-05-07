@@ -1,4 +1,3 @@
-
 export class MainScene extends Phaser.Scene {
 
     private timeAccumulator = 0.0;
@@ -179,13 +178,15 @@ export class MainScene extends Phaser.Scene {
 
 
     private setupWorld(): void {
+        const tmp = 1;
     }
 
     private setupCollision(): void {
+        const tmp = 1;
     }
 
     update(): void {
-        
+        const tmp = 1;
     }
 }
 
