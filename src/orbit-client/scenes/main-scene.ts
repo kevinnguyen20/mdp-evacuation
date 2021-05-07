@@ -8,6 +8,8 @@ export class MainScene extends Phaser.Scene {
     private scoreText;
     private playercounttext;
     private spielerstartpunkt = [];
+    private layer;
+    private preMovePos =[];
 
     constructor() {
         super({
@@ -47,7 +49,8 @@ export class MainScene extends Phaser.Scene {
       this.playerInstances.push(this.playercounttext);
       this.scoreText = this.add.text(16,16, 'Score:0');
       this.spielerstartpunkt = [5,12];
-      var WAHRSCHEINLICHKEITEN = [[[null, null, null , null], [[1, 99, 99], [100, 100, 1], null, null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],     [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],     [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],     [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]], [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [[1,50, 50], [1,50, 50], null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],     [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],     [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]]];
+      this.preMovePos = [400,48];
+      var WAHRSCHEINLICHKEITEN = [[[null, null, null , null], [[1, 99, 99], [100, 100, 1], null, null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],     [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],     [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],     [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]], [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [[1,50, 50], [51,100, 50], null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],     [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],     [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]]];
       var x = this.add.text (30,30, ""+this.spielerstartpunkt[0]+this.spielerstartpunkt[1]);
 
 
@@ -55,8 +58,9 @@ export class MainScene extends Phaser.Scene {
             this.movePlayers(false, -32, layer, map)
             this.spielerstartpunkt [1] = this.spielerstartpunkt [1] - 1;
             x.setText(""+this.spielerstartpunkt);
-          //  var ll = this.add.text (100,100, ''+WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0]][this.spielerstartpunkt[1]]);
-            this.splitCalc(WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0][this.spielerstartpunkt[1]]], player);
+           // var ll = this.add.text (100,100, ''+WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0]][this.spielerstartpunkt[1]]);
+            this.splitCalc(WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0]][this.spielerstartpunkt[1]+1], player);
+            this.preMovePos[0] = this.preMovePos [0]-32;
           });
 
       this.input.keyboard.on ('keydown-D', () =>{
@@ -65,7 +69,8 @@ export class MainScene extends Phaser.Scene {
             //playercounttext.x += 32;
             this.movePlayers(false, +32, layer, map);
             x.setText(""+this.spielerstartpunkt);
-            this.splitCalc(WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0][this.spielerstartpunkt[1]]], player);
+            this.splitCalc(WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0]][this.spielerstartpunkt[1]-1], player);
+            this.preMovePos[0] = this.preMovePos [0]+32;
 
       });
 
@@ -73,7 +78,8 @@ export class MainScene extends Phaser.Scene {
            this.movePlayers(true, +32, layer, map)
            this.spielerstartpunkt [0] = this.spielerstartpunkt [0] - 1;
            x.setText(""+this.spielerstartpunkt);
-           this.splitCalc(WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0][this.spielerstartpunkt[1]]], player);
+           this.splitCalc(WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0]][this.spielerstartpunkt[1]+1], player);
+           this.preMovePos[1] = this.preMovePos [1]+32;
 
       });
 
@@ -81,17 +87,19 @@ export class MainScene extends Phaser.Scene {
             this.movePlayers(true, -32, layer, map)
             this.spielerstartpunkt [0] = this.spielerstartpunkt [0] + 1;
             x.setText(""+this.spielerstartpunkt);
-            this.splitCalc(WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0][this.spielerstartpunkt[1]]], player);
+            this.splitCalc(WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0]][this.spielerstartpunkt[1]-1], player);
+            this.preMovePos[1] = this.preMovePos [1]-32;
+
       });
       
     }
     //Calculates whether the PlayerGroup splits after a PlayerMove and in which directions N,E,S,W, Figur ist die Figur die fuer ein split gecheckt wird, BUG!!!!
     private splitCalc(arr:any, figur:any): void {
-        var nmbr = Phaser.Math.Between(1,100);
+        var nmbr = Phaser.Math.Between(1,150);
         //var txt = this.add.text(100,100, '' +arr);
         for (var i = 0; i<=3; i++){
             if (arr[i] != null)
-              if (nmbr >= arr[i][0] && nmbr <= arr[i][1]){ // WIR KOMMEN NIE IN DIE SCHLEIFE IMMER ARR IST IMMER UNKNOWN
+              if (nmbr >= arr[i][0] && nmbr <= arr[i][1]){ // WIR KOMMEN NIE IN DIE SCHLEIFE,ARR IST IMMER UNKNOWN!!!!
                   this.doSplit(i, figur, arr[i][2]);
               }
         }
@@ -146,16 +154,16 @@ export class MainScene extends Phaser.Scene {
     }
     private doSplit(dir: number, figur:any, percentage: number): void {
         if (dir === 0){
-            this.setFigureAt(figur.x, figur.y-32, percentage);
+            this.setFigureAt(this.preMovePos[0], this.preMovePos[1]-32, percentage);
         }
-        if (dir === 1){
-            this.setFigureAt(figur.x+32, figur.y, percentage);
+        else if (dir === 1){
+            this.setFigureAt(this.preMovePos[0]+32, this.preMovePos[1], percentage);
         }
-        if (dir === 2){
-            this.setFigureAt(figur.x, figur.y+32, percentage);
+        else if (dir === 2){
+            this.setFigureAt(this.preMovePos[0], this.preMovePos[1]+32, percentage);
         }
         else {
-            this.setFigureAt(figur.x-32, figur.y, percentage);
+            this.setFigureAt(this.preMovePos[0], this.preMovePos[1], percentage);
         }
     }
 
@@ -163,7 +171,8 @@ export class MainScene extends Phaser.Scene {
         var player = this.add.image (x,y,'player');
         var tmp = this.playercount - percentage;
         var neueGruppe = this.add.text(x,y, ''+percentage ,{color: '#FF0000' })
-        this.playercount
+        this.playercount = this.playercount - percentage;
+        this.playercounttext.setText(''+this.playercount);
         this.playerInstances.push(neueGruppe);
         this.playerInstances.push (player);
     }
