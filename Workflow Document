@@ -1,1 +1,15 @@
+Dokumentation
+
+Product Backlog
+
+Für die Dokumentation der Tickets, bzw. der Features die wir implementieren verwenden wir ein Product Backlog.
+Dieses dient zum einen der Orientierung für die Devs als auch der Überprüfung unseres Fortschritts.
+
+Contributing 
+
+Für die Devs haben wir ein spezielles Contributing Dokument aufgesetz. Es dient dazu eine einheitliche Vorgehensweise und Struktur für die Entwicklung zu haben. Außerdem beschreibt es wichtige Hinweise, die größere Probleme mit dem Repository verhindern sollen.
+
+Readme
+
+Das Repository beinahltet ebenfalls eine Readme Datei, die im Allgemeinen unser eigentliches Programm beschreibt.
 
