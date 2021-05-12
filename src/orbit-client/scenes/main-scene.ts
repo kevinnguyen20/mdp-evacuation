@@ -1,3 +1,5 @@
+import { TileParser } from "../util/tileParser";
+
 export class MainScene extends Phaser.Scene {
 
     private timeAccumulator = 0.0;
@@ -9,6 +11,7 @@ export class MainScene extends Phaser.Scene {
     private spielerstartpunkt = [];
     private layer;
     private preMovePos =[];
+    private tileParser:TileParser = new TileParser();
 
     constructor() {
         super({
@@ -115,48 +118,35 @@ export class MainScene extends Phaser.Scene {
     // Datentypen von kevinnguyen geändert, optimiert Typsicherheit
     private movePlayers(xory: boolean, pos: number, layer: Phaser.Tilemaps.Tilemap, map:Phaser.Tilemaps.Tilemap): void {
         this.playerInstances.forEach( (element)=> {
+            let tile:Phaser.Tilemaps.Tile = null;
             if (xory === false){
-                const tile = layer.getTileAtWorldXY(element.x+pos, element.y, true); 
-                if (tile.index === 5){
-                    //blocked can't move
-                }
-                else {
-                    //  player.x -= 32;
-                    //  playercounttext.x -= 32;
-                    element.x += pos;
-                    if (tile.index === 3) { //ACTiON FELD HIER NUR BELOHNUNGEN/STERNE, WIRD AUFGESAMMELT UND NORMALER TILE WIRD GEPLACED
-                        map.putTileAt(21, tile.x, tile.y);
-                        this.score+= 1;
-                        this.scoreText.setText('Score:' + this.score);
-                    }
-                    if (tile.index === 73){ // erreicht das rote Ziel, ist nur in links movement, da man auf der map nur von links ans ziel kommt 
-                        map.putTileAt(21, tile.x, tile.y);
-                        this.scoreText.setText('Du hast das Ziel erreicht mit Score:' +this.score);
-                    }
-        
-                }
-            }
-            else {
-                const tile = layer.getTileAtWorldXY(element.x, element.y+pos, true); 
-                if (tile.index === 5){
-                    //blocked can't move
-                }
-                else {                  //  player.x -= 32;
-                    //  playercounttext.x -= 32;
-                    element.y += pos;
-                    if (tile.index === 3) { //ACTiON FELD HIER NUR BELOHNUNGEN/STERNE, WIRD AUFGESAMMELT UND NORMALER TILE WIRD GEPLACED
-                        map.putTileAt(21, tile.x, tile.y);
-                        this.score+= 1;
-                        this.scoreText.setText('Score:' + this.score);
-                    }
-                    if (tile.index === 73){ // erreicht das rote Ziel, ist nur in links movement, da man auf der map nur von links ans ziel kommt 
-                        map.putTileAt(21, tile.x, tile.y);
-                        this.scoreText.setText('Du hast das Ziel erreicht mit Score:' +this.score);
-                    }
-        
-                }
+                tile = layer.getTileAtWorldXY(element.x+pos, element.y, true); 
+            } else {
+                tile = layer.getTileAtWorldXY(element.x, element.y+pos, true); 
             }
 
+            if (this.tileParser.tileIDToAPIID_LVL1(tile.index) === TileParser.WALL_ID){
+                //blocked, can't move, do nothing
+            }
+            else {                  
+                if(xory === false){ element.x += pos; } else { element.y += pos; } // this must be done before the switch, don't know why though
+
+                switch(this.tileParser.tileIDToAPIID_LVL1(tile.index)){
+                    case TileParser.STOP_ID: {
+                        map.putTileAt(21, tile.x, tile.y);
+                        this.scoreText.setText('Du hast das Ziel erreicht mit Score:' +this.score);
+                        break;
+                    }
+
+                    case TileParser.ACTIONFIELD_ID: {
+                        map.putTileAt(21, tile.x, tile.y);
+                        this.score+= 1;
+                        this.scoreText.setText('Score:' + this.score);
+                        break;
+                    }
+                    default: break;
+                }
+            }
         });
     }
     private doSplit(dir: number /*, figur:any*/ , percentage: number): void {
