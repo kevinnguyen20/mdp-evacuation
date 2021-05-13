@@ -8,11 +8,11 @@ export class MainScene extends Phaser.Scene {
     private score = 0;
     private scoreText;
     private playercounttext;
-    private spielerstartpunkt = [];
+    private queenPos = [];
     private layer;
     private preMovePos =[];
     private tileParser:TileParser = new TileParser();
-    private queenAlive =false;
+    private queenAlive =true;
 
     constructor() {
         super({
@@ -56,19 +56,19 @@ export class MainScene extends Phaser.Scene {
         this.playerInstances.push(player);
         this.playerInstances.push(this.playercounttext);
         this.scoreText = this.add.text(16,16, 'Score:0');
-        this.spielerstartpunkt = [5,12];
+        this.queenPos = [5,12];
         this.preMovePos = [400,48];
         const WAHRSCHEINLICHKEITEN = [[[null, null, null , null], [[1, 99, 99], [100, 100, 1], null, null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],     [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],     [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],     [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]], [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [[1,50, 50], [51,100, 50], null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],     [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],     [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]]];
-        const x = this.add.text (30,30, ""+this.spielerstartpunkt[0]+this.spielerstartpunkt[1]);
+        const x = this.add.text (30,30, ""+this.queenPos[0]+this.queenPos[1]);
 
 
         this.input.keyboard.on ('keydown-A', () =>{
             if (this.queenAlive){
             this.movePlayers(false, -32, layer_new, map)
-            this.spielerstartpunkt [1] = this.spielerstartpunkt [1] - 1;
-            x.setText(""+this.spielerstartpunkt);
-            // var ll = this.add.text (100,100, ''+WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0]][this.spielerstartpunkt[1]]);
-            this.splitCalc(WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0]][this.spielerstartpunkt[1]+1], player);
+            this.queenPos [1] = this.queenPos [1] - 1;
+            x.setText(""+this.queenPos);
+            // var ll = this.add.text (100,100, ''+WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]]);
+            this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]+1], player);
             this.preMovePos[0] = this.preMovePos [0]-32;
             }
         });
@@ -76,11 +76,11 @@ export class MainScene extends Phaser.Scene {
         this.input.keyboard.on ('keydown-D', () =>{
             //player.x += 32;
             if (this.queenAlive){
-            this.spielerstartpunkt [1] = this.spielerstartpunkt [1] + 1;
+            this.queenPos [1] = this.queenPos [1] + 1;
             //playercounttext.x += 32;
             this.movePlayers(false, +32, layer_new, map);
-            x.setText(""+this.spielerstartpunkt);
-            this.splitCalc(WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0]][this.spielerstartpunkt[1]-1], player);
+            x.setText(""+this.queenPos);
+            this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]-1], player);
             this.preMovePos[0] = this.preMovePos [0]+32;
             }
 
@@ -89,9 +89,9 @@ export class MainScene extends Phaser.Scene {
         this.input.keyboard.on ('keydown-S', () =>{
             if (this.queenAlive){
             this.movePlayers(true, +32, layer_new, map)
-            this.spielerstartpunkt [0] = this.spielerstartpunkt [0] - 1;
-            x.setText(""+this.spielerstartpunkt);
-            this.splitCalc(WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0]][this.spielerstartpunkt[1]+1], player);
+            this.queenPos [0] = this.queenPos [0] - 1;
+            x.setText(""+this.queenPos);
+            this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]+1], player);
             this.preMovePos[1] = this.preMovePos [1]+32;
             }
 
@@ -100,9 +100,9 @@ export class MainScene extends Phaser.Scene {
         this.input.keyboard.on ('keydown-W', () =>{
             if (this.queenAlive){
             this.movePlayers(true, -32, layer_new, map)
-            this.spielerstartpunkt [0] = this.spielerstartpunkt [0] + 1;
-            x.setText(""+this.spielerstartpunkt);
-            this.splitCalc(WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0]][this.spielerstartpunkt[1]-1], player);
+            this.queenPos [0] = this.queenPos [0] + 1;
+            x.setText(""+this.queenPos);
+            this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]-1], player);
             this.preMovePos[1] = this.preMovePos [1]-32;
             }
 
