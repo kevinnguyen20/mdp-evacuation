@@ -13,6 +13,7 @@ export class MainScene extends Phaser.Scene {
     private preMovePos =[];
     private tileParser:TileParser = new TileParser();
     private queenAlive =true;
+    private queen;
 
     constructor() {
         super({
@@ -33,7 +34,7 @@ export class MainScene extends Phaser.Scene {
         );
         this.load.image('tiles','./assets/sprites/scifitiles-sheet.png');
         this.load.tilemapTiledJSON('map','./assets/sprites/lvl.json');   
-        this.load.image('player', './assets/sprites/boar.png');
+        this.load.image('queen', './assets/sprites/boar.png');
     }
 
     init(): void {
@@ -50,10 +51,10 @@ export class MainScene extends Phaser.Scene {
         // von kevinnguyen hinzugefügt, optimiert Typsicherheit
         const layer_new = layer as unknown as Phaser.Tilemaps.Tilemap;
 
-        const player = this.add.image (400,48,'player');
+        this.queen = this.add.image (400,48,'queen');
         this.playercount = 100;
         this.playercounttext = this.add.text (400, 48, '100' ,{color: '#FF0000' })
-        this.playerInstances.push(player);
+        this.playerInstances.push(this.queen);
         this.playerInstances.push(this.playercounttext);
         this.scoreText = this.add.text(16,16, 'Score:0');
         this.queenPos = [5,12];
@@ -63,51 +64,66 @@ export class MainScene extends Phaser.Scene {
 
 
         this.input.keyboard.on ('keydown-A', () =>{
-            if (this.queenAlive){
-            this.movePlayers(false, -32, layer_new, map)
-            this.queenPos [1] = this.queenPos [1] - 1;
-            x.setText(""+this.queenPos);
-            // var ll = this.add.text (100,100, ''+WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]]);
-            this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]+1], player);
-            this.preMovePos[0] = this.preMovePos [0]-32;
+            if (this.queenAlive && this.queenValidMoveCheck(false, -32, layer_new)){ //if queen alive and queen can move to tile then perform move for rest 
+                this.movePlayers(false, -32, layer_new, map)
+                this.queenPos [1] = this.queenPos [1] - 1;
+                x.setText(""+this.queenPos);
+                // var ll = this.add.text (100,100, ''+WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]]);
+                this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]+1], this.queen);
+                this.preMovePos[0] = this.preMovePos [0]-32;
             }
         });
 
         this.input.keyboard.on ('keydown-D', () =>{
-            //player.x += 32;
-            if (this.queenAlive){
-            this.queenPos [1] = this.queenPos [1] + 1;
-            //playercounttext.x += 32;
-            this.movePlayers(false, +32, layer_new, map);
-            x.setText(""+this.queenPos);
-            this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]-1], player);
-            this.preMovePos[0] = this.preMovePos [0]+32;
+            //queen.x += 32;
+            if (this.queenAlive && this.queenValidMoveCheck(false, +32, layer_new)){
+                this.queenPos [1] = this.queenPos [1] + 1;
+                //playercounttext.x += 32;
+                this.movePlayers(false, +32, layer_new, map);
+                x.setText(""+this.queenPos);
+                this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]-1], this.queen);
+                this.preMovePos[0] = this.preMovePos [0]+32;
             }
 
         });
 
         this.input.keyboard.on ('keydown-S', () =>{
-            if (this.queenAlive){
-            this.movePlayers(true, +32, layer_new, map)
-            this.queenPos [0] = this.queenPos [0] - 1;
-            x.setText(""+this.queenPos);
-            this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]+1], player);
-            this.preMovePos[1] = this.preMovePos [1]+32;
+            if (this.queenAlive && this.queenValidMoveCheck(true, +32, layer_new)){
+                this.movePlayers(true, +32, layer_new, map)
+                this.queenPos [0] = this.queenPos [0] - 1;
+                x.setText(""+this.queenPos);
+                this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]+1], this.queen);
+                this.preMovePos[1] = this.preMovePos [1]+32;
             }
 
         });
 
         this.input.keyboard.on ('keydown-W', () =>{
-            if (this.queenAlive){
-            this.movePlayers(true, -32, layer_new, map)
-            this.queenPos [0] = this.queenPos [0] + 1;
-            x.setText(""+this.queenPos);
-            this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]-1], player);
-            this.preMovePos[1] = this.preMovePos [1]-32;
+            if (this.queenAlive && this.queenValidMoveCheck(true, -32, layer_new)){
+                this.movePlayers(true, -32, layer_new, map)
+                this.queenPos [0] = this.queenPos [0] + 1;
+                x.setText(""+this.queenPos);
+                this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]-1], this.queen);
+                this.preMovePos[1] = this.preMovePos [1]-32;
             }
 
         });
       
+    }
+    //checks whether the Queen can move in the desired direction of the player
+    private queenValidMoveCheck (xory: boolean, pos:number, layer: Phaser.Tilemaps.Tilemap): boolean{
+        let tile:Phaser.Tilemaps.Tile = null;
+        if (xory === false){
+            tile = layer.getTileAtWorldXY(this.queen.x+pos, this.queen.y, true); 
+        } else {
+            tile = layer.getTileAtWorldXY(this.queen.x, this.queen.y+pos, true); 
+        }
+
+        if (this.tileParser.tileIDToAPIID_LVL1(tile.index) === TileParser.WALL_ID){
+            //blocked, can't move, do nothing
+            return false;
+        }
+        return true;
     }
     //Calculates whether the PlayerGroup splits after a PlayerMove and in which directions N,E,S,W, Figur ist die Figur die fuer ein split gecheckt wird, BUG!!!!
     // Datentypen von kevinnguyen geändert, optimiert Typsicherheit
@@ -174,13 +190,13 @@ export class MainScene extends Phaser.Scene {
     }
 
     private setFigureAt(x: number, y: number, percentage: number): void {
-        const player = this.add.image (x,y,'player');
+        const queen = this.add.image (x,y,'queen');
         // const tmp = this.playercount - percentage;
         const neueGruppe = this.add.text(x,y, ''+percentage ,{color: '#FF0000' })
         this.playercount = this.playercount - percentage;
         this.playercounttext.setText(''+this.playercount);
         this.playerInstances.push(neueGruppe);
-        this.playerInstances.push (player);
+        this.playerInstances.push (queen);
     }
 
 
