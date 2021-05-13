@@ -12,6 +12,7 @@ export class MainScene extends Phaser.Scene {
     private layer;
     private preMovePos =[];
     private tileParser:TileParser = new TileParser();
+    private queenAlive =false;
 
     constructor() {
         super({
@@ -62,40 +63,48 @@ export class MainScene extends Phaser.Scene {
 
 
         this.input.keyboard.on ('keydown-A', () =>{
+            if (this.queenAlive){
             this.movePlayers(false, -32, layer_new, map)
             this.spielerstartpunkt [1] = this.spielerstartpunkt [1] - 1;
             x.setText(""+this.spielerstartpunkt);
             // var ll = this.add.text (100,100, ''+WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0]][this.spielerstartpunkt[1]]);
             this.splitCalc(WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0]][this.spielerstartpunkt[1]+1], player);
             this.preMovePos[0] = this.preMovePos [0]-32;
+            }
         });
 
         this.input.keyboard.on ('keydown-D', () =>{
             //player.x += 32;
+            if (this.queenAlive){
             this.spielerstartpunkt [1] = this.spielerstartpunkt [1] + 1;
             //playercounttext.x += 32;
             this.movePlayers(false, +32, layer_new, map);
             x.setText(""+this.spielerstartpunkt);
             this.splitCalc(WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0]][this.spielerstartpunkt[1]-1], player);
             this.preMovePos[0] = this.preMovePos [0]+32;
+            }
 
         });
 
         this.input.keyboard.on ('keydown-S', () =>{
+            if (this.queenAlive){
             this.movePlayers(true, +32, layer_new, map)
             this.spielerstartpunkt [0] = this.spielerstartpunkt [0] - 1;
             x.setText(""+this.spielerstartpunkt);
             this.splitCalc(WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0]][this.spielerstartpunkt[1]+1], player);
             this.preMovePos[1] = this.preMovePos [1]+32;
+            }
 
         });
 
         this.input.keyboard.on ('keydown-W', () =>{
+            if (this.queenAlive){
             this.movePlayers(true, -32, layer_new, map)
             this.spielerstartpunkt [0] = this.spielerstartpunkt [0] + 1;
             x.setText(""+this.spielerstartpunkt);
             this.splitCalc(WAHRSCHEINLICHKEITEN[this.spielerstartpunkt[0]][this.spielerstartpunkt[1]-1], player);
             this.preMovePos[1] = this.preMovePos [1]-32;
+            }
 
         });
       
