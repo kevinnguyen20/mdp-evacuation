@@ -17,15 +17,10 @@ export class TileParser {
      * Maps the given Tile_ID of Level 1 to the general API_ID  
      */
     public tileIDToAPIID_LVL1(tileID: number) {
-        if(tileID === 5){
-            return TileParser.WALL_ID;
-        }
-
+        if(tileID === 5)  return TileParser.WALL_ID;
         if(tileID === 63) return TileParser.START_ID;
-        
         if(tileID === 73) return TileParser.STOP_ID;
-
-        if(tileID === 3) return TileParser.ACTIONFIELD_ID;
+        if(tileID === 3)  return TileParser.ACTIONFIELD_ID;
     }
 
     
