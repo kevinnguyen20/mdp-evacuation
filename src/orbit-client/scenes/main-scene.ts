@@ -225,17 +225,7 @@ export class MainScene extends Phaser.Scene {
         this.playerInstances.push (queen);
     }
 
-
-    private setupWorld(): void {
-        console.log("[0] setupWorld\n")
-    }
-
-    private setupCollision(): void {
-        console.log("[0] setupCollision\n")
-    }
-
     update(): void {
         console.log("[0] update\n")
     }
 }
-
