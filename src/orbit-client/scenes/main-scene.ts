@@ -2,18 +2,20 @@ import { TileParser } from "../util/tileParser";
 
 export class MainScene extends Phaser.Scene {
 
-    private timeAccumulator = 0.0;
+    private tileParser:TileParser = new TileParser();
+
     private playercount = 100;
     private playerInstances = [];
+    private playercounttext;
+
     private score = 0;
     private scoreText;
-    private playercounttext;
+
     private queenPos = [];
-    private layer;
-    private preMovePos =[];
-    private tileParser:TileParser = new TileParser();
-    private queenAlive =true;
+    private queenAlive = true;
     private queen;
+
+    private preMovePos = [];
 
     constructor() {
         super({
