@@ -14,9 +14,9 @@ export class MainScene extends Phaser.Scene {
     private queenPos = [];
     private queenAlive = true;
     private queen = null;
+    private queenPositionText = null;
 
     private preMovePos = [];
-
     
     private WAHRSCHEINLICHKEITEN = [
         [[null, null, null , null], [[1, 99, 99], [100, 100, 1], null, null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
@@ -42,6 +42,8 @@ export class MainScene extends Phaser.Scene {
     gameRestart(): void {
         this.scene.restart();
     }
+
+
 
     preload(): void {
         this.load.pack(
@@ -78,7 +80,6 @@ export class MainScene extends Phaser.Scene {
             0,              // x
             0               // y
         );
-        const layer_new = layer as unknown as Phaser.Tilemaps.Tilemap;
 
         this.queen = this.add.image(400, 48,'queen');
         this.queenPos = [5,12];
@@ -103,19 +104,34 @@ export class MainScene extends Phaser.Scene {
 
         this.preMovePos = [400,48];
         
-        const queenPositionText = this.add.text(
+        this.queenPositionText = this.add.text(
             450, 
             45, 
             this.queenPos[0] + "," + this.queenPos[1]
         );
 
+        /*********************************************
+         *********************************************
+         *********************************************
+          x ^
+            |
+            |
+            |
+            |
+            |
+            |
+            |________________________> y
+            0
+        **********************************************
+        **********************************************
+        **********************************************/
 
         this.input.keyboard.on('keydown-A', () =>{
-            if(this.queenAlive && this.queenValidMoveCheck(false, -32, layer_new)) {
+            if(this.queenAlive && this.queenValidMoveCheck(false, -32, layer)) {
                 
                 this.queenPos[1] -= 1;
-                this.movePlayers(false, -32, layer_new, this.map);
-                queenPositionText.setText("" + this.queenPos);
+                this.movePlayers(false, -32, layer, this.map);
+                this.queenPositionText.setText("" + this.queenPos);
 
                 this.splitCalc(this.WAHRSCHEINLICHKEITEN[
                     this.queenPos[0]
@@ -128,11 +144,11 @@ export class MainScene extends Phaser.Scene {
         });
 
         this.input.keyboard.on('keydown-D', () =>{
-            if (this.queenAlive && this.queenValidMoveCheck(false, +32, layer_new)){
+            if (this.queenAlive && this.queenValidMoveCheck(false, +32, layer)){
 
                 this.queenPos[1] += 1;
-                this.movePlayers(false, +32, layer_new, this.map);
-                queenPositionText.setText("" + this.queenPos);
+                this.movePlayers(false, +32, layer, this.map);
+                this.queenPositionText.setText("" + this.queenPos);
 
                 this.splitCalc(this.WAHRSCHEINLICHKEITEN[
                     this.queenPos[0]
@@ -145,11 +161,11 @@ export class MainScene extends Phaser.Scene {
         });
 
         this.input.keyboard.on('keydown-S', () =>{
-            if (this.queenAlive && this.queenValidMoveCheck(true, +32, layer_new)){
+            if (this.queenAlive && this.queenValidMoveCheck(true, +32, layer)){
 
-                this.movePlayers(true, +32, layer_new, this.map)
+                this.movePlayers(true, +32, layer, this.map)
                 this.queenPos[0] -= 1;
-                queenPositionText.setText("" + this.queenPos);
+                this.queenPositionText.setText("" + this.queenPos);
 
                 this.splitCalc(this.WAHRSCHEINLICHKEITEN[
                     this.queenPos[0]
@@ -162,11 +178,11 @@ export class MainScene extends Phaser.Scene {
         });
 
         this.input.keyboard.on('keydown-W', () =>{
-            if (this.queenAlive && this.queenValidMoveCheck(true, -32, layer_new)){
+            if (this.queenAlive && this.queenValidMoveCheck(true, -32, layer)){
 
-                this.movePlayers(true, -32, layer_new, this.map)
+                this.movePlayers(true, -32, layer, this.map)
                 this.queenPos[0] += 1;
-                queenPositionText.setText("" + this.queenPos);
+                this.queenPositionText.setText("" + this.queenPos);
 
                 this.splitCalc(this.WAHRSCHEINLICHKEITEN[
                     this.queenPos[0]
@@ -188,19 +204,17 @@ export class MainScene extends Phaser.Scene {
      * @returns true if the move is valid, false if not
      */
 
-    private queenValidMoveCheck (xory: boolean, pos:number, layer: Phaser.Tilemaps.Tilemap): boolean{
-        let tile:Phaser.Tilemaps.Tile = null;
-        if (xory === false){
+    private queenValidMoveCheck(xory: boolean, pos:number, layer: Phaser.Tilemaps.Tilemap): boolean {
+        let tile: Phaser.Tilemaps.Tile = null;
+        if(xory === false) 
             tile = layer.getTileAtWorldXY(this.queen.x+pos, this.queen.y, true); 
-        } else {
+        else 
             tile = layer.getTileAtWorldXY(this.queen.x, this.queen.y+pos, true); 
-        }
 
-        if (this.tileParser.tileIDToAPIID_LVL1(tile.index) === TileParser.WALL_ID){
-            //blocked, can't move, do nothing
-            return false;
-        }
-        return true;
+        if(this.tileParser.tileIDToAPIID_LVL1(tile.index) === TileParser.WALL_ID) 
+            return false; //blocked, can't move, do nothing
+        else
+            return true;
     }
 
     // Calculates whether the PlayerGroup splits after a PlayerMove and in which directions N,E,S,W, Figur ist die Figur die fuer ein split gecheckt wird, BUG!!!!
@@ -293,6 +307,6 @@ export class MainScene extends Phaser.Scene {
 
 
     update(): void {
-        console.log("Hi");
+        console.log();
     }
 }
