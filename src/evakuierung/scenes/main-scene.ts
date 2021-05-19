@@ -123,7 +123,7 @@ export class MainScene extends Phaser.Scene {
         this.playercount = 8;
         this.playerInstances.push(this.queen);
         this.playercounttext = this.add.text(
-            400,                    // x
+            365,                    // x
             48,                     // y
             '8',                    // text
             {
@@ -133,7 +133,7 @@ export class MainScene extends Phaser.Scene {
         this.playerInstances.push(this.playercounttext);
 
         this.scoreText = this.add.text(
-            450,
+            415,
             30, 
             'Score: ' + this.score
         );
@@ -141,7 +141,7 @@ export class MainScene extends Phaser.Scene {
         this.preMovePos = [400,48];
         
         this.queenPositionText = this.add.text(
-            450, 
+            415, 
             45, 
             this.queenPos[0] + "," + this.queenPos[1]
         );
@@ -273,7 +273,7 @@ export class MainScene extends Phaser.Scene {
                 switch(this.tileParser.tileIDToAPIID_LVL1(tile.index)){
                     case TileParser.STOP_ID:
                         map.putTileAt(21, tile.x, tile.y);
-                        this.scoreText.setText('Your penis is grown by ' + this.score + " cm!");
+                        this.scoreText.setText('Your final score: ' + this.score + "!");
                         this.input.keyboard.enabled = false;
                         break;
 

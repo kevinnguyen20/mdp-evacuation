@@ -3,10 +3,10 @@ import {MainScene} from "./scenes/main-scene";
 import {GuiScene} from "./scenes/gui-scene";
 
 const config: Phaser.Types.Core.GameConfig = {
-    width: 800,
-    height: 600,
+    width: 600, // CHANGED
+    height: 480,    // CHANGED
     scale: {
-        mode: Phaser.Scale.RESIZE,
+        mode: Phaser.Scale.FIT, // CHANGED
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
     scene: [MainScene, GuiScene],
