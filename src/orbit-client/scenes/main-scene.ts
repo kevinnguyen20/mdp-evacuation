@@ -29,6 +29,8 @@ export class MainScene extends Phaser.Scene {
         });
     }
 
+
+
     gameRestart(): void {
         this.scene.restart();
     }
@@ -45,10 +47,14 @@ export class MainScene extends Phaser.Scene {
         this.load.image('queen', './assets/sprites/boar.png');
     }
 
+
+
     init(): void {
         this.data.set('playerScore', 0);
         this.data.set('playerWinningScore', 10);
     }
+
+
 
     create(): void {
         const map = this.make.tilemap({
@@ -258,6 +264,8 @@ export class MainScene extends Phaser.Scene {
         this.playerInstances.push (queen);
     }
 
+
+    
     update(): void {
         console.log("[0] update\n")
     }
