@@ -85,7 +85,7 @@ export class MainScene extends Phaser.Scene {
     /*********************************************
     -------------FOR GAMESCREEN-------------------
     **********************************************
-    
+
     0 _______________________ x
     |
     |
@@ -224,7 +224,6 @@ export class MainScene extends Phaser.Scene {
      * @param layer the layer we're operating on
      * @returns true if the move is valid, false if not
      */
-
     private queenValidMoveCheck(xory: boolean, pos:number, layer: Phaser.Tilemaps.Tilemap): boolean {
         let tile: Phaser.Tilemaps.Tile = null;
         if(xory === false) 
@@ -238,15 +237,12 @@ export class MainScene extends Phaser.Scene {
             return true;
     }
 
-    // Calculates whether the PlayerGroup splits after a PlayerMove and in which directions N,E,S,W, Figur ist die Figur die fuer ein split gecheckt wird, BUG!!!!
     private splitCalc(arr:number[][]): void {
         const nmbr = Phaser.Math.Between(1,150);
-        for (let i = 0; i<=3; i++){
-            if (arr[i] != null)
-                if (nmbr >= arr[i][0] && nmbr <= arr[i][1]){ // WIR KOMMEN NIE IN DIE SCHLEIFE,ARR IST IMMER UNKNOWN!!!!
+        for(let i = 0; i<=3; i++)
+            if(arr[i] != null)
+                if(nmbr>=arr[i][0] && nmbr<=arr[i][1])
                     this.doSplit(i, arr[i][2]);
-                }
-        }
     }
 
     /**
@@ -297,30 +293,36 @@ export class MainScene extends Phaser.Scene {
 
     /**
      * 
-     * @param direction the direction of the movement - 0 (down), 1 (right), 2 (up)
+     * @param direction the direction of the movement - 0 (up), 1 (right), 2 (down), 3 (left)
      * @param percentage 
      */
     private doSplit(direction: number, percentage: number): void {
-        if (direction === 0){
-            this.setFigureAt(this.preMovePos[0], this.preMovePos[1]-32, percentage);
-        }
-        else if (direction === 1){
-            this.setFigureAt(this.preMovePos[0]+32, this.preMovePos[1], percentage);
-        }
-        else if (direction === 2){
-            this.setFigureAt(this.preMovePos[0], this.preMovePos[1]+32, percentage);
-        }
-        else {
-            this.setFigureAt(this.preMovePos[0], this.preMovePos[1], percentage);
-        }
+        if (direction === 0)
+            this.setFigureAt(this.preMovePos[0], this.preMovePos[1] - 32, percentage);
+
+        else if (direction === 1)
+            this.setFigureAt(this.preMovePos[0] + 32, this.preMovePos[1], percentage);
+
+        else if (direction === 2)
+            this.setFigureAt(this.preMovePos[0], this.preMovePos[1] + 32, percentage);
+
+        else
+            this.setFigureAt(this.preMovePos[0] - 32, this.preMovePos[1], percentage);
     }
 
     private setFigureAt(x: number, y: number, percentage: number): void {
         const queen = this.add.image (x, y, 'queen');
-        // const tmp = this.playercount - percentage;
-        const neueGruppe = this.add.text(x, y, '' + percentage , {color: '#FF0000'})
-        this.playercount = this.playercount - percentage;
-        this.playercounttext.setText(''+this.playercount);
+        const neueGruppe = this.add.text(
+            x, 
+            y, 
+            '' + percentage, 
+            {
+                color: '#FF0000'
+            }
+        );
+
+        this.playercount -= percentage;
+        this.playercounttext.setText('' + this.playercount);
         this.playerInstances.push(neueGruppe);
         this.playerInstances.push (queen);
     }
