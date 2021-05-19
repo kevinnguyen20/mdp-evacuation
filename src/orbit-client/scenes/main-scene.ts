@@ -44,7 +44,6 @@ export class MainScene extends Phaser.Scene {
         this.data.set('playerWinningScore', 10);
     }
 
-    //THE SPRITES ARE FILLERS!
     create(): void {
         const map = this.make.tilemap({
             key: 'map',
@@ -54,10 +53,10 @@ export class MainScene extends Phaser.Scene {
 
         const tileset = map.addTilesetImage('scifi', 'tiles');
         const layer = map.createLayer(
-            'Tile Layer 1', 
-            tileset, 
-            0, 
-            0
+            'Tile Layer 1', // layerID
+            tileset,        // tileset
+            0,              // x
+            0               // y
         );
         const layer_new = layer as unknown as Phaser.Tilemaps.Tilemap;
 
