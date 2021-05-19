@@ -117,8 +117,8 @@ export class MainScene extends Phaser.Scene {
             0               // y
         );
 
-        this.queen = this.add.image(48, 176,'queen');
-        this.queenPos = [1,1];
+        this.queen = this.add.image(400, 48,'queen');
+        this.queenPos = [5,12];
 
         this.playercount = 8;
         this.playerInstances.push(this.queen);
