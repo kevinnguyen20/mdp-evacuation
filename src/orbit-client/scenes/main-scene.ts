@@ -17,6 +17,12 @@ export class MainScene extends Phaser.Scene {
 
     private preMovePos = [];
 
+    //#########################################//
+    // CHANGE THE FOLLOWIG VALUE IF DESIRED    //
+    //#########################################//
+    private scaleFactor = 32;
+    //#########################################//
+
     constructor() {
         super({
             key: "MainScene"
@@ -60,12 +66,19 @@ export class MainScene extends Phaser.Scene {
         );
         const layer_new = layer as unknown as Phaser.Tilemaps.Tilemap;
 
-        this.queen = this.add.image (400, 48,'queen');
+        this.queen = this.add.image(400, 48,'queen');
         this.queenPos = [5,12];
 
         this.playercount = 8;
         this.playerInstances.push(this.queen);
-        this.playercounttext = this.add.text (400, 48, '8', {color: '#FF0000' })
+        this.playercounttext = this.add.text(
+            400,                    // x
+            48,                     // y
+            '8',                    // text
+            {
+                color: '#FF0000'    // style
+            }
+        )
         this.playerInstances.push(this.playercounttext);
 
         this.scoreText = this.add.text(450,30, 'Score: ' + this.score);
