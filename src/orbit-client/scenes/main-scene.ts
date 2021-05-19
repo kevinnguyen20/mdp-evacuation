@@ -9,13 +9,26 @@ export class MainScene extends Phaser.Scene {
     private playercounttext;
 
     private score = 0;
-    private scoreText;
+    private scoreText = null;
 
     private queenPos = [];
     private queenAlive = true;
-    private queen;
+    private queen = null;
 
     private preMovePos = [];
+
+    
+    private WAHRSCHEINLICHKEITEN = [
+        [[null, null, null , null], [[1, 99, 99], [100, 100, 1], null, null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
+        [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
+        [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
+        [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
+        [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [[1,50, 50], [51,100, 50], null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
+        [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
+        [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]]
+    ];
+
+    private map = null;
 
 
     constructor() {
@@ -52,14 +65,14 @@ export class MainScene extends Phaser.Scene {
 
 
     create(): void {
-        const map = this.make.tilemap({
+        this.map = this.make.tilemap({
             key: 'map',
             tileWidth: 32,
             tileHeight: 32
         });
 
-        const tileset = map.addTilesetImage('scifi', 'tiles');
-        const layer = map.createLayer(
+        const tileset = this.map.addTilesetImage('scifi', 'tiles');
+        const layer = this.map.createLayer(
             'Tile Layer 1', // layerID
             tileset,        // tileset
             0,              // x
@@ -90,15 +103,6 @@ export class MainScene extends Phaser.Scene {
 
         this.preMovePos = [400,48];
         
-        const WAHRSCHEINLICHKEITEN = [
-            [[null, null, null , null], [[1, 99, 99], [100, 100, 1], null, null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
-            [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
-            [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
-            [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
-            [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [[1,50, 50], [51,100, 50], null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
-            [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
-            [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]]
-        ];
         const queenPositionText = this.add.text(
             450, 
             45, 
@@ -106,49 +110,73 @@ export class MainScene extends Phaser.Scene {
         );
 
 
-        this.input.keyboard.on ('keydown-A', () =>{
+        this.input.keyboard.on('keydown-A', () =>{
             if(this.queenAlive && this.queenValidMoveCheck(false, -32, layer_new)) {
+                
                 this.queenPos[1] -= 1;
-                this.movePlayers(false, -32, layer_new, map);
+                this.movePlayers(false, -32, layer_new, this.map);
                 queenPositionText.setText("" + this.queenPos);
-                this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1] + 1], this.queen);
+
+                this.splitCalc(this.WAHRSCHEINLICHKEITEN[
+                    this.queenPos[0]
+                ][
+                    this.queenPos[1] + 1
+                ]);
+
                 this.preMovePos[0] -= 32;
             }
         });
 
-        this.input.keyboard.on ('keydown-D', () =>{
+        this.input.keyboard.on('keydown-D', () =>{
             if (this.queenAlive && this.queenValidMoveCheck(false, +32, layer_new)){
-                this.queenPos [1] += 1;
-                this.movePlayers(false, +32, layer_new, map);
-                queenPositionText.setText(""+this.queenPos);
-                this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1] - 1], this.queen);
+
+                this.queenPos[1] += 1;
+                this.movePlayers(false, +32, layer_new, this.map);
+                queenPositionText.setText("" + this.queenPos);
+
+                this.splitCalc(this.WAHRSCHEINLICHKEITEN[
+                    this.queenPos[0]
+                ][
+                    this.queenPos[1] - 1
+                ]);
+
                 this.preMovePos[0] += 32;
             }
-
         });
 
-        this.input.keyboard.on ('keydown-S', () =>{
+        this.input.keyboard.on('keydown-S', () =>{
             if (this.queenAlive && this.queenValidMoveCheck(true, +32, layer_new)){
-                this.movePlayers(true, +32, layer_new, map)
-                this.queenPos [0] = this.queenPos [0] - 1;      // queen moves one field down the y axis
-                queenPositionText.setText(""+this.queenPos);
-                this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]+1], this.queen);
-                this.preMovePos[1] = this.preMovePos [1]+32;
-            }
 
+                this.movePlayers(true, +32, layer_new, this.map)
+                this.queenPos[0] -= 1;
+                queenPositionText.setText("" + this.queenPos);
+
+                this.splitCalc(this.WAHRSCHEINLICHKEITEN[
+                    this.queenPos[0]
+                ][
+                    this.queenPos[1] + 1
+                ]);
+
+                this.preMovePos[1] += 32;
+            }
         });
 
-        this.input.keyboard.on ('keydown-W', () =>{
+        this.input.keyboard.on('keydown-W', () =>{
             if (this.queenAlive && this.queenValidMoveCheck(true, -32, layer_new)){
-                this.movePlayers(true, -32, layer_new, map)
-                this.queenPos [0] = this.queenPos [0] + 1;      // queen moves one field up the y axis
-                queenPositionText.setText(""+this.queenPos);
-                this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]-1], this.queen);
-                this.preMovePos[1] = this.preMovePos [1]-32;
-            }
 
+                this.movePlayers(true, -32, layer_new, this.map)
+                this.queenPos[0] += 1;
+                queenPositionText.setText("" + this.queenPos);
+
+                this.splitCalc(this.WAHRSCHEINLICHKEITEN[
+                    this.queenPos[0]
+                ][
+                    this.queenPos[1] - 1
+                ]);
+
+                this.preMovePos[1] -= 32;
+            }
         });
-      
     }
 
     /**
@@ -176,7 +204,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     // Calculates whether the PlayerGroup splits after a PlayerMove and in which directions N,E,S,W, Figur ist die Figur die fuer ein split gecheckt wird, BUG!!!!
-    private splitCalc(arr:number[][], figur:Phaser.GameObjects.Image): void {
+    private splitCalc(arr:number[][]): void {
         const nmbr = Phaser.Math.Between(1,150);
         for (let i = 0; i<=3; i++){
             if (arr[i] != null)
@@ -265,6 +293,6 @@ export class MainScene extends Phaser.Scene {
 
 
     update(): void {
-        console.log("[0] update\n")
+        console.log("Hi");
     }
 }
