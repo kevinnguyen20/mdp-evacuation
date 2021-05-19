@@ -117,8 +117,8 @@ export class MainScene extends Phaser.Scene {
             0               // y
         );
 
-        this.queen = this.add.image(400, 48,'queen');
-        this.queenPos = [5,12];
+        this.queen = this.add.image(48, 176,'queen');
+        this.queenPos = [1,1];
 
         this.playercount = 8;
         this.playerInstances.push(this.queen);
@@ -184,8 +184,8 @@ export class MainScene extends Phaser.Scene {
         this.input.keyboard.on('keydown-S', () =>{
             if (this.queenAlive && this.queenValidMoveCheck(true, +32, layer)){
 
-                this.movePlayers(true, +32, layer, this.map)
                 this.queenPos[0] -= 1;
+                this.movePlayers(true, +32, layer, this.map)
                 this.queenPositionText.setText("" + this.queenPos);
 
                 this.splitCalc(this.WAHRSCHEINLICHKEITEN[
@@ -201,8 +201,8 @@ export class MainScene extends Phaser.Scene {
         this.input.keyboard.on('keydown-W', () =>{
             if (this.queenAlive && this.queenValidMoveCheck(true, -32, layer)){
 
-                this.movePlayers(true, -32, layer, this.map)
                 this.queenPos[0] += 1;
+                this.movePlayers(true, -32, layer, this.map)
                 this.queenPositionText.setText("" + this.queenPos);
 
                 this.splitCalc(this.WAHRSCHEINLICHKEITEN[
@@ -259,33 +259,32 @@ export class MainScene extends Phaser.Scene {
             let tile:Phaser.Tilemaps.Tile = null;
 
             // Determine if which axis we're moving on
-            if (xory === false){
+            if (xory === false)
                 tile = layer.getTileAtWorldXY(element.x+pos, element.y, true);
-            } else {
+            else 
                 tile = layer.getTileAtWorldXY(element.x, element.y+pos, true); 
-            }
 
-            if (this.tileParser.tileIDToAPIID_LVL1(tile.index) === TileParser.WALL_ID){
-                //blocked, can't move, do nothing
-            }
-            else {            
-                if(xory === false){ element.x += pos; } else { element.y += pos; } // this must be done before the switch, don't know why though
+            // eslint-disable-next-line no-empty
+            if (this.tileParser.tileIDToAPIID_LVL1(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
+            else {           
+                if(xory === false) element.x += pos; 
+                else element.y += pos;
 
                 switch(this.tileParser.tileIDToAPIID_LVL1(tile.index)){
-                    case TileParser.STOP_ID: {
+                    case TileParser.STOP_ID:
                         map.putTileAt(21, tile.x, tile.y);
-                        this.scoreText.setText('You finished the level with score ' + this.score + "!");
+                        this.scoreText.setText('Your penis is grown by ' + this.score + " cm!");
                         this.input.keyboard.enabled = false;
                         break;
-                    }
 
-                    case TileParser.ACTIONFIELD_ID: {
+                    case TileParser.ACTIONFIELD_ID:
                         map.putTileAt(21, tile.x, tile.y);
-                        this.score+= 1;
+                        this.score += 1;
                         this.scoreText.setText('Score: ' + this.score);
                         break;
-                    }
-                    default: break;
+                    
+                    default:
+                        break;
                 }
             }
         });
