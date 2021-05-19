@@ -17,11 +17,6 @@ export class MainScene extends Phaser.Scene {
 
     private preMovePos = [];
 
-    //#########################################//
-    // CHANGE THE FOLLOWIG VALUE IF DESIRED    //
-    //#########################################//
-    private scaleFactor = 32;
-    //#########################################//
 
     constructor() {
         super({
@@ -87,7 +82,12 @@ export class MainScene extends Phaser.Scene {
         )
         this.playerInstances.push(this.playercounttext);
 
-        this.scoreText = this.add.text(450,30, 'Score: ' + this.score);
+        this.scoreText = this.add.text(
+            450,
+            30, 
+            'Score: ' + this.score
+        );
+
         this.preMovePos = [400,48];
         
         const WAHRSCHEINLICHKEITEN = [
@@ -99,29 +99,30 @@ export class MainScene extends Phaser.Scene {
             [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
             [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]]
         ];
-        const x = this.add.text (450, 45, this.queenPos[0]+ "," + this.queenPos[1]);
+        const queenPositionText = this.add.text(
+            450, 
+            45, 
+            this.queenPos[0] + "," + this.queenPos[1]
+        );
 
 
         this.input.keyboard.on ('keydown-A', () =>{
-            if (this.queenAlive && this.queenValidMoveCheck(false, -32, layer_new)){ //if queen alive and queen can move to tile then perform move for rest 
-                this.movePlayers(false, -32, layer_new, map)
-                this.queenPos [1] = this.queenPos [1] - 1;      // queen moves one field left along the x axis
-                x.setText(""+this.queenPos);
-                // var ll = this.add.text (100,100, ''+WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]]);
-                this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]+1], this.queen);
-                this.preMovePos[0] = this.preMovePos [0]-32;
+            if(this.queenAlive && this.queenValidMoveCheck(false, -32, layer_new)) {
+                this.queenPos[1] -= 1;
+                this.movePlayers(false, -32, layer_new, map);
+                queenPositionText.setText("" + this.queenPos);
+                this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1] + 1], this.queen);
+                this.preMovePos[0] -= 32;
             }
         });
 
         this.input.keyboard.on ('keydown-D', () =>{
-            //queen.x += 32;
             if (this.queenAlive && this.queenValidMoveCheck(false, +32, layer_new)){
-                this.queenPos [1] = this.queenPos [1] + 1;      // queen moves one field right along the x axis
-                //playercounttext.x += 32;
+                this.queenPos [1] += 1;
                 this.movePlayers(false, +32, layer_new, map);
-                x.setText(""+this.queenPos);
-                this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]-1], this.queen);
-                this.preMovePos[0] = this.preMovePos [0]+32;
+                queenPositionText.setText(""+this.queenPos);
+                this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1] - 1], this.queen);
+                this.preMovePos[0] += 32;
             }
 
         });
@@ -130,7 +131,7 @@ export class MainScene extends Phaser.Scene {
             if (this.queenAlive && this.queenValidMoveCheck(true, +32, layer_new)){
                 this.movePlayers(true, +32, layer_new, map)
                 this.queenPos [0] = this.queenPos [0] - 1;      // queen moves one field down the y axis
-                x.setText(""+this.queenPos);
+                queenPositionText.setText(""+this.queenPos);
                 this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]+1], this.queen);
                 this.preMovePos[1] = this.preMovePos [1]+32;
             }
@@ -141,7 +142,7 @@ export class MainScene extends Phaser.Scene {
             if (this.queenAlive && this.queenValidMoveCheck(true, -32, layer_new)){
                 this.movePlayers(true, -32, layer_new, map)
                 this.queenPos [0] = this.queenPos [0] + 1;      // queen moves one field up the y axis
-                x.setText(""+this.queenPos);
+                queenPositionText.setText(""+this.queenPos);
                 this.splitCalc(WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1]-1], this.queen);
                 this.preMovePos[1] = this.preMovePos [1]-32;
             }
@@ -175,14 +176,11 @@ export class MainScene extends Phaser.Scene {
     }
 
     // Calculates whether the PlayerGroup splits after a PlayerMove and in which directions N,E,S,W, Figur ist die Figur die fuer ein split gecheckt wird, BUG!!!!
-    // Datentypen von kevinnguyen geändert, optimiert Typsicherheit
     private splitCalc(arr:number[][], figur:Phaser.GameObjects.Image): void {
         const nmbr = Phaser.Math.Between(1,150);
-        //var txt = this.add.text(100,100, '' +arr);
         for (let i = 0; i<=3; i++){
             if (arr[i] != null)
                 if (nmbr >= arr[i][0] && nmbr <= arr[i][1]){ // WIR KOMMEN NIE IN DIE SCHLEIFE,ARR IST IMMER UNKNOWN!!!!
-                    // von kevinnguyen auskommentiert, doSplit erwartet nur 2 Argumente, außerdem ist figur nicht vom Typ number
                     this.doSplit(i, arr[i][2]);
                 }
         }
@@ -265,7 +263,7 @@ export class MainScene extends Phaser.Scene {
     }
 
 
-    
+
     update(): void {
         console.log("[0] update\n")
     }
