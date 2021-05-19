@@ -2,17 +2,16 @@ import { TileParser } from "../util/tileParser";
 
 export class MainScene extends Phaser.Scene {
 
-    private tileParser:TileParser = new TileParser();
-
+    private timeAccumulator = 0.0;
     private playercount = 100;
     private playerInstances = [];
-    private playercounttext;
-
     private score = 0;
     private scoreText;
-    
-    private preMovePos =[];
+    private playercounttext;
     private queenPos = [];
+    private layer;
+    private preMovePos =[];
+    private tileParser:TileParser = new TileParser();
     private queenAlive =true;
     private queen;
 
@@ -22,6 +21,7 @@ export class MainScene extends Phaser.Scene {
         });
     }
 
+    // Rückgabewert hinzugefügt
     gameRestart(): void {
         this.scene.restart();
     }
@@ -32,7 +32,6 @@ export class MainScene extends Phaser.Scene {
             "assets/pack.json",
             "preload"
         );
-
         this.load.image('tiles','./assets/sprites/scifitiles-sheet.png');
         this.load.tilemapTiledJSON('map','./assets/sprites/lvl.json');   
         this.load.image('queen', './assets/sprites/boar.png');
@@ -42,31 +41,24 @@ export class MainScene extends Phaser.Scene {
         this.data.set('playerScore', 0);
         this.data.set('playerWinningScore', 10);
     }
-
     //THE SPRITES ARE FILLERS!
     create(): void {
         //this.add.image(300,300,"tiles"); sanity check
-        const map = this.make.tilemap({ 
-            key: 'map', 
-            tileWidth: 32, 
-            tileHeight: 32
-        });
-
+        const map = this.make.tilemap({ key: 'map', tileWidth: 32, tileHeight: 32});
         const tileset = map.addTilesetImage('scifi', 'tiles');
         const layer = map.createLayer('Tile Layer 1', tileset, 0, 0);
+
+        // von kevinnguyen hinzugefügt, optimiert Typsicherheit
         const layer_new = layer as unknown as Phaser.Tilemaps.Tilemap;
 
+        this.queen = this.add.image (400, 48,'queen');
         this.playercount = 8;
+        this.playercounttext = this.add.text (400, 48, '8', {color: '#FF0000' })
         this.playerInstances.push(this.queen);
         this.playerInstances.push(this.playercounttext);
-        this.playercounttext = this.add.text (400, 48, '8', {color: '#FF0000' })
-
         this.scoreText = this.add.text(450,30, 'Score: ' + this.score);
-
-        this.preMovePos = [400,48];
         this.queenPos = [5,12];
-        this.queen = this.add.image(400, 48,'queen');
-
+        this.preMovePos = [400,48];
         const WAHRSCHEINLICHKEITEN = [[[null, null, null , null], [[1, 99, 99], [100, 100, 1], null, null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],[[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],[[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],[[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],[[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [[1,50, 50], [51,100, 50], null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],[[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],[[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]]];
         const x = this.add.text (450, 45, this.queenPos[0]+ "," + this.queenPos[1]);
 
@@ -144,12 +136,14 @@ export class MainScene extends Phaser.Scene {
     }
 
     // Calculates whether the PlayerGroup splits after a PlayerMove and in which directions N,E,S,W, Figur ist die Figur die fuer ein split gecheckt wird, BUG!!!!
+    // Datentypen von kevinnguyen geändert, optimiert Typsicherheit
     private splitCalc(arr:number[][], figur:Phaser.GameObjects.Image): void {
         const nmbr = Phaser.Math.Between(1,150);
         //var txt = this.add.text(100,100, '' +arr);
         for (let i = 0; i<=3; i++){
             if (arr[i] != null)
                 if (nmbr >= arr[i][0] && nmbr <= arr[i][1]){ // WIR KOMMEN NIE IN DIE SCHLEIFE,ARR IST IMMER UNKNOWN!!!!
+                    // von kevinnguyen auskommentiert, doSplit erwartet nur 2 Argumente, außerdem ist figur nicht vom Typ number
                     this.doSplit(i, arr[i][2]);
                 }
         }
