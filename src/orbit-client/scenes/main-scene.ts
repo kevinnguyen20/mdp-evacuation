@@ -32,6 +32,7 @@ export class MainScene extends Phaser.Scene {
             "assets/pack.json",
             "preload"
         );
+
         this.load.image('tiles','./assets/sprites/scifitiles-sheet.png');
         this.load.tilemapTiledJSON('map','./assets/sprites/lvl.json');   
         this.load.image('queen', './assets/sprites/boar.png');
@@ -41,24 +42,31 @@ export class MainScene extends Phaser.Scene {
         this.data.set('playerScore', 0);
         this.data.set('playerWinningScore', 10);
     }
+
     //THE SPRITES ARE FILLERS!
     create(): void {
         //this.add.image(300,300,"tiles"); sanity check
-        const map = this.make.tilemap({ key: 'map', tileWidth: 32, tileHeight: 32});
+        const map = this.make.tilemap({ 
+            key: 'map', 
+            tileWidth: 32, 
+            tileHeight: 32
+        });
+
         const tileset = map.addTilesetImage('scifi', 'tiles');
         const layer = map.createLayer('Tile Layer 1', tileset, 0, 0);
-
-        // von kevinnguyen hinzugefügt, optimiert Typsicherheit
         const layer_new = layer as unknown as Phaser.Tilemaps.Tilemap;
 
-        this.queen = this.add.image (400, 48,'queen');
         this.playercount = 8;
-        this.playercounttext = this.add.text (400, 48, '8', {color: '#FF0000' })
         this.playerInstances.push(this.queen);
         this.playerInstances.push(this.playercounttext);
+        this.playercounttext = this.add.text (400, 48, '8', {color: '#FF0000' })
+
         this.scoreText = this.add.text(450,30, 'Score: ' + this.score);
-        this.queenPos = [5,12];
+
         this.preMovePos = [400,48];
+        this.queenPos = [5,12];
+        this.queen = this.add.image(400, 48,'queen');
+
         const WAHRSCHEINLICHKEITEN = [[[null, null, null , null], [[1, 99, 99], [100, 100, 1], null, null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],[[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],[[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],[[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],[[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [[1,50, 50], [51,100, 50], null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],[[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],[[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]]];
         const x = this.add.text (450, 45, this.queenPos[0]+ "," + this.queenPos[1]);
 
