@@ -4,7 +4,7 @@ export class level1 extends Phaser.Scene {
 
     private tileParser:TileParser = new TileParser();
 
-    private playercount = 100;
+    private playercount;
     private playerInstances = [];
     private playercounttext;
 
@@ -61,7 +61,7 @@ export class level1 extends Phaser.Scene {
 
     init(): void {
         this.data.set('playerScore', 0);
-        this.data.set('playerWinningScore', 10);
+        this.data.set('playerWinningScore', 8);
     }
 
 
@@ -116,7 +116,7 @@ export class level1 extends Phaser.Scene {
             0,              // x
             0               // y
         );
-
+        
         this.queen = this.add.image(400, 48,'queen');
         this.queenPos = [5,12];
 
@@ -133,7 +133,7 @@ export class level1 extends Phaser.Scene {
         this.playerInstances.push(this.playercounttext);
 
         this.scoreText = this.add.text(
-            415,
+            430,
             30, 
             'Score: ' + this.score
         );
@@ -141,9 +141,9 @@ export class level1 extends Phaser.Scene {
         this.preMovePos = [400,48];
         
         this.queenPositionText = this.add.text(
-            415, 
-            45, 
-            this.queenPos[0] + "," + this.queenPos[1]
+            430, 
+            50, 
+            "Queen's position: (" + this.queenPos[0] + "," + this.queenPos[1] + ")"
         );
 
         
@@ -152,7 +152,7 @@ export class level1 extends Phaser.Scene {
                 
                 this.queenPos[1] -= 1;
                 this.movePlayers(false, -32, layer, this.map);
-                this.queenPositionText.setText("" + this.queenPos);
+                this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
                 this.splitCalc(this.WAHRSCHEINLICHKEITEN[
                     this.queenPos[0]
@@ -169,7 +169,7 @@ export class level1 extends Phaser.Scene {
 
                 this.queenPos[1] += 1;
                 this.movePlayers(false, +32, layer, this.map);
-                this.queenPositionText.setText("" + this.queenPos);
+                this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
                 this.splitCalc(this.WAHRSCHEINLICHKEITEN[
                     this.queenPos[0]
@@ -186,7 +186,7 @@ export class level1 extends Phaser.Scene {
 
                 this.queenPos[0] -= 1;
                 this.movePlayers(true, +32, layer, this.map)
-                this.queenPositionText.setText("" + this.queenPos);
+                this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
                 this.splitCalc(this.WAHRSCHEINLICHKEITEN[
                     this.queenPos[0]
@@ -203,7 +203,7 @@ export class level1 extends Phaser.Scene {
 
                 this.queenPos[0] += 1;
                 this.movePlayers(true, -32, layer, this.map)
-                this.queenPositionText.setText("" + this.queenPos);
+                this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
                 this.splitCalc(this.WAHRSCHEINLICHKEITEN[
                     this.queenPos[0]
