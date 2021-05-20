@@ -1,6 +1,6 @@
 import { TileParser } from "../util/tileParser";
 
-export class MainScene extends Phaser.Scene {
+export class level1 extends Phaser.Scene {
 
     private tileParser:TileParser = new TileParser();
 
@@ -33,7 +33,7 @@ export class MainScene extends Phaser.Scene {
 
     constructor() {
         super({
-            key: "MainScene"
+            key: "level1"
         });
     }
 
