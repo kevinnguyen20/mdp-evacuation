@@ -4,7 +4,7 @@ const pathToPhaser = path.join(__dirname, '/node_modules/phaser/');
 const phaser = path.join(pathToPhaser, 'dist/phaser.js');
 
 module.exports = {
-    entry: './src/orbit-client/game.ts',
+    entry: './src/evakuierung/game.ts',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js',
@@ -34,7 +34,7 @@ module.exports = {
         new CopyPlugin({
             patterns:
             [
-                { from: path.resolve(__dirname, 'src/orbit-client/assets'), to: 'assets' },
+                { from: path.resolve(__dirname, 'src/evakuierung/assets'), to: 'assets' },
                 { from: path.resolve(__dirname, 'index.html'), to: 'index.html' },
             ]
         }),
