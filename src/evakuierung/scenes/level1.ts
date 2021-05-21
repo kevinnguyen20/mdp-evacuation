@@ -113,18 +113,18 @@ export class level1 extends Phaser.Scene {
         const layer = this.map.createLayer(
             'Tile Layer 1', // layerID
             tileset,        // tileset
-            0,              // x
-            0               // y
+            210,              // x
+            230               // y
         );
         
-        this.queen = this.add.image(400, 48,'queen');
+        this.queen = this.add.image(610, 277,'queen');
         this.queenPos = [5,12];
 
         this.playercount = 8;
         this.playerInstances.push(this.queen);
         this.playercounttext = this.add.text(
-            410,                    // x
-            48,                     // y
+            615,                    // x
+            277,                     // y
             '8',                    // text
             {
                 color: '#FF0000'    // style
@@ -133,16 +133,16 @@ export class level1 extends Phaser.Scene {
         this.playerInstances.push(this.playercounttext);
 
         this.scoreText = this.add.text(
-            430,
-            30, 
+            150,
+            150, 
             'Score: ' + this.score
         );
         
         this.preMovePos = [400,48];
         
         this.queenPositionText = this.add.text(
-            430, 
-            50, 
+            150, 
+            190, 
             "Queen's position: (" + this.queenPos[0] + "," + this.queenPos[1] + ")"
         );
 
