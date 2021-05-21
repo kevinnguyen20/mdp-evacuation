@@ -123,7 +123,7 @@ export class level1 extends Phaser.Scene {
         this.playercount = 8;
         this.playerInstances.push(this.queen);
         this.playercounttext = this.add.text(
-            365,                    // x
+            410,                    // x
             48,                     // y
             '8',                    // text
             {
@@ -137,7 +137,7 @@ export class level1 extends Phaser.Scene {
             30, 
             'Score: ' + this.score
         );
-
+        
         this.preMovePos = [400,48];
         
         this.queenPositionText = this.add.text(
