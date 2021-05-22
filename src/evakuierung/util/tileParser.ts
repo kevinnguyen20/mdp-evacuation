@@ -8,7 +8,18 @@ export class TileParser {
     public static readonly COIN_ID = 12;
     public static readonly PORTAL_BLUE_ID = 13;
     public static readonly PORTAL_ORANGE_ID = 14;
-    // ------------------------
+    // ----- Probability -----
+    public static readonly PROBABILITY_0 = 30;
+    public static readonly PROBABILITY_1 = 31;
+    public static readonly PROBABILITY_2 = 32;
+    public static readonly PROBABILITY_3 = 33;
+    public static readonly PROBABILITY_4 = 34;
+    public static readonly PROBABILITY_5 = 35;
+    public static readonly PROBABILITY_6 = 36;
+    public static readonly PROBABILITY_7 = 37;
+    public static readonly PROBABILITY_8 = 38;
+    public static readonly PROBABILITY_9 = 39;
+
     
     
     constructor() {
@@ -49,4 +60,22 @@ export class TileParser {
         if(tileID == 93) return TileParser.PORTAL_BLUE_ID;
         if(tileID == 94) return TileParser.PORTAL_ORANGE_ID;
     }
+
+
+    /**
+     * Use only the Probability-Layer Tiles as Input
+     */
+     public tileIDToAPIID_scifiLVL_Probability(tileID: number) {
+        if(tileID == 122) return TileParser.PROBABILITY_0;
+        if(tileID == 123) return TileParser.PROBABILITY_1;
+        if(tileID == 124) return TileParser.PROBABILITY_2;
+        if(tileID == 125) return TileParser.PROBABILITY_3;
+        if(tileID == 126) return TileParser.PROBABILITY_4;
+        if(tileID == 136) return TileParser.PROBABILITY_5;
+        if(tileID == 136) return TileParser.PROBABILITY_6;
+        if(tileID == 136) return TileParser.PROBABILITY_7;
+        if(tileID == 136) return TileParser.PROBABILITY_8;
+        if(tileID == 136) return TileParser.PROBABILITY_9;
+    }
+
 }
