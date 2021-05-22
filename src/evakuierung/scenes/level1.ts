@@ -1,5 +1,6 @@
 import { TileParser } from "../util/tileParser";
 import { TilePiece } from "../util/tilePiece";
+import { Player } from "../util/player"
 
 export class level1 extends Phaser.Scene {
 
