@@ -119,11 +119,13 @@ export class level1 extends Phaser.Scene {
             230               // y
         );
         
+
         this.queen = this.add.image(610, 277,'queen');
         this.queenPos = [5,12];
-
         this.playercount = 8;
+                
         this.playerInstances.push(this.queen);
+        const figureList = this.initFigureList(this.playercount, this.queenPos);
         this.playercounttext = this.add.text(
             615,                    // x
             277,                     // y
@@ -133,7 +135,7 @@ export class level1 extends Phaser.Scene {
             }
         )
         this.playerInstances.push(this.playercounttext);
-
+        
         this.scoreText = this.add.text(
             150,
             150, 
@@ -327,8 +329,19 @@ export class level1 extends Phaser.Scene {
         this.playerInstances.push(neueGruppe);
         this.playerInstances.push (queen);
     }
-
-
+    /**
+     * @param playercount number of Players in the level
+     * @param startpunkt coordinates of the startpunkt of the level, startpunkt [0] = y, startpunkt [1] = x
+     * @returns list which contains each playerFigure
+     */
+    private initFigureList(playercount: number, startpunkt: number[]): number[]{
+        const playerList = [];
+        playerList.push (new Player(startpunkt[1], startpunkt[1], true)); //creates queen
+        for (let i = 0; i<=playercount-1; i++){
+            playerList.push(new Player(startpunkt[0], startpunkt[1], false)); //creates pawns
+        }
+        return playerList;
+    }
 
     update(): void {
         console.log();
