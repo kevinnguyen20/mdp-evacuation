@@ -8,7 +8,7 @@ export class TilePiece{
     downProbability: number;
     leftProbability: number;
     rightProbability: number;
-    private _playersOnTop: Object[] = [];   // this is where the players on top of a tile are stored
+    private _playersOnTop: any[] = [];   // this is where the players on top of a tile are stored, it should be a list of objects, when the piglet class is created
 
     constructor(x: number, y: number, upProbability: number, downProbability: number, leftProbability: number, rightProbability: number) {
         this.x = x;
