@@ -336,9 +336,9 @@ export class level1 extends Phaser.Scene {
      */
     private initFigureList(playercount: number, startpunkt: number[]): number[]{
         const playerList = [];
-        playerList.push (new Player(startpunkt[1], startpunkt[1], true)); //creates queen
+        playerList.push (new Player(startpunkt[1], startpunkt[0], true)); //creates queen
         for (let i = 0; i<=playercount-1; i++){
-            playerList.push(new Player(startpunkt[0], startpunkt[1], false)); //creates pawns
+            playerList.push(new Player(startpunkt[1], startpunkt[0], false)); //creates pawns
         }
         return playerList;
     }
