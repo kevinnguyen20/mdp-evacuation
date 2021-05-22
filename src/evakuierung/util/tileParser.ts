@@ -72,7 +72,7 @@ export class TileParser {
     /**
      * Use only the Probability-Layer Tiles as Input
      */
-     public static tileIDToAPIID_scifiLVL_Probability(tileID: number) {
+    public static tileIDToAPIID_scifiLVL_Probability(tileID: number) {
         if(tileID == 122) return TileParser.PROBABILITY_0;
         if(tileID == 123) return TileParser.PROBABILITY_1;
         if(tileID == 124) return TileParser.PROBABILITY_2;
