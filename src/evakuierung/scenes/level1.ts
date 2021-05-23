@@ -149,7 +149,7 @@ export class level1 extends Phaser.Scene {
         
 
         // sets the Startposition automatically by reading the Map
-        var startingPosition: [number, number] = LevelFunctions.getStartPostition(layerGround);
+        const startingPosition: [number, number] = LevelFunctions.getStartPostition(layerGround);
         console.log("Start at X:" + startingPosition[0] / 32 + " Y:" + startingPosition[1] / 32);
         this.queenPos = [startingPosition[0] / 32, startingPosition[1] /32];
         this.queen = this.add.image(layerX + 512 + TileParser.TILE_SIZE / 2, layerY + 64 + TileParser.TILE_SIZE / 2,'queen');

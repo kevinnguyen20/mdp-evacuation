@@ -23,8 +23,8 @@ export class LevelFunctions{
      * @returns Tupel [X, Y] and null if not Start was found
      */
     public static getStartPostition(layerGround: Phaser.Tilemaps.Tilemap): [number, number] {
-        var X = 0;
-        var Y = 0;
+        let X = 0;
+        let Y = 0;
         layerGround.forEachTile((tile) => {
             if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.START_ID){
                 X = tile.pixelX;
