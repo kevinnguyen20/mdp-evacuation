@@ -21,7 +21,7 @@ export class Player{
      */
     public followQueen():boolean {
         const randomNum: number = Math.random();
-        if (randomNum < 0.98){
+        if (randomNum < 0.92){
             return true;
         }
         else return false;

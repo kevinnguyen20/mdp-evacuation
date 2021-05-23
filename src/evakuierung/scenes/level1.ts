@@ -334,7 +334,7 @@ export class level1 extends Phaser.Scene {
      *           W(0)
      *      A(3) S(2) D(1)
      */
-    private splitDirection(currentTile: TilePiece): number {
+    private generateDirection(currentTile: TilePiece): number {
         const random: number = Math.random();     // returns a random num between 0 and 1
         if (random >= 0 &&
             random < currentTile.upProbability) {
