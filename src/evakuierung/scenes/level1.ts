@@ -352,17 +352,6 @@ export class level1 extends Phaser.Scene {
         return -1;
     }
 
-    /**
-     * Decides if a player should follow the queen
-     * @returns True if the player shold go with the queen or else false
-     */
-    private followQueen():boolean{
-        const randomNum: number = Math.random();
-        if (randomNum < 0.98){
-            return true;
-        }
-        else return false;
-    }
 
     /*
 
