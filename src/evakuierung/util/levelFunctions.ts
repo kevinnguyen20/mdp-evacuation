@@ -8,10 +8,10 @@ export class LevelFunctions{
      * @param startpunkt coordinates of the startpunkt of the level, startpunkt [0] = x, startpunkt [1] = y
      * @returns list which contains each playerFigure
      */
-    public static initFigureList(playercount: number, startpunkt: number[]): number[]{
-        const playerList = [];
+    public static initFigureList(playercount: number, startpunkt: number[]): Player[]{
+        const playerList: Player[] = [];
         playerList.push (new Player(startpunkt[0], startpunkt[1], true)); //creates queen
-        for (let i = 0; i<=playercount-1; i++){
+        for (let i = 0; i < playercount-1; i++){
             playerList.push(new Player(startpunkt[0], startpunkt[1], false)); //creates pawns
         }
         return playerList;

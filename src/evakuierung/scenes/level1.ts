@@ -7,7 +7,7 @@ export class level1 extends Phaser.Scene {
 
     private tileParser:TileParser = new TileParser();
 
-    private playercount;
+    private playercount: number;
     private playerInstances = [];
     private playercounttext;
 
@@ -139,7 +139,7 @@ export class level1 extends Phaser.Scene {
             layerY              // y
         );
 
-        const layerDesign = this.map.createLayer(   // there is no need to read this layer ever, only creat it
+        const layerDesign = this.map.createLayer(   // there is no need to read this layer ever, only create it
             'Design', // layerID
             tileset,        // tileset
             layerX,              // x
@@ -334,8 +334,8 @@ export class level1 extends Phaser.Scene {
      *           W(0)
      *      A(3) S(2) D(1)
      */
-    private splitDirection(currentTile: TilePiece) {
-        const random = Math.random();     // returns a random num between 0 and 1
+    private splitDirection(currentTile: TilePiece): number {
+        const random: number = Math.random();     // returns a random num between 0 and 1
         if (random >= 0 &&
             random < currentTile.upProbability) {
             return 0;   // up
@@ -351,6 +351,7 @@ export class level1 extends Phaser.Scene {
         }
         return -1;
     }
+
 
     /*
 
