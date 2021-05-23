@@ -333,7 +333,7 @@ export class level1 extends Phaser.Scene {
      * 
      * @param currentTile the tile we're currently on. 
      * @returns the direction of the split that occurs
-     *          when leaving the tile
+     *          when leaving the tile - 0 (up), 1 (right), 2 (down), 3 (left)
      */
     private splitDirection(currentTile: TilePiece) {
         const random = Math.random();     // returns a random num between 0 and 1
