@@ -301,21 +301,21 @@ export class level1 extends Phaser.Scene {
      *          when leaving the tile
      */
     private splitDirection(currentTile: TilePiece) {
-        var random = Math.random();     // returns a random num between 0 and 1
-    if (random >= 0 &&
-        random < currentTile.upProbability) {
-        return 0;
-    } else if (random >= currentTile.upProbability &&
-               random < currentTile.upProbability + currentTile.downProbability) {
-        return 1;
-    } else if (random >= currentTile.upProbability + currentTile.downProbability &&
-               random < currentTile.upProbability + currentTile.downProbability + currentTile.leftProbability) {
-        return 2;
-    } else if (random >= currentTile.upProbability + currentTile.downProbability + currentTile.leftProbability &&
-               random < 1) {
-        return 3;
-    }
-    return -1;
+        const random = Math.random();     // returns a random num between 0 and 1
+        if (random >= 0 &&
+            random < currentTile.upProbability) {
+            return 0;
+        } else if (random >= currentTile.upProbability &&
+                   random < currentTile.upProbability + currentTile.downProbability) {
+            return 1;
+        } else if (random >= currentTile.upProbability + currentTile.downProbability &&
+                   random < currentTile.upProbability + currentTile.downProbability + currentTile.leftProbability) {
+            return 2;
+        } else if (random >= currentTile.upProbability + currentTile.downProbability + currentTile.leftProbability &&
+                   random < 1) {
+            return 3;
+        }
+        return -1;
     }
 
     /**
