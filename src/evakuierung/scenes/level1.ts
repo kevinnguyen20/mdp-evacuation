@@ -107,9 +107,10 @@ export class level1 extends Phaser.Scene {
     **********************************************/
 
     /**
-     * Directions:
+     * -----------DIRECTIONS-----------
+     * 
      *               W(0)
-     *          A(1) S(2) D(3)
+     *          A(3) S(2) D(1)
      */
 
 
@@ -190,7 +191,7 @@ export class level1 extends Phaser.Scene {
         
 
         //########################################
-        // this.splitCalc() is producing a Uncaught TypeError, maybe cus the this.WAHRSCHEINLICHKEITEN[] is not updatet for the new Levels
+        // this.splitCalc() is producing a Uncaught TypeError, maybe cus the this.WAHRSCHEINLICHKEITEN[] is not updated for the new Levels
         //########################################
 
         this.input.keyboard.on('keydown-A', () =>{
@@ -200,11 +201,7 @@ export class level1 extends Phaser.Scene {
                 this.movePlayers(false, -32, layerGround, layerAction, this.map);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.splitCalc(this.WAHRSCHEINLICHKEITEN[
-                    this.queenPos[0]
-                ][
-                    this.queenPos[1] + 1
-                ]);
+                //this.splitCalc(this.WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1] + 1]);
 
                 this.preMovePos[0] -= 32;
             }
@@ -217,11 +214,7 @@ export class level1 extends Phaser.Scene {
                 this.movePlayers(false, +32, layerGround, layerAction, this.map);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.splitCalc(this.WAHRSCHEINLICHKEITEN[
-                    this.queenPos[0]
-                ][
-                    this.queenPos[1] - 1
-                ]);
+                //this.splitCalc(this.WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1] - 1]);
 
                 this.preMovePos[0] += 32;
             }
@@ -234,11 +227,7 @@ export class level1 extends Phaser.Scene {
                 this.movePlayers(true, +32, layerGround, layerAction, this.map)
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.splitCalc(this.WAHRSCHEINLICHKEITEN[
-                    this.queenPos[0]
-                ][
-                    this.queenPos[1] + 1
-                ]);
+                //this.splitCalc(this.WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1] + 1]);
 
                 this.preMovePos[1] += 32;
             }
@@ -251,11 +240,7 @@ export class level1 extends Phaser.Scene {
                 this.movePlayers(true, -32, layerGround, layerAction, this.map)
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.splitCalc(this.WAHRSCHEINLICHKEITEN[
-                    this.queenPos[0]
-                ][
-                    this.queenPos[1] - 1
-                ]);
+                //this.splitCalc(this.WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1] - 1]);
 
                 this.preMovePos[1] -= 32;
             }
@@ -283,13 +268,19 @@ export class level1 extends Phaser.Scene {
             return true;
     }
 
+    /*
+
+    splitCalc IST NEU ZU IMPLEMENTIEREN !!!!!!!!!!!!!!
+
     private splitCalc(arr:number[][]): void {
         const nmbr = Phaser.Math.Between(1,150);
         for(let i = 0; i<=3; i++)
             if(arr[i] != null)
-                if(nmbr>=arr[i][0] && nmbr<=arr[i][1])
-                    this.doSplit(i, arr[i][2]);
+                if(nmbr>=arr[i][0] && nmbr<=arr[i][1]) {
+                    //this.doSplit(i, arr[i][2]);
+                }
     }
+    */
 
     /**
      * Moves all the figures (including the queen!)
@@ -337,11 +328,11 @@ export class level1 extends Phaser.Scene {
     /**
      * Determines the direction of the next split given the probabilities for each direction
      * 
-     * @param currentTile the tile we're currently on. 
+     * @param currentTile the tile we're currently on 
      * @returns the direction of the split that occurs
      *          when leaving the tile - 0 (up), 1 (right), 2 (down), 3 (left)
      *           W(0)
-     *      A(1) S(2) D(3)
+     *      A(3) S(2) D(1)
      */
     private splitDirection(currentTile: TilePiece) {
         const random = Math.random();     // returns a random num between 0 and 1
@@ -353,21 +344,25 @@ export class level1 extends Phaser.Scene {
             return 2;   // down
         } else if (random >= currentTile.upProbability + currentTile.downProbability &&
                    random < currentTile.upProbability + currentTile.downProbability + currentTile.leftProbability) {
-            return 1;   // left
+            return 3;   // left
         } else if (random >= currentTile.upProbability + currentTile.downProbability + currentTile.leftProbability &&
                    random < 1) {
-            return 3;   // right
+            return 1;   // right
         }
         return -1;
     }
+
+    /*
+
+    doSplit() ist erstmal nicht benötigt...die Funktion bitte so lassen, vllt wird sie nützlich
 
     /**
      * 
      * @param direction the direction of the movement - 0 (up), 1 (right), 2 (down), 3 (left)
      *                   W(0)
-     *              A(1) S(2) D(3)
+     *              A(3) S(2) D(1)
      * @param percentage 
-     */
+     
     private doSplit(direction: number, percentage: number): void {
         if (direction === 0)
             this.setFigureAt(this.preMovePos[0], this.preMovePos[1] - 32, percentage);
@@ -381,6 +376,7 @@ export class level1 extends Phaser.Scene {
         else
             this.setFigureAt(this.preMovePos[0] - 32, this.preMovePos[1], percentage);
     }
+    */
 
     private setFigureAt(x: number, y: number, percentage: number): void {
         const queen = this.add.image (x, y, 'queen');
