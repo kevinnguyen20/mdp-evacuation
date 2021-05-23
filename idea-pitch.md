@@ -12,7 +12,9 @@ Für die eindeutige Kommunikation lege ich fest, dass folgende Objekte auf dem S
 Außerdem gelten folgende Bezeichnungen:
 
 - Das Spielfeld besteht aus Vierecken. Sie werden Tiles genannt.
-- Die Person, die unser Spiel spielt, heißt SpielerIn.
+- Die Person, die unser Spiel spielt, heißt Spieler.
+
+Wenn ihr mit den Bezeichnungen nicht zufrieden seid, dann ändert das und **sagt das allen Bescheid, damit keine Verwirrungen auftreten und Eindeutigkeit herrscht**.
 
 ## Ideen, die wir von der ursprünglichen Idee übernehmen
 
@@ -33,7 +35,7 @@ Außerdem gelten folgende Bezeichnungen:
 
 - Besitzt ein Tile angrenzende nicht begehbare Tiles, dann beträgt die Wahrscheinlichkeit gleich 0% (nicht -1 oder -3 oder andere kryptische Fehlercodes, denn 0% entspricht ein unmögliches Ereignis und ist verständlicher für die Programmierer, die sich nicht direkt mit der konkreten Implementierung beschäftigt haben).
 
-- Möchte die Königin nach Westen gehen, aber der Untertan liefe dann gegen eine Wand, dann implementieren wir das folgendermaßen
+- Möchte die Königin nach Westen gehen, aber der Untertan liefe dann gegen eine Wand, dann implementieren wir das folgendermaßen: die Wahrscheinlichkeit für den Untertan in Richtung Westen beträgt 0%. Das Tile kann so aussehen: (F: 92%, N: 30%, E: 40%, S: 30%, W: 0%). Der Untertan fragt diese Daten ab und speichert sie ab. 
 
 Kleine Anmerkung: ich denke nicht, dass wir beim Split unbedingt prüfen müssen, dass ein Feld begehbar ist. Da wir hardcoden, geben wir für die jeweiligen Felder, die nicht betretet werden dürfen, einfach die Wahrscheinlichkeit von 0 an, was heißt, dass sie nie betreten werden. Das optimiert auch die Laufzeit in gewisser Weise
 Da wir wissen, dass die Königin alle anderen Objekte steuert, können wir das so implementieren, dass die Objekte mit z.B. 98%-er Wahrscheinlichkeit in die Richtung der Königin bewegen und die restlichen 2% entnehmen wir dann aus dem Tupel des jeweiligen Feldes. Damit können wir dann die Bewegungen der Untertarnen eleganter gestalten. Wir reduzieren damit die Anzahl der möglichen Attribute für die Objekte und beziehen die Informationen direkt aus dem jeweiligen Tile
