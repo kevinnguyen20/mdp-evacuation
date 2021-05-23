@@ -106,6 +106,12 @@ export class level1 extends Phaser.Scene {
     **********************************************
     **********************************************/
 
+    /**
+     * Directions:
+     *               W(0)
+     *          A(1) S(2) D(3)
+     */
+
 
 
     create(): void {
@@ -334,21 +340,23 @@ export class level1 extends Phaser.Scene {
      * @param currentTile the tile we're currently on. 
      * @returns the direction of the split that occurs
      *          when leaving the tile - 0 (up), 1 (right), 2 (down), 3 (left)
+     *           W(0)
+     *      A(1) S(2) D(3)
      */
     private splitDirection(currentTile: TilePiece) {
         const random = Math.random();     // returns a random num between 0 and 1
         if (random >= 0 &&
             random < currentTile.upProbability) {
-            return 0;
+            return 0;   // up
         } else if (random >= currentTile.upProbability &&
                    random < currentTile.upProbability + currentTile.downProbability) {
-            return 1;
+            return 2;   // down
         } else if (random >= currentTile.upProbability + currentTile.downProbability &&
                    random < currentTile.upProbability + currentTile.downProbability + currentTile.leftProbability) {
-            return 2;
+            return 1;   // left
         } else if (random >= currentTile.upProbability + currentTile.downProbability + currentTile.leftProbability &&
                    random < 1) {
-            return 3;
+            return 3;   // right
         }
         return -1;
     }
@@ -356,6 +364,8 @@ export class level1 extends Phaser.Scene {
     /**
      * 
      * @param direction the direction of the movement - 0 (up), 1 (right), 2 (down), 3 (left)
+     *                   W(0)
+     *              A(1) S(2) D(3)
      * @param percentage 
      */
     private doSplit(direction: number, percentage: number): void {
