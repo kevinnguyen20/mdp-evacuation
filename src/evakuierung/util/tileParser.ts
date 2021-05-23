@@ -92,7 +92,7 @@ export class TileParser {
      * 
      * @param groundLayer groundLayer des Levels, um herauszufinden welcher Tile eine Wand, Ziel und Start ist 
      * @param actionLayer actionLayer des Levels, um herauszufinden welcher Tile ein actionField ist
-     * @returns fiveTuple, access the tiles in the fiveTuple with coordinates, e.g. fiveTuple[x+y*x]
+     * @returns fiveTuple, access the tiles in the fiveTuple with coordinates, e.g. fiveTuple[x+y*tilemapwidth]
      */
     public static fiveTupleAPI (groundLayer: Phaser.Tilemaps.Tilemap, actionLayer: Phaser.Tilemaps.Tilemap) : TilePiece[] {
         //TODO Wahrscheinlichkeiten in den einzelnen Tiles implementieren
