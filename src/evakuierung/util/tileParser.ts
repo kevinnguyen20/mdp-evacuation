@@ -91,15 +91,15 @@ export class TileParser {
     /**
      * 
      * @param groundLayer groundLayer des Levels, um herauszufinden welcher Tile eine Wand, Ziel und Start ist 
-     * @param actionLayer actionLayer des Levels, um herauszufinden welcher Tile ein actionField ist
+     * @param actionLayer actionLayer des Levels, um herauszufinden welcher Tile ein actionField ist (wird vermutlich nicht gebraucht)
      * @returns fiveTuple, access the tiles in the fiveTuple with coordinates, e.g. fiveTuple[x+y*tilemapwidth]
      */
     public static fiveTupleAPI (groundLayer: Phaser.Tilemaps.Tilemap, actionLayer: Phaser.Tilemaps.Tilemap) : TilePiece[] {
         //TODO Wahrscheinlichkeiten in den einzelnen Tiles implementieren
         const fiveTuple = [];
-        for (let x = 0; x<= groundLayer.width-1; x++){
-            for (let y = 0; y <= groundLayer.height-1; y++){
-                let tile = groundLayer.getTileAtWorldXY(x, y, true); 
+        for (let y = 0; y<= groundLayer.width-1; y++){
+            for (let x = 0; x <= groundLayer.height-1; x++){
+                const tile = groundLayer.getTileAtWorldXY(x, y, true); 
                 if (this.tileIDToAPIID_scifiLVL_Ground(tile.index) === this.WALL_ID){ //is Tile a wall?
                     fiveTuple.push(new TilePiece (x, y, 0 ,0, 0, 0, true, false, false));
                 }
