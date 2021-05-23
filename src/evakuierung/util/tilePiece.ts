@@ -2,6 +2,7 @@
 // their probabilities (for each direction) hard coded.
 import { Player } from "../util/player"
 import { TileParser } from "./tileParser";
+
 export class TilePiece{
     public x: number;
     public y: number;

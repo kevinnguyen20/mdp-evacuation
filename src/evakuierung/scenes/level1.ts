@@ -334,8 +334,8 @@ export class level1 extends Phaser.Scene {
      *           W(0)
      *      A(3) S(2) D(1)
      */
-    private splitDirection(currentTile: TilePiece) {
-        const random = Math.random();     // returns a random num between 0 and 1
+    private splitDirection(currentTile: TilePiece): number {
+        const random: number = Math.random();     // returns a random num between 0 and 1
         if (random >= 0 &&
             random < currentTile.upProbability) {
             return 0;   // up
@@ -350,6 +350,18 @@ export class level1 extends Phaser.Scene {
             return 1;   // right
         }
         return -1;
+    }
+
+    /**
+     * Decides if a player should follow the queen
+     * @returns True if the player shold go with the queen or else false
+     */
+    private followQueen():boolean{
+        const randomNum: number = Math.random();
+        if (randomNum < 0.98){
+            return true;
+        }
+        else return false;
     }
 
     /*
