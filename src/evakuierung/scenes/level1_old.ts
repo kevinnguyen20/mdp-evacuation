@@ -1,3 +1,4 @@
+
 import { TileParser } from "../util/tileParser";
 import { TilePiece } from "../util/tilePiece";
 import { Figure } from "../util/figure"
@@ -220,6 +221,7 @@ export class level1 extends Phaser.Scene {
         });
     }
 
+    /*
     /**
      * Checks if the queen moves in a valid direction
      * 
@@ -229,6 +231,7 @@ export class level1 extends Phaser.Scene {
      * @returns true if the move is valid, false if not
      */
     private queenValidMoveCheck(xory: boolean, pos:number, layer: Phaser.Tilemaps.Tilemap): boolean {
+        /*
         let tile: Phaser.Tilemaps.Tile = null;
         if(xory === false) 
             tile = layer.getTileAtWorldXY(this.queen.x+pos, this.queen.y, true); 
@@ -238,8 +241,11 @@ export class level1 extends Phaser.Scene {
         if(this.tileParser.tileIDToAPIID_LVL1(tile.index) === TileParser.WALL_ID) 
             return false; //blocked, can't move, do nothing
         else
+        */
             return true;
     }
+
+    
 
     private splitCalc(arr:number[][]): void {
         const nmbr = Phaser.Math.Between(1,150);
@@ -259,6 +265,7 @@ export class level1 extends Phaser.Scene {
      */
 
     private movePlayers(xory: boolean, pos: number, layer: Phaser.Tilemaps.Tilemap, map:Phaser.Tilemaps.Tilemap): void {
+        /*
         this.playerInstances.forEach( (element)=> {
             let tile:Phaser.Tilemaps.Tile = null;
 
@@ -292,6 +299,7 @@ export class level1 extends Phaser.Scene {
                 }
             }
         });
+        */
     }
 
     /**
@@ -347,3 +355,4 @@ export class level1 extends Phaser.Scene {
         console.log();
     }
 }
+
