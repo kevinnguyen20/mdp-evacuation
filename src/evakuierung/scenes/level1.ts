@@ -11,11 +11,11 @@ export class level1 extends Phaser.Scene {
     private playerInstances = [];
     private playercounttext;
 
-    private score: number = 0;
+    private score = 0;
     private scoreText = null;
 
     private queenPos:number[];
-    private queenAlive: boolean = true;
+    private queenAlive = true;
     private queen = null;
     private queenPositionText = null;
 
