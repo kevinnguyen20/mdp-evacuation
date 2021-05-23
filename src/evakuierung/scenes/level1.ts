@@ -329,6 +329,31 @@ export class level1 extends Phaser.Scene {
     }
 
     /**
+     * Determines the direction of the next split given the probabilities for each direction
+     * 
+     * @param currentTile the tile we're currently on. 
+     * @returns the direction of the split that occurs
+     *          when leaving the tile - 0 (up), 1 (right), 2 (down), 3 (left)
+     */
+    private splitDirection(currentTile: TilePiece) {
+        const random = Math.random();     // returns a random num between 0 and 1
+        if (random >= 0 &&
+            random < currentTile.upProbability) {
+            return 0;
+        } else if (random >= currentTile.upProbability &&
+                   random < currentTile.upProbability + currentTile.downProbability) {
+            return 1;
+        } else if (random >= currentTile.upProbability + currentTile.downProbability &&
+                   random < currentTile.upProbability + currentTile.downProbability + currentTile.leftProbability) {
+            return 2;
+        } else if (random >= currentTile.upProbability + currentTile.downProbability + currentTile.leftProbability &&
+                   random < 1) {
+            return 3;
+        }
+        return -1;
+    }
+
+    /**
      * 
      * @param direction the direction of the movement - 0 (up), 1 (right), 2 (down), 3 (left)
      * @param percentage 
