@@ -257,7 +257,6 @@ export class level1 extends Phaser.Scene {
      * @param layer the layer we're operating on
      * @param map the map we're operating on
      */
-
     private movePlayers(xory: boolean, pos: number, layer: Phaser.Tilemaps.Tilemap, map:Phaser.Tilemaps.Tilemap): void {
         this.playerInstances.forEach( (element)=> {
             let tile:Phaser.Tilemaps.Tile = null;
@@ -292,6 +291,31 @@ export class level1 extends Phaser.Scene {
                 }
             }
         });
+    }
+
+    /**
+     * Determines the direction of the next split given the probabilities for each direction
+     * 
+     * @param currentTile the tile we're currently on. 
+     * @returns the direction of the split that occurs
+     *          when leaving the tile
+     */
+    private splitDirection(currentTile: TilePiece) {
+        var random = Math.random();     // returns a random num between 0 and 1
+    if (random >= 0 &&
+        random < currentTile.upProbability) {
+        return 0;
+    } else if (random >= currentTile.upProbability &&
+               random < currentTile.upProbability + currentTile.downProbability) {
+        return 1;
+    } else if (random >= currentTile.upProbability + currentTile.downProbability &&
+               random < currentTile.upProbability + currentTile.downProbability + currentTile.leftProbability) {
+        return 2;
+    } else if (random >= currentTile.upProbability + currentTile.downProbability + currentTile.leftProbability &&
+               random < 1) {
+        return 3;
+    }
+    return -1;
     }
 
     /**
