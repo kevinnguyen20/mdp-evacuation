@@ -97,8 +97,8 @@ export class TileParser {
     public static fiveTupleAPI (groundLayer: Phaser.Tilemaps.Tilemap, actionLayer: Phaser.Tilemaps.Tilemap) : TilePiece[] {
         //TODO Wahrscheinlichkeiten in den einzelnen Tiles implementieren
         const fiveTuple = [];
-        for (let y = 0; y<= groundLayer.width-1; y++){
-            for (let x = 0; x <= groundLayer.height-1; x++){
+        for (let y = 0; y<= groundLayer.height-1; y++){
+            for (let x = 0; x <= groundLayer.width-1; x++){
                 const tile = groundLayer.getTileAtWorldXY(x, y, true); 
                 if (this.tileIDToAPIID_scifiLVL_Ground(tile.index) === this.WALL_ID){ //is Tile a wall?
                     fiveTuple.push(new TilePiece (x, y, 0 ,0, 0, 0, true, false, false));
