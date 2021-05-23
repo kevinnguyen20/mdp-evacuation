@@ -45,7 +45,7 @@ export class LevelFunctions {
      *           W(0)
      *      A(3) S(2) D(1)
      */
-     public static generateDirection(currentTile: TilePiece): number {
+    public static generateDirection(currentTile: TilePiece): number {
         const random: number = Math.random();     // returns a random num between 0 and 1
         if (random >= 0 &&
             random < currentTile.upProbability) {
@@ -72,7 +72,7 @@ export class LevelFunctions {
      * @param layer the layer we're operating on
      * @returns true if the move is valid, false if not
      */
-     public static queenValidMoveCheck(xory: boolean, pos: number, layer: Phaser.Tilemaps.Tilemap, queen: Figure): boolean {
+    public static queenValidMoveCheck(xory: boolean, pos: number, layer: Phaser.Tilemaps.Tilemap, queen: Figure): boolean {
         let tile: Phaser.Tilemaps.Tile = null;
         if (xory === false)
             tile = layer.getTileAtWorldXY(queen.image.x + pos, queen.image.y, true);

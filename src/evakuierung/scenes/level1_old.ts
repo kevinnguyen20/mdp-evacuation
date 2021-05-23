@@ -242,7 +242,7 @@ export class level1 extends Phaser.Scene {
             return false; //blocked, can't move, do nothing
         else
         */
-            return true;
+        return true;
     }
 
     
