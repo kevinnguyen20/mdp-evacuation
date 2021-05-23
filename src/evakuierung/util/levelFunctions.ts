@@ -1,4 +1,4 @@
-import { Player } from "./player";
+import { Figure } from "./figure";
 import { TileParser } from "./tileParser";
 import { TilePiece } from "./tilePiece";
 
@@ -9,11 +9,11 @@ export class LevelFunctions {
      * @param startpunkt coordinates of the startpunkt of the level, startpunkt [0] = x, startpunkt [1] = y
      * @returns list which contains each playerFigure
      */
-    public static initFigureList(playercount: number, startpunkt: number[]): Player[] {
-        const playerList: Player[] = [];
-        playerList.push(new Player(startpunkt[0], startpunkt[1], true)); //creates queen
+    public static initFigureList(playercount: number, startpunkt: number[]): Figure[] {
+        const playerList: Figure[] = [];
+        playerList.push(new Figure(startpunkt[0], startpunkt[1], true)); //creates queen
         for (let i = 0; i < playercount - 1; i++) {
-            playerList.push(new Player(startpunkt[0], startpunkt[1], false)); //creates pawns
+            playerList.push(new Figure(startpunkt[0], startpunkt[1], false)); //creates pawns
         }
         return playerList;
     }
@@ -72,19 +72,13 @@ export class LevelFunctions {
      * @param layer the layer we're operating on
      * @returns true if the move is valid, false if not
      */
-     public static queenValidMoveCheck(xory: boolean, pos: number, layer: Phaser.Tilemaps.Tilemap, queen: Player): boolean {
-        console.log("check move");
+     public static queenValidMoveCheck(xory: boolean, pos: number, layer: Phaser.Tilemaps.Tilemap, queen: Figure): boolean {
         let tile: Phaser.Tilemaps.Tile = null;
-        console.log(queen);
         if (xory === false)
-            tile = layer.getTileAtWorldXY(queen.x + pos, queen.y, true);
+            tile = layer.getTileAtWorldXY(queen.image.x + pos, queen.image.y, true);
         else
-            tile = layer.getTileAtWorldXY(queen.x, queen.y + pos, true);
-            console.log("else");
-
-        console.log("Tile: " + tile.index);
+            tile = layer.getTileAtWorldXY(queen.image.x, queen.image.y + pos, true);
         if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID){
-            console.log("wall");
             return false; //blocked, can't move, do nothing
         } else
             return true;
