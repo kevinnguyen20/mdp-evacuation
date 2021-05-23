@@ -116,8 +116,8 @@ export class TileParser {
                     action = true;
                 }
                 fiveTuple.push(new TilePiece(x, y, 0, 0, 0, 0, false, action, false))
-                }
-                x++;
+            }
+            x++;
                 
         })
         return fiveTuple;      
