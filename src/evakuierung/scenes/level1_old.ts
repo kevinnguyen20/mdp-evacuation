@@ -1,6 +1,6 @@
 import { TileParser } from "../util/tileParser";
 import { TilePiece } from "../util/tilePiece";
-import { Player } from "../util/player"
+import { Figure } from "../util/figure"
 
 export class level1 extends Phaser.Scene {
 
@@ -336,9 +336,9 @@ export class level1 extends Phaser.Scene {
      */
     private initFigureList(playercount: number, startpunkt: number[]): number[]{
         const playerList = [];
-        playerList.push (new Player(startpunkt[0], startpunkt[1], true)); //creates queen
+        playerList.push (new Figure(startpunkt[0], startpunkt[1], true)); //creates queen
         for (let i = 0; i<=playercount-1; i++){
-            playerList.push(new Player(startpunkt[0], startpunkt[1], false)); //creates pawns
+            playerList.push(new Figure(startpunkt[0], startpunkt[1], false)); //creates pawns
         }
         return playerList;
     }

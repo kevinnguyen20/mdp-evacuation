@@ -1,6 +1,6 @@
 // Class for each tile. There will be 13 * 7 tiles in total with each of them having
 // their probabilities (for each direction) hard coded.
-import { Player } from "../util/player"
+import { Figure } from "./figure"
 import { TileParser } from "./tileParser";
 
 export class TilePiece{
@@ -10,7 +10,7 @@ export class TilePiece{
     public downProbability: number;
     public leftProbability: number;
     public rightProbability: number;
-    private _playersOnTop: Player[] = [];   // this is where the players on top of a tile are stored, it should be a list of objects, when the piglet class is created
+    private _playersOnTop: Figure[] = [];   // this is where the players on top of a tile are stored, it should be a list of objects, when the piglet class is created
     public wall: boolean; //is the Tile a Wall?
     public action: boolean; // is the Tile a actionField?
     public goal: boolean; // ist the Tile the goal?
@@ -44,10 +44,10 @@ export class TilePiece{
     private setTileProbability (layer: Phaser.Tilemaps.Tilemap): void {
         if(this.x != null && this.y != null){
     
-            const tile_right = layer.getTileAtWorldXY(this.x + TileParser.TILE_SIZE, this.y);
-            const tile_left = layer.getTileAtWorldXY(this.x - TileParser.TILE_SIZE, this.y);
-            const tile_up = layer.getTileAtWorldXY(this.x, this.y + TileParser.TILE_SIZE);
-            const tile_down = layer.getTileAtWorldXY(this.x, this.y - TileParser.TILE_SIZE);
+            const tile_right = layer.getTileAtWorldXY(this.x + Figure.STEP_SIZE, this.y);
+            const tile_left = layer.getTileAtWorldXY(this.x - Figure.STEP_SIZE, this.y);
+            const tile_up = layer.getTileAtWorldXY(this.x, this.y + Figure.STEP_SIZE);
+            const tile_down = layer.getTileAtWorldXY(this.x, this.y - Figure.STEP_SIZE);
 
             let l = -1;
             let r = -1;

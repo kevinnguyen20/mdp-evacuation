@@ -2,8 +2,6 @@ import { TilePiece } from "./tilePiece";
 
 export class TileParser {
 
-    public static readonly TILE_SIZE = 32;
-
 
     // API Codes
     public static readonly WALL_ID = 9;
