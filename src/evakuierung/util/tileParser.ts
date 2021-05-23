@@ -1,3 +1,5 @@
+import { TilePiece } from "./tilePiece";
+
 export class TileParser {
 
     public static readonly TILE_SIZE = 32;
@@ -59,7 +61,7 @@ export class TileParser {
     }
 
     /**
-     * Use only the Ground-Layer Tiles as Input
+     * Use only the Action-Layer Tiles as Input
      */
     public static tileIDToAPIID_scifiLVL_Action(tileID: number) {
         if(tileID == 113) return TileParser.COIN_ID;
@@ -86,7 +88,40 @@ export class TileParser {
         return -1;
     }
 
-
+    /**
+     * 
+     * @param groundLayer groundLayer des Levels, um herauszufinden welcher Tile eine Wand, Ziel und Start ist 
+     * @param actionLayer actionLayer des Levels, um herauszufinden welcher Tile ein actionField ist (wird vermutlich nicht gebraucht)
+     * @returns fiveTuple, access the tiles in the fiveTuple with coordinates, e.g. fiveTuple[x+y*tilemapwidth], wobei das erste Tile oben links ist, x=0 und y=0 ist oben links
+     */
+    public static fiveTupleAPI (groundLayer: Phaser.Tilemaps.Tilemap, actionLayer: Phaser.Tilemaps.Tilemap) : TilePiece[] {
+        //TODO Wahrscheinlichkeiten in den einzelnen Tiles implementieren
+        const fiveTuple = [];
+        let x = 0;
+        let y = groundLayer.height - 1;
+        groundLayer.layer.data[0].forEach((tile) => {
+            if (x === groundLayer.width){
+                y--;
+                x=0;
+            }
+            if (this.tileIDToAPIID_scifiLVL_Ground(tile.index) === this.WALL_ID){ //is Tile a wall?
+                fiveTuple.push(new TilePiece (x, y, 0 ,0, 0, 0, true, false, false));
+            }
+            else if (this.tileIDToAPIID_scifiLVL_Ground(tile.index) === this.STOP_ID){ //is Tile the goal?
+                fiveTuple.push(new TilePiece (x, y, 0, 0, 0, 0, false, false, true));
+            }
+            else{
+                let action = false;
+                if (this.tileIDToAPIID_scifiLVL_Action(tile.index) === this.ACTIONFIELD_ID){ //is Tile an actionfield?
+                    action = true;
+                }
+                fiveTuple.push(new TilePiece(x, y, 0, 0, 0, 0, false, action, false))
+            }
+            x++;
+                
+        })
+        return fiveTuple;      
+    }
 
 
 }
