@@ -7,15 +7,15 @@ export class level1 extends Phaser.Scene {
 
     private tileParser:TileParser = new TileParser();
 
-    private playercount;
+    private playercount: number;
     private playerInstances = [];
     private playercounttext;
 
-    private score = 0;
+    private score: number = 0;
     private scoreText = null;
 
     private queenPos:number[];
-    private queenAlive = true;
+    private queenAlive: boolean = true;
     private queen = null;
     private queenPositionText = null;
 
@@ -139,7 +139,7 @@ export class level1 extends Phaser.Scene {
             layerY              // y
         );
 
-        const layerDesign = this.map.createLayer(   // there is no need to read this layer ever, only creat it
+        const layerDesign = this.map.createLayer(   // there is no need to read this layer ever, only create it
             'Design', // layerID
             tileset,        // tileset
             layerX,              // x
