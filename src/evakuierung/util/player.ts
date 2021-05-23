@@ -3,6 +3,7 @@ export class Player{
     public x: number;
     public y: number;
     public isQueen: boolean;
+    public image:Phaser.GameObjects.Image;
 
     constructor(x: number, y: number, isQueen:boolean){
         this.x = x;
@@ -25,6 +26,10 @@ export class Player{
             return true;
         }
         else return false;
+    }
+
+    public toString = (): string => {
+        return `Player Position ( ${this.x} + ,  ${this.y}), isQueen: ${this.isQueen}`;
     }
 
 }
