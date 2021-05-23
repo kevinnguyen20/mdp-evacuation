@@ -1,7 +1,6 @@
 import { TileParser } from "../util/tileParser";
 import { TilePiece } from "../util/tilePiece";
 import { Player } from "../util/player"
-import { LevelFunctions } from "../util/levelFunctions";
 
 export class level1 extends Phaser.Scene {
 
@@ -14,13 +13,10 @@ export class level1 extends Phaser.Scene {
     private score = 0;
     private scoreText = null;
 
-    private queenPos:number[];
+    private queenPos = [];
     private queenAlive = true;
     private queen = null;
     private queenPositionText = null;
-
-    private player: Player;
-
 
     private preMovePos = [];
     
@@ -58,8 +54,8 @@ export class level1 extends Phaser.Scene {
             "preload"
         );
 
-        this.load.image('tileset-scifi','./assets/sprites/tileset-scifi.png');
-        this.load.tilemapTiledJSON('map','./assets/sprites/Level_1.json');   
+        this.load.image('tiles','./assets/sprites/scifitiles-sheet.png');
+        this.load.tilemapTiledJSON('map','./assets/sprites/lvl.json');   
         this.load.image('queen', './assets/sprites/boar.png');
     }
 
@@ -115,48 +111,21 @@ export class level1 extends Phaser.Scene {
             tileHeight: 32
         });
 
-        //const layerX = 2/100 * window.innerWidth;
-        //const layerY = 23/100 * window.innerHeight;
-
-        //this.game.scale.updateCenter();
-
-        const layerX = 1/90 * window.screen.width;
-        const layerY = 1/20 * window.screen.height;
-
-        const tileset = this.map.addTilesetImage('scifi', 'tileset-scifi');
-
-        const layerGround = this.map.createStaticLayer(
-            'Ground', // layerID
+        const tileset = this.map.addTilesetImage('scifi', 'tiles');
+        const layer = this.map.createLayer(
+            'Tile Layer 1', // layerID
             tileset,        // tileset
-            layerX,              // x
-            layerY              // y
+            210,              // x
+            230               // y
         );
-
-        const layerDesign = this.map.createLayer(   // there is no need to read this layer ever, only creat it
-            'Design', // layerID
-            tileset,        // tileset
-            layerX,              // x
-            layerY              // y
-        );
-
-        const layerAction = this.map.createLayer(
-            'Action', // layerID
-            tileset,        // tileset
-            layerX,              // x
-            layerY              // y
-        );
-
         
 
-        // sets the Startposition automatically by reading the Map
-        const startingPosition: [number, number] = LevelFunctions.getStartPostition(layerGround);
-        console.log("Start at X:" + startingPosition[0] / 32 + " Y:" + startingPosition[1] / 32);
-        this.queenPos = [startingPosition[0] / 32, startingPosition[1] /32];
-        this.queen = this.add.image(layerX + 512 + TileParser.TILE_SIZE / 2, layerY + 64 + TileParser.TILE_SIZE / 2,'queen');
+        this.queen = this.add.image(610, 277,'queen');
+        this.queenPos = [5,12];
         this.playercount = 8;
                 
         this.playerInstances.push(this.queen);
-        const figureList = LevelFunctions.initFigureList(this.playercount, this.queenPos);
+        const figureList = this.initFigureList(this.playercount, this.queenPos);
         this.playercounttext = this.add.text(
             615,                    // x
             277,                     // y
@@ -168,30 +137,25 @@ export class level1 extends Phaser.Scene {
         this.playerInstances.push(this.playercounttext);
         
         this.scoreText = this.add.text(
-            2 * layerX, 
-            layerY - 80,  
+            150,
+            150, 
             'Score: ' + this.score
         );
         
         this.preMovePos = [400,48];
         
         this.queenPositionText = this.add.text(
-            2 * layerX, 
-            layerY - 60, 
+            150, 
+            190, 
             "Queen's position: (" + this.queenPos[0] + "," + this.queenPos[1] + ")"
         );
 
         
-
-        //########################################
-        // this.splitCalc() is producing a Uncaught TypeError, maybe cus the this.WAHRSCHEINLICHKEITEN[] is not updatet for the new Levels
-        //########################################
-
         this.input.keyboard.on('keydown-A', () =>{
-            if(this.queenAlive && this.queenValidMoveCheck(false, -32, layerGround)) {
+            if(this.queenAlive && this.queenValidMoveCheck(false, -32, layer)) {
                 
-                this.queenPos[0] -= 1;
-                this.movePlayers(false, -32, layerGround, layerAction, this.map);
+                this.queenPos[1] -= 1;
+                this.movePlayers(false, -32, layer, this.map);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
                 this.splitCalc(this.WAHRSCHEINLICHKEITEN[
@@ -205,10 +169,10 @@ export class level1 extends Phaser.Scene {
         });
 
         this.input.keyboard.on('keydown-D', () =>{
-            if (this.queenAlive && this.queenValidMoveCheck(false, +32, layerGround)){
+            if (this.queenAlive && this.queenValidMoveCheck(false, +32, layer)){
 
-                this.queenPos[0] += 1;
-                this.movePlayers(false, +32, layerGround, layerAction, this.map);
+                this.queenPos[1] += 1;
+                this.movePlayers(false, +32, layer, this.map);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
                 this.splitCalc(this.WAHRSCHEINLICHKEITEN[
@@ -222,10 +186,10 @@ export class level1 extends Phaser.Scene {
         });
 
         this.input.keyboard.on('keydown-S', () =>{
-            if (this.queenAlive && this.queenValidMoveCheck(true, +32, layerGround)){
+            if (this.queenAlive && this.queenValidMoveCheck(true, +32, layer)){
 
-                this.queenPos[1] += 1;
-                this.movePlayers(true, +32, layerGround, layerAction, this.map)
+                this.queenPos[0] -= 1;
+                this.movePlayers(true, +32, layer, this.map)
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
                 this.splitCalc(this.WAHRSCHEINLICHKEITEN[
@@ -239,10 +203,10 @@ export class level1 extends Phaser.Scene {
         });
 
         this.input.keyboard.on('keydown-W', () =>{
-            if (this.queenAlive && this.queenValidMoveCheck(true, -32, layerGround)){
+            if (this.queenAlive && this.queenValidMoveCheck(true, -32, layer)){
 
-                this.queenPos[1] -= 1;
-                this.movePlayers(true, -32, layerGround, layerAction, this.map)
+                this.queenPos[0] += 1;
+                this.movePlayers(true, -32, layer, this.map)
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
                 this.splitCalc(this.WAHRSCHEINLICHKEITEN[
@@ -271,7 +235,7 @@ export class level1 extends Phaser.Scene {
         else 
             tile = layer.getTileAtWorldXY(this.queen.x, this.queen.y+pos, true); 
 
-        if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) 
+        if(this.tileParser.tileIDToAPIID_LVL1(tile.index) === TileParser.WALL_ID) 
             return false; //blocked, can't move, do nothing
         else
             return true;
@@ -294,35 +258,37 @@ export class level1 extends Phaser.Scene {
      * @param map the map we're operating on
      */
 
-    private movePlayers(xory: boolean, pos: number, layerGround: Phaser.Tilemaps.Tilemap, layerAction: Phaser.Tilemaps.Tilemap, map:Phaser.Tilemaps.Tilemap): void {
+    private movePlayers(xory: boolean, pos: number, layer: Phaser.Tilemaps.Tilemap, map:Phaser.Tilemaps.Tilemap): void {
         this.playerInstances.forEach( (element)=> {
             let tile:Phaser.Tilemaps.Tile = null;
-            let tileAction:Phaser.Tilemaps.Tile = null;
-            
 
             // Determine if which axis we're moving on
-            if (xory === false){
-                tile = layerGround.getTileAtWorldXY(element.x+pos, element.y, true);
-                tileAction = layerAction.getTileAtWorldXY(element.x+pos, element.y, true); 
-            } else {
-                tile = layerGround.getTileAtWorldXY(element.x, element.y+pos, true); 
-                tileAction = layerAction.getTileAtWorldXY(element.x, element.y+pos, true); 
-            } 
+            if (xory === false)
+                tile = layer.getTileAtWorldXY(element.x+pos, element.y, true);
+            else 
+                tile = layer.getTileAtWorldXY(element.x, element.y+pos, true); 
+
             // eslint-disable-next-line no-empty
-            if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
+            if (this.tileParser.tileIDToAPIID_LVL1(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
             else {           
                 if(xory === false) element.x += pos; 
                 else element.y += pos;
 
-                if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
-                    this.scoreText.setText('Your final score: ' + this.score + "!");
-                    this.input.keyboard.enabled = false;
-                }
+                switch(this.tileParser.tileIDToAPIID_LVL1(tile.index)){
+                    case TileParser.STOP_ID:
+                        map.putTileAt(21, tile.x, tile.y);
+                        this.scoreText.setText('Your final score: ' + this.score + "!");
+                        this.input.keyboard.enabled = false;
+                        break;
 
-                if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
-                    map.putTileAt(0, tileAction.x, tileAction.y);
-                    this.score += 1;
-                    this.scoreText.setText('Score: ' + this.score);
+                    case TileParser.ACTIONFIELD_ID:
+                        map.putTileAt(21, tile.x, tile.y);
+                        this.score += 1;
+                        this.scoreText.setText('Score: ' + this.score);
+                        break;
+                    
+                    default:
+                        break;
                 }
             }
         });
@@ -362,6 +328,19 @@ export class level1 extends Phaser.Scene {
         this.playercounttext.setText('' + this.playercount);
         this.playerInstances.push(neueGruppe);
         this.playerInstances.push (queen);
+    }
+    /**
+     * @param playercount number of Players in the level
+     * @param startpunkt coordinates of the startpunkt of the level, startpunkt [0] = x, startpunkt [1] = y
+     * @returns list which contains each playerFigure
+     */
+    private initFigureList(playercount: number, startpunkt: number[]): number[]{
+        const playerList = [];
+        playerList.push (new Player(startpunkt[0], startpunkt[1], true)); //creates queen
+        for (let i = 0; i<=playercount-1; i++){
+            playerList.push(new Player(startpunkt[0], startpunkt[1], false)); //creates pawns
+        }
+        return playerList;
     }
 
     update(): void {
