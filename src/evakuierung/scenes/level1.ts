@@ -250,7 +250,7 @@ export class level1 extends Phaser.Scene {
         this.figureList.forEach( (element) =>{
             if(element.isQueen == false){
                 if(element.followQueen){
-                   element = this.movePlayer(xory, pos, this.layerGround, this.layerAction, this.map, element);
+                    element = this.movePlayer(xory, pos, this.layerGround, this.layerAction, this.map, element);
                 }
                 else{
                     const direction: number = LevelFunctions.generateDirection(this.fiveTupelList[(element.x + element.y*23)/32]);
@@ -303,7 +303,7 @@ export class level1 extends Phaser.Scene {
 
             if(xory === false){                 
                 element.updateCoordinates(pos, 0);
-           } 
+            } 
             else {
                 element.updateCoordinates(0, pos);
             }
