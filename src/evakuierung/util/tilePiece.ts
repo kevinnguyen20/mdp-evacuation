@@ -3,30 +3,17 @@ import { Figure } from "./figure"
 import { TileParser } from "./tileParser";
 
 export class TilePiece{
-    public x: number;
-    public y: number;
-    public upProbability: number;
-    public downProbability: number;
-    public leftProbability: number;
-    public rightProbability: number;
+    public tileCoordinates: number[] = [];
+    public directionProbabilities: number[] = []; // up down left right
     private _playersOnTop: Figure[] = [];   // this is where the players on top of a tile are stored, it should be a list of objects, when the piglet class is created
-    public wall: boolean;
-    public action: boolean;
-    public goal: boolean;
+    public tileType: boolean[] = []; // wall action goal
 
-    constructor(x: number, y: number, upProbability: number, downProbability: number, leftProbability: number, rightProbability: number, wall: boolean, action: boolean, goal: boolean ) {
-        this.x = x;
-        this.y = y;
-        this.upProbability = upProbability;
-        this.downProbability = downProbability;
-        this.leftProbability = leftProbability;
-        this.rightProbability = rightProbability;
-        this.wall = wall;
-        this.action = action;
-        this.goal = goal;
+    constructor(coordinates: number[], directionProbabilities: number[], tileType: boolean[]) {
+        this.tileCoordinates = coordinates;
+        this.directionProbabilities = directionProbabilities;
+        this.tileType = tileType;
     }
 
-    // can be accessed with dot notation
     public get playersOnTop(): Figure[] {
         return this._playersOnTop;
     }

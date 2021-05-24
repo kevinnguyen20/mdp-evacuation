@@ -51,13 +51,14 @@ export class LevelFunctions {
 
     public static generateDirection(tile: TilePiece): number {
         const random: number = Math.random();
-        if(random < tile.upProbability)
+        if(random < tile.directionProbabilities[0])
             return 0;   // up
 
-        else if(random < tile.upProbability + tile.rightProbability)
+        else if(random < tile.directionProbabilities[0] + tile.directionProbabilities[1])
             return 1;   // right
 
-        else if(random < tile.upProbability + tile.rightProbability + tile.downProbability) 
+        else if(random < tile.directionProbabilities[0] + tile.directionProbabilities[1] 
+                        + tile.directionProbabilities[2]) 
             return 2;   // down
 
         else
