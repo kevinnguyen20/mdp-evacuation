@@ -5,20 +5,12 @@ import { LevelFunctions } from "../util/levelFunctions";
 
 export class level1 extends Phaser.Scene {
 
-    private tileParser:TileParser = new TileParser();
-
-    private playercount: number;
-    private playerInstances = [];
-    private playercounttext: Phaser.GameObjects.Text;
-
     private score = 0;
     private scoreText: Phaser.GameObjects.Text = null;
 
     // ??????????????????????????????????
     //  do we still need this
     private queenPos:number[];
-    private queenAlive = true;
-    private queen = null;
     private queenPositionText = null;
     // ??????????????????????????????????
 
@@ -196,7 +188,7 @@ export class level1 extends Phaser.Scene {
         //########################################
 
         this.input.keyboard.on('keydown-A', () =>{
-            if(this.queenAlive && LevelFunctions.queenValidMoveCheck(false, -32, this.layerGround, this.figureList[0])) {
+            if(LevelFunctions.queenValidMoveCheck(false, -32, this.layerGround, this.figureList[0])) {
                 
                 this.queenPos[0] -= 1;
                 this.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
@@ -209,7 +201,7 @@ export class level1 extends Phaser.Scene {
         });
 
         this.input.keyboard.on('keydown-D', () =>{
-            if (this.queenAlive && LevelFunctions.queenValidMoveCheck(false, +32, this.layerGround, this.figureList[0])){
+            if (LevelFunctions.queenValidMoveCheck(false, +32, this.layerGround, this.figureList[0])){
 
                 this.queenPos[0] += 1;
                 this.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
@@ -222,7 +214,7 @@ export class level1 extends Phaser.Scene {
         });
 
         this.input.keyboard.on('keydown-S', () =>{
-            if (this.queenAlive && LevelFunctions.queenValidMoveCheck(true, +32, this.layerGround, this.figureList[0])){
+            if (LevelFunctions.queenValidMoveCheck(true, +32, this.layerGround, this.figureList[0])){
 
                 this.queenPos[1] += 1;
                 this.figureList[0] = this.movePlayer(true, +Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
@@ -235,7 +227,7 @@ export class level1 extends Phaser.Scene {
         });
 
         this.input.keyboard.on('keydown-W', () =>{
-            if (this.queenAlive && LevelFunctions.queenValidMoveCheck(true, -32, this.layerGround, this.figureList[0])){
+            if (LevelFunctions.queenValidMoveCheck(true, -32, this.layerGround, this.figureList[0])){
 
                 this.queenPos[1] -= 1;
                 this.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
