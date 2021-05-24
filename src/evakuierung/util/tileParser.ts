@@ -68,11 +68,12 @@ export class TileParser {
     /**
      * 
      * @param groundLayer groundLayer des Levels, um herauszufinden welcher Tile eine Wand, Ziel und Start ist 
-     * @returns fiveTuple, access the tiles in the fiveTuple with coordinates, e.g. fiveTuple[x+y*tilemapwidth], wobei das erste Tile oben links ist, x=0 und y=0 ist oben links
+     * @returns tileTuple, access the tiles in the tileTuple with coordinates, e.g. tileTuple[x+y*tilemapwidth], 
+     *          wobei das erste Tile oben links ist, x=0 und y=0 ist oben links
      */
-    public static fiveTupleAPI (groundLayer: Phaser.Tilemaps.Tilemap) : TilePiece[] {
+    public static tileTupleAPI (groundLayer: Phaser.Tilemaps.Tilemap) : TilePiece[] {
         //TODO Wahrscheinlichkeiten in den einzelnen Tiles implementieren
-        const fiveTuple = [];
+        const tileTuple = [];
         let x = 0;
         let y = groundLayer.height - 1;
        
@@ -82,26 +83,24 @@ export class TileParser {
                 x=0;
             }
             if(this.tileIDToAPIID_scifiLVL_Ground(tile.index) === this.WALL_ID)
-                fiveTuple.push(new TilePiece (x, y, 0 ,0, 0, 0, true, false, false));
+                tileTuple.push(new TilePiece (x, y, 0 ,0, 0, 0, true, false, false));
 
             else if (this.tileIDToAPIID_scifiLVL_Ground(tile.index) === this.STOP_ID)
-                fiveTuple.push(new TilePiece (x, y, 0, 0, 0, 0, false, false, true));
+                tileTuple.push(new TilePiece (x, y, 0, 0, 0, 0, false, false, true));
 
             else {
                 let action = false;
                 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 // carefull this may not work cuz only move Information is stored in the groundLayer, no Action Tiles
                 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                if (this.tileIDToAPIID_scifiLVL_Action(tile.index) === this.ACTIONFIELD_ID){ //is Tile an actionfield?
+                if (this.tileIDToAPIID_scifiLVL_Action(tile.index) === this.ACTIONFIELD_ID)
                     action = true;
-                }
-                fiveTuple.push(new TilePiece(x, y, 0, 0, 0, 0, false, action, false))
+
+                tileTuple.push(new TilePiece(x, y, 0, 0, 0, 0, false, action, false));
             }
             x++;
                 
         })
-        return fiveTuple;      
+        return tileTuple;      
     }
-
-
 }

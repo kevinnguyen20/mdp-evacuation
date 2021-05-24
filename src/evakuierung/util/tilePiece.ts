@@ -10,9 +10,9 @@ export class TilePiece{
     public leftProbability: number;
     public rightProbability: number;
     private _playersOnTop: Figure[] = [];   // this is where the players on top of a tile are stored, it should be a list of objects, when the piglet class is created
-    public wall: boolean; //is the Tile a Wall?
-    public action: boolean; // is the Tile a actionField?
-    public goal: boolean; // ist the Tile the goal?
+    public wall: boolean;
+    public action: boolean;
+    public goal: boolean;
 
     constructor(x: number, y: number, upProbability: number, downProbability: number, leftProbability: number, rightProbability: number, wall: boolean, action: boolean, goal: boolean ) {
         this.x = x;

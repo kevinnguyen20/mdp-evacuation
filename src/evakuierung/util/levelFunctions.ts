@@ -30,7 +30,7 @@ export class LevelFunctions {
     public static getStartPostition(layerGround: Phaser.Tilemaps.Tilemap): [number, number] {
         let X = 0;
         let Y = 0;
-        
+
         layerGround.forEachTile((tile) => {
             if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.START_ID) {
                 X = tile.pixelX;
@@ -62,7 +62,6 @@ export class LevelFunctions {
 
         else
             return 3;   // left
-
     }
 
     /**
@@ -78,14 +77,7 @@ export class LevelFunctions {
             tile = layer.getTileAtWorldXY(queen.image.x + pos, queen.image.y, true);
 
         return TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID ?
-            false : true;
-
-        /*
-        if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID){
-            return false; //blocked, can't move, do nothing
-        } else
-            return true;
-            */
+            false : true;   // false means blocked, freeze
     }
 
 }
