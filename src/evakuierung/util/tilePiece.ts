@@ -27,7 +27,7 @@ export class TilePiece{
     }
 
     // can be accessed with dot notation
-    public get playersOnTop() {
+    public get playersOnTop(): Figure[] {
         return this._playersOnTop;
     }
 
