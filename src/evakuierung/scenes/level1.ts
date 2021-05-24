@@ -19,22 +19,16 @@ export class level1 extends Phaser.Scene {
     private queen = null;
     private queenPositionText = null;
 
-    private player: Player;
-
+    private playerList: Player[];
+    private fiveTupelList: TilePiece[]; 
 
     private preMovePos = [];
     
-    private WAHRSCHEINLICHKEITEN = [
-        [[null, null, null , null], [[1, 99, 99], [100, 100, 1], null, null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
-        [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
-        [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
-        [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
-        [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [[1,50, 50], [51,100, 50], null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
-        [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]],
-        [[null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null], [null, null, null , null]]
-    ];
-
     private map = null;
+
+    private layerGround: Phaser.Tilemaps.Tilemap;
+    private layerAction: Phaser.Tilemaps.Tilemap;
+    private layerDesign: Phaser.Tilemaps.Tilemap;
 
 
     constructor() {
@@ -132,38 +126,41 @@ export class level1 extends Phaser.Scene {
 
         const tileset = this.map.addTilesetImage('scifi', 'tileset-scifi');
 
-        const layerGround = this.map.createStaticLayer(
+        this.layerGround = this.map.createStaticLayer(
             'Ground', // layerID
             tileset,        // tileset
             layerX,              // x
             layerY              // y
         );
 
-        const layerDesign = this.map.createLayer(   // there is no need to read this layer ever, only create it
+        this.layerDesign = this.map.createLayer(   // there is no need to read this layer ever, only create it
             'Design', // layerID
             tileset,        // tileset
             layerX,              // x
             layerY              // y
         );
 
-        const layerAction = this.map.createLayer(
+        this.layerAction = this.map.createLayer(
             'Action', // layerID
             tileset,        // tileset
             layerX,              // x
             layerY              // y
         );
 
-        
+        this.fiveTupelList = TileParser.fiveTupleAPI(this.layerGround, this.layerAction);
 
         // sets the Startposition automatically by reading the Map
-        const startingPosition: [number, number] = LevelFunctions.getStartPostition(layerGround);
+        const startingPosition: [number, number] = LevelFunctions.getStartPostition(this.layerGround);
         console.log("Start at X:" + startingPosition[0] / 32 + " Y:" + startingPosition[1] / 32);
+        
         this.queenPos = [startingPosition[0] / 32, startingPosition[1] /32];
         this.queen = this.add.image(layerX + 512 + TileParser.TILE_SIZE / 2, layerY + 64 + TileParser.TILE_SIZE / 2,'queen');
         this.playercount = 8;
                 
         this.playerInstances.push(this.queen);
-        const figureList = LevelFunctions.initFigureList(this.playercount, this.queenPos);
+        this.playerList = LevelFunctions.initFigureList(this.playercount, this.queenPos);
+        this.fiveTupelList[this.queenPos[0] + 23*this.queenPos[1]].playersOnTop = this.playerList.length; //adds all players to the starting tile
+
         this.playercounttext = this.add.text(
             615,                    // x
             277,                     // y
@@ -195,52 +192,52 @@ export class level1 extends Phaser.Scene {
         //########################################
 
         this.input.keyboard.on('keydown-A', () =>{
-            if(this.queenAlive && this.queenValidMoveCheck(false, -32, layerGround)) {
+            if(this.queenAlive && this.queenValidMoveCheck(false, -32, this.layerGround)) {
                 
                 this.queenPos[0] -= 1;
-                this.movePlayers(false, -32, layerGround, layerAction, this.map);
+                this.playerList[0] = this.movePlayer(false, -32, this.layerGround, this.layerAction, this.map, this.playerList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                //this.splitCalc(this.WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1] + 1]);
+                this.doSplit(false, -32);
 
                 this.preMovePos[0] -= 32;
             }
         });
 
         this.input.keyboard.on('keydown-D', () =>{
-            if (this.queenAlive && this.queenValidMoveCheck(false, +32, layerGround)){
+            if (this.queenAlive && this.queenValidMoveCheck(false, +32, this.layerGround)){
 
                 this.queenPos[0] += 1;
-                this.movePlayers(false, +32, layerGround, layerAction, this.map);
+                this.playerList[0] = this.movePlayer(false, +32, this.layerGround, this.layerAction, this.map, this.playerList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                //this.splitCalc(this.WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1] - 1]);
+                this.doSplit(false, +32);
 
                 this.preMovePos[0] += 32;
             }
         });
 
         this.input.keyboard.on('keydown-S', () =>{
-            if (this.queenAlive && this.queenValidMoveCheck(true, +32, layerGround)){
+            if (this.queenAlive && this.queenValidMoveCheck(true, +32, this.layerGround)){
 
                 this.queenPos[1] += 1;
-                this.movePlayers(true, +32, layerGround, layerAction, this.map)
+                this.playerList[0] = this.movePlayer(true, +32, this.layerGround, this.layerAction, this.map, this.playerList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                //this.splitCalc(this.WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1] + 1]);
+                this.doSplit(true, +32);
 
                 this.preMovePos[1] += 32;
             }
         });
 
         this.input.keyboard.on('keydown-W', () =>{
-            if (this.queenAlive && this.queenValidMoveCheck(true, -32, layerGround)){
+            if (this.queenAlive && this.queenValidMoveCheck(true, -32, this.layerGround)){
 
                 this.queenPos[1] -= 1;
-                this.movePlayers(true, -32, layerGround, layerAction, this.map)
+                this.playerList[0] = this.movePlayer(true, -32, this.layerGround, this.layerAction, this.map, this.playerList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                //this.splitCalc(this.WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1] - 1]);
+                this.doSplit(true, -32);
 
                 this.preMovePos[1] -= 32;
             }
@@ -268,22 +265,41 @@ export class level1 extends Phaser.Scene {
             return true;
     }
 
-    /*
-
-    splitCalc IST NEU ZU IMPLEMENTIEREN !!!!!!!!!!!!!!
-
-    private splitCalc(arr:number[][]): void {
-        const nmbr = Phaser.Math.Between(1,150);
-        for(let i = 0; i<=3; i++)
-            if(arr[i] != null)
-                if(nmbr>=arr[i][0] && nmbr<=arr[i][1]) {
-                    //this.doSplit(i, arr[i][2]);
+    /**
+     * Executes the split for the non-queen players
+     * @param xory true when moving on the y axis (up/down), false if moving on the x axis (left/right)
+     * @param pos always has the value +32 or -32, because the tiles are 32x32
+     */
+    private doSplit(xory: boolean, pos: number): void {
+        this.playerList.forEach( (element) =>{
+            if(element.isQueen == false){
+                if(element.followQueen){
+                   element = this.movePlayer(xory, pos, this.layerGround, this.layerAction, this.map, element);
                 }
+                else{
+                    const direction: number = this.generateDirection(this.fiveTupelList[(element.x + element.y*23)/32]);
+                    switch(direction){
+                        case 0: 
+                            element = this.movePlayer(true, -32, this.layerGround, this.layerAction, this.map, element);
+                            break;
+                        case 1: 
+                            element = this.movePlayer(false, +32, this.layerGround, this.layerAction, this.map, element);
+                            break;
+                        case 2: 
+                            element = this.movePlayer(true, +32, this.layerGround, this.layerAction, this.map, element);
+                            break;
+                        case 3: 
+                            element = this.movePlayer(false, -32, this.layerGround, this.layerAction, this.map, element);
+                            break;
+                    }
+                }
+            }
+        });
     }
-    */
+    
 
     /**
-     * Moves all the figures (including the queen!)
+     * Moves a figure in a given direction (including the queen!)
      * 
      * @param xory true when moving on the y axis (up/down), false if moving on the x axis (left/right)
      * @param pos always has the value +32 or -32, because the tiles are 32x32
@@ -291,38 +307,46 @@ export class level1 extends Phaser.Scene {
      * @param map the map we're operating on
      */
 
-    private movePlayers(xory: boolean, pos: number, layerGround: Phaser.Tilemaps.Tilemap, layerAction: Phaser.Tilemaps.Tilemap, map:Phaser.Tilemaps.Tilemap): void {
-        this.playerInstances.forEach( (element)=> {
-            let tile:Phaser.Tilemaps.Tile = null;
-            let tileAction:Phaser.Tilemaps.Tile = null;
+    private movePlayer(xory: boolean, pos: number, layerGround: Phaser.Tilemaps.Tilemap, layerAction: Phaser.Tilemaps.Tilemap, map:Phaser.Tilemaps.Tilemap, element: Player): Player {        
+        let tile:Phaser.Tilemaps.Tile = null;
+        let tileAction:Phaser.Tilemaps.Tile = null;
             
 
-            // Determine if which axis we're moving on
-            if (xory === false){
-                tile = layerGround.getTileAtWorldXY(element.x+pos, element.y, true);
-                tileAction = layerAction.getTileAtWorldXY(element.x+pos, element.y, true); 
-            } else {
-                tile = layerGround.getTileAtWorldXY(element.x, element.y+pos, true); 
-                tileAction = layerAction.getTileAtWorldXY(element.x, element.y+pos, true); 
+        // Determine if which axis we're moving on
+        if (xory === false){
+            tile = layerGround.getTileAtWorldXY(element.x+pos, element.y, true);
+            tileAction = layerAction.getTileAtWorldXY(element.x+pos, element.y, true); 
+        } else {
+            tile = layerGround.getTileAtWorldXY(element.x, element.y+pos, true); 
+            tileAction = layerAction.getTileAtWorldXY(element.x, element.y+pos, true); 
+        } 
+        // eslint-disable-next-line no-empty
+        if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
+        else {   
+            this.fiveTupelList[(element.x + 23*element.y)/32].playersOnTop--; 
+
+            if(xory === false){                 
+                element.x += pos;
             } 
-            // eslint-disable-next-line no-empty
-            if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
-            else {           
-                if(xory === false) element.x += pos; 
-                else element.y += pos;
-
-                if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
-                    this.scoreText.setText('Your final score: ' + this.score + "!");
-                    this.input.keyboard.enabled = false;
-                }
-
-                if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
-                    map.putTileAt(0, tileAction.x, tileAction.y);
-                    this.score += 1;
-                    this.scoreText.setText('Score: ' + this.score);
-                }
+            else {
+                element.y += pos;
             }
-        });
+
+            this.fiveTupelList[(element.x + 23*element.y)/32].playersOnTop++;
+
+            if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
+                this.scoreText.setText('Your final score: ' + this.score + "!");
+                this.input.keyboard.enabled = false;
+            }
+
+            if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
+                map.putTileAt(0, tileAction.x, tileAction.y);
+                this.score += 1;
+                this.scoreText.setText('Score: ' + this.score);
+            }
+        }
+        
+        return element;
     }
 
     /**
@@ -379,6 +403,7 @@ export class level1 extends Phaser.Scene {
     }
     */
 
+    /*
     private setFigureAt(x: number, y: number, percentage: number): void {
         const queen = this.add.image (x, y, 'queen');
         const neueGruppe = this.add.text(
@@ -395,6 +420,7 @@ export class level1 extends Phaser.Scene {
         this.playerInstances.push(neueGruppe);
         this.playerInstances.push (queen);
     }
+    */
 
     update(): void {
         console.log();

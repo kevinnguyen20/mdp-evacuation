@@ -10,7 +10,7 @@ export class TilePiece{
     public downProbability: number;
     public leftProbability: number;
     public rightProbability: number;
-    private _playersOnTop: Player[] = [];   // this is where the players on top of a tile are stored, it should be a list of objects, when the piglet class is created
+    public playersOnTop: number;   // this is where the players on top of a tile are stored, it should be a list of objects, when the piglet class is created
     public wall: boolean; //is the Tile a Wall?
     public action: boolean; // is the Tile a actionField?
     public goal: boolean; // ist the Tile the goal?
@@ -28,8 +28,8 @@ export class TilePiece{
     }
 
     // can be accessed with dot notation
-    public get playersOnTop() {
-        return this._playersOnTop;
+    public get getPlayersOnTop(): number {
+        return this.playersOnTop;
     }
 
     /**
