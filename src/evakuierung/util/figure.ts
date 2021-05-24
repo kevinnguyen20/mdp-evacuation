@@ -20,6 +20,8 @@ export class Figure{
         this.image.y += y;
     }
 
+    /* We will retrieve the probability from the tile. 
+
     public followQueen():boolean {
         const randomNum: number = Math.random();
         if (randomNum < 0.92){
@@ -27,6 +29,8 @@ export class Figure{
         }
         else return false;
     }
+    */
+
 
     public toString = (): string => {
         return "Queen's position (${this.x} + , ${this.y}), isQueen: ${this.isQueen}";
