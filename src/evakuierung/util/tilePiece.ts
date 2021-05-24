@@ -1,5 +1,4 @@
 // Class for each tile. There will be 13 * 7 tiles in total with each of them having
-// their probabilities (for each direction) hard coded.
 import { Figure } from "./figure"
 import { TileParser } from "./tileParser";
 

@@ -34,7 +34,7 @@ export class Figure{
 
 
     public toString = (): string => {
-        return "Queen's position (${this.x} + , ${this.y}), isQueen: ${this.isQueen}";
+        return `Queen's position (${this.x} + , ${this.y}), isQueen: ${this.isQueen}`;
     }
 
 }

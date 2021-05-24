@@ -39,32 +39,28 @@ export class LevelFunctions {
     }
 
     // Please don't use the term "split". Instead, use followQueen or disobeyQueen :)
+    // kevinnguyen changed this method radically (runtime optimized)
     /**
-     * Determines the direction of the next split given the probabilities for each direction
+     * Determines the direction (if we disobey the queen) given the probabilities for each direction
      * 
-     * @param currentTile the tile we're currently on 
-     * @returns the direction of the split that occurs
-     *          when leaving the tile - 0 (up), 1 (right), 2 (down), 3 (left)
-     *           W(0)
-     *      A(3) S(2) D(1)
+     * @param tile the tile we're currently on 
+     * @returns the direction - 0 (up), 1 (right), 2 (down), 3 (left)
      */
 
-    public static generateDirection(currentTile: TilePiece): number {
+    public static generateDirection(tile: TilePiece): number {
         const random: number = Math.random();
-        if (random >= 0 &&
-            random < currentTile.upProbability)
+        if(random < tile.upProbability)
             return 0;   // up
-        else if (random >= currentTile.upProbability &&
-            random < currentTile.upProbability + currentTile.downProbability) {
-            return 2;   // down
-        } else if (random >= currentTile.upProbability + currentTile.downProbability &&
-            random < currentTile.upProbability + currentTile.downProbability + currentTile.leftProbability) {
-            return 3;   // left
-        } else if (random >= currentTile.upProbability + currentTile.downProbability + currentTile.leftProbability &&
-            random < 1) {
+
+        else if(random < tile.upProbability + tile.rightProbability)
             return 1;   // right
-        }
-        return -1;
+
+        else if(random < tile.upProbability + tile.rightProbability + tile.downProbability) 
+            return 2;   // down
+
+        else
+            return 3;   // left
+
     }
 
 
@@ -78,10 +74,9 @@ export class LevelFunctions {
      */
     public static queenValidMoveCheck(xory: boolean, pos: number, layer: Phaser.Tilemaps.Tilemap, queen: Figure): boolean {
         let tile: Phaser.Tilemaps.Tile = null;
-        if (xory === false)
+        tile = xory ? tile = layer.getTileAtWorldXY(queen.image.x, queen.image.y + pos, true) :
             tile = layer.getTileAtWorldXY(queen.image.x + pos, queen.image.y, true);
-        else
-            tile = layer.getTileAtWorldXY(queen.image.x, queen.image.y + pos, true);
+
         if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID){
             return false; //blocked, can't move, do nothing
         } else
