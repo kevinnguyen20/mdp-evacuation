@@ -14,6 +14,7 @@ export class LevelFunctions {
         const playerList: Figure[] = [];
 
         playerList.push(new Figure(spawnPoint[0], spawnPoint[1], true)); //creates queen
+
         for (let i=0; i<figure-1; i++)
             playerList.push(new Figure(spawnPoint[0], spawnPoint[1], false)); //creates subjects
 
@@ -29,6 +30,7 @@ export class LevelFunctions {
     public static getStartPostition(layerGround: Phaser.Tilemaps.Tilemap): [number, number] {
         let X = 0;
         let Y = 0;
+        
         layerGround.forEachTile((tile) => {
             if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.START_ID) {
                 X = tile.pixelX;
@@ -63,24 +65,27 @@ export class LevelFunctions {
 
     }
 
-
     /**
-     * Checks if the queen moves in a valid direction
-     * 
      * @param xory true when moving on the y axis (up/down), false if moving on the x axis (left/right)
      * @param pos always has the value +32 or -32, because the tiles are 32x32
      * @param layer the layer we're operating on
-     * @returns true if the move is valid, false if not
+     * @returns valid/invalid move
      */
+
     public static queenValidMoveCheck(xory: boolean, pos: number, layer: Phaser.Tilemaps.Tilemap, queen: Figure): boolean {
         let tile: Phaser.Tilemaps.Tile = null;
         tile = xory ? tile = layer.getTileAtWorldXY(queen.image.x, queen.image.y + pos, true) :
             tile = layer.getTileAtWorldXY(queen.image.x + pos, queen.image.y, true);
 
+        return TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID ?
+            false : true;
+
+        /*
         if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID){
             return false; //blocked, can't move, do nothing
         } else
             return true;
+            */
     }
 
 }
