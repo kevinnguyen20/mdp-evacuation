@@ -1,6 +1,9 @@
+# Testbericht Woche 2
+
 Die folgenden Bugs sind auf die alte Version unseres Codes zurückführen. Gefühlt hängen 90% der Bugs mit dem Split und der unsauberen Implementierung der Königin zusammen.
 
-Gefixte Bugs:
+## Gefixte Bugs
+
 - 1. Bug: Koordinate nach dem Einsammeln der Rewards nicht aktualisiert
 - 2. Bug: Südlicher Split funktioniert nicht
 - 3. Bug: Aufgespaltene Gruppe befindet sich auf demselben Feld wie die Königin
@@ -14,14 +17,16 @@ Gefixte Bugs:
 - 11. Bug: Gruppenzusammenführung addiert sich fehlerhaft (manchmal bis zu -243)
 - 12. Bug: Beim Split werden falsche Spielerzahlen angezeigt (z.B. nach dem 5. Mal immer noch 50 pro Split)
 
-Reproduzierbare Bugs:
+## Reproduzierbare Bugs
+
 - 13. Bug: Spieleranzeige bewegt sich nicht mit
 - 14. Bug: Spieler erreicht das Ziel, ohne jemals mit der Königin oder Untertarnen das Ziel erreicht zu haben
 - 15. Bug: Königin läuft durch die Wand/nicht begehbare Felder hindurch
 - 16. Bug: Untertarnen blockieren Königin, es findet keine Gruppenzusammenführung statt
 - 17. Bug: Nach längerer Spielzeit kann man nicht mehr splitten
 
-Paranormale Bugs:
+## Paranormale Bugs:
+
 - 18. Bug: Koordinatenanzeige friert
 - 19. Bug: Königin bewegt sich ganz normal, ein Teil der Untertarnen jedoch nicht
 - 20. Bug: Königin verschwindet einfach, Untertarnen sichtbar, können sich aber nicht bewegen (weil Königin weg ist)
