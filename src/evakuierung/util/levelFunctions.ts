@@ -5,16 +5,18 @@ import { TilePiece } from "./tilePiece";
 export class LevelFunctions {
 
     /**
-     * @param playercount number of Players in the level
-     * @param startpunkt coordinates of the startpunkt of the level, startpunkt [0] = x, startpunkt [1] = y
+     * @param figure number of Players in the level
+     * @param spawnPoint level coordinates of the spawnPoint, spawnPoint[0] = x, spawnPoint[1] = y
      * @returns list which contains each playerFigure
      */
-    public static initFigureList(playercount: number, startpunkt: number[]): Figure[] {
+
+    public static initFigureList(figure: number, spawnPoint: number[]): Figure[] {
         const playerList: Figure[] = [];
-        playerList.push(new Figure(startpunkt[0], startpunkt[1], true)); //creates queen
-        for (let i = 0; i < playercount - 1; i++) {
-            playerList.push(new Figure(startpunkt[0], startpunkt[1], false)); //creates pawns
-        }
+
+        playerList.push(new Figure(spawnPoint[0], spawnPoint[1], true)); //creates queen
+        for (let i=0; i<figure-1; i++)
+            playerList.push(new Figure(spawnPoint[0], spawnPoint[1], false)); //creates subjects
+
         return playerList;
     }
 
@@ -23,11 +25,12 @@ export class LevelFunctions {
      * @param layerGround inout the Ground-Layer
      * @returns Tupel [X, Y] and null if not Start was found
      */
+
     public static getStartPostition(layerGround: Phaser.Tilemaps.Tilemap): [number, number] {
         let X = 0;
         let Y = 0;
         layerGround.forEachTile((tile) => {
-            if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.START_ID) {
+            if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.START_ID) {
                 X = tile.pixelX;
                 Y = tile.pixelY;
             }
@@ -35,7 +38,7 @@ export class LevelFunctions {
         return [X, Y];
     }
 
-
+    // Please don't use the term "split". Instead, use followQueen or disobeyQueen :)
     /**
      * Determines the direction of the next split given the probabilities for each direction
      * 
@@ -45,12 +48,13 @@ export class LevelFunctions {
      *           W(0)
      *      A(3) S(2) D(1)
      */
+
     public static generateDirection(currentTile: TilePiece): number {
-        const random: number = Math.random();     // returns a random num between 0 and 1
+        const random: number = Math.random();
         if (random >= 0 &&
-            random < currentTile.upProbability) {
+            random < currentTile.upProbability)
             return 0;   // up
-        } else if (random >= currentTile.upProbability &&
+        else if (random >= currentTile.upProbability &&
             random < currentTile.upProbability + currentTile.downProbability) {
             return 2;   // down
         } else if (random >= currentTile.upProbability + currentTile.downProbability &&

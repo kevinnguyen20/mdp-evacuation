@@ -21,12 +21,7 @@ export class Figure{
     }
 
     /* We will retrieve the probability from the tile.
-    Instead, implement something like:
-    public retrieveProbsFromTile(f: number, n: number, e: number, s: number, w: number) {
-        tmp = math.random()
-        if(tmp < f) follow queen
-        else if(...) other direction
-    }
+    Instead, use generateDirections from levelFunctions.
 
     public followQueen():boolean {
         const randomNum: number = Math.random();
