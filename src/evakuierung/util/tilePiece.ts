@@ -5,8 +5,11 @@ import { TileParser } from "./tileParser";
 export class TilePiece{
     public tileCoordinates: number[] = [];
     public directionProbabilities: number[] = []; // up down left right
-    private _playersOnTop: Figure[] = [];   // this is where the players on top of a tile are stored, it should be a list of objects, when the piglet class is created
     public tileType: boolean[] = []; // wall action goal
+
+    // this is where the players on top of a tile are stored, 
+    // it should be a list of objects, when the piglet class is created
+    private _playersOnTop: Figure[] = [];
 
     constructor(coordinates: number[], directionProbabilities: number[], tileType: boolean[]) {
         this.tileCoordinates = coordinates;

@@ -83,10 +83,18 @@ export class TileParser {
             }
             const index: number = this.tileIDToAPIID_scifiLVL_Ground(tile.index);
             if(index === this.WALL_ID)
-                tileTuple.push(new TilePiece (x, y, 15, 60, 10, 15, true, false, false));
+                tileTuple.push(new TilePiece(
+                    [x, y], 
+                    [15, 60, 10, 15], 
+                    [true, false, false]
+                ));
 
             else if (index === this.STOP_ID)
-                tileTuple.push(new TilePiece (x, y, 25, 40, 15, 20, false, false, true));
+                tileTuple.push(new TilePiece(
+                    [x, y], 
+                    [25, 40, 15, 20], 
+                    [false, false, true]
+                ));
 
             else {
                 let action = false;
@@ -96,7 +104,11 @@ export class TileParser {
                 if (this.tileIDToAPIID_scifiLVL_Action(tile.index) === this.ACTIONFIELD_ID)
                     action = true;
 
-                tileTuple.push(new TilePiece(x, y, 0, 0, 0, 0, false, action, false));
+                tileTuple.push(new TilePiece(
+                    [x, y], 
+                    [0, 0, 0, 0], 
+                    [false, action, false]
+                ));
             }
             x++;
                 
