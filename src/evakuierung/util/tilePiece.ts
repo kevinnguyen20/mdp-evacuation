@@ -4,7 +4,7 @@ import { TileParser } from "./tileParser";
 
 export class TilePiece{
     public tileCoordinates: number[] = [];
-    public directionProbabilities: number[] = []; // up down left right
+    public directionProbabilities: number[] = []; // up right down left
     public tileType: boolean[] = []; // wall action goal
 
     // this is where the players on top of a tile are stored, 
@@ -31,41 +31,35 @@ export class TilePiece{
      * @param layer input the Probability-Layer from the Level
      */
     private setTileProbability (layer: Phaser.Tilemaps.Tilemap): void {
-        if(this.x != null && this.y != null){
+        const x = this.tileCoordinates[0];
+        const y = this.tileCoordinates[1];
+        if(x !== null && y !== null){
     
-            const tile_right = layer.getTileAtWorldXY(this.x + Figure.STEP_SIZE, this.y);
-            const tile_left = layer.getTileAtWorldXY(this.x - Figure.STEP_SIZE, this.y);
-            const tile_up = layer.getTileAtWorldXY(this.x, this.y + Figure.STEP_SIZE);
-            const tile_down = layer.getTileAtWorldXY(this.x, this.y - Figure.STEP_SIZE);
+            const tile_up = layer.getTileAtWorldXY(x, y + Figure.STEP_SIZE);
+            const tile_right = layer.getTileAtWorldXY(x + Figure.STEP_SIZE, y);
+            const tile_down = layer.getTileAtWorldXY(x, y - Figure.STEP_SIZE);
+            const tile_left = layer.getTileAtWorldXY(x - Figure.STEP_SIZE, y);
 
-            let l = -1;
-            let r = -1;
             let u = -1;
+            let r = -1;
             let d = -1;
+            let l = -1;
 
-            if((r = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_right.index)) != -1){    // right neighbour tile
-                this.rightProbability = r;
-            } else {
-                this.rightProbability = -1;
-            }
+            // up neighbour tile
+            u = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_up.index);
+            this.directionProbabilities[0] = u !== -1 ? u : -1;
 
-            if((l = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_left.index)) != -1){    // left neighbour tile
-                this.leftProbability = l;
-            } else {
-                this.leftProbability = -1;
-            }
+            // right neighbour tile
+            r = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_right.index);
+            this.directionProbabilities[1] = r !== -1 ? r : -1;
 
-            if((u = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_up.index)) != -1){    // up neighbour tile
-                this.upProbability = u;
-            } else {
-                this.upProbability = -1;
-            }
+            // down neighbour tile
+            d = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_down.index);
+            this.directionProbabilities[2] = d !== -1 ? d : -1;
 
-            if((d = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_down.index)) != -1){    // down neighbour tile
-                this.downProbability = d;
-            } else {
-                this.downProbability = -1;
-            }
+            // left neighbour tile
+            l = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_left.index);
+            this.directionProbabilities[3] = l !== -1 ? l : -1;
         }
     }
     
