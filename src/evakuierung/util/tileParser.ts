@@ -31,9 +31,9 @@ export class TileParser {
      * Use only the Ground-Layer Tiles as Input
      */
     public static tileIDToAPIID_scifiLVL_Ground(tileID: number): number {
-        if(tileID == 5 || tileID == 18 || tileID == 43)  return TileParser.WALL_ID;
-        if(tileID == 1 || tileID == 2 || tileID == 15 || tileID == 16) return TileParser.START_ID;
-        if(tileID == 69 || tileID == 70 || tileID == 83 || tileID == 84) return TileParser.STOP_ID;
+        if(tileID === 5 || tileID === 18 || tileID === 43)  return TileParser.WALL_ID;
+        if(tileID === 1 || tileID === 2 || tileID === 15 || tileID === 16) return TileParser.START_ID;
+        if(tileID === 69 || tileID === 70 || tileID === 83 || tileID === 84) return TileParser.STOP_ID;
         return -1;
     }
 
@@ -41,9 +41,9 @@ export class TileParser {
      * Use only the Action-Layer Tiles as Input
      */
     public static tileIDToAPIID_scifiLVL_Action(tileID: number): number {
-        if(tileID == 113) return TileParser.COIN_ID;
-        if(tileID == 93) return TileParser.PORTAL_BLUE_ID;
-        if(tileID == 94) return TileParser.PORTAL_ORANGE_ID;
+        if(tileID === 113) return TileParser.COIN_ID;
+        if(tileID === 93) return TileParser.PORTAL_BLUE_ID;
+        if(tileID === 94) return TileParser.PORTAL_ORANGE_ID;
         return -1;
     }
 
@@ -52,21 +52,20 @@ export class TileParser {
      * Use only the Probability-Layer Tiles as Input
      */
     public static tileIDToAPIID_scifiLVL_Probability(tileID: number): number {
-        if(tileID == 122) return TileParser.PROBABILITY[0];
-        if(tileID == 123) return TileParser.PROBABILITY[1];
-        if(tileID == 124) return TileParser.PROBABILITY[2];
-        if(tileID == 125) return TileParser.PROBABILITY[3];
-        if(tileID == 126) return TileParser.PROBABILITY[4];
-        if(tileID == 136) return TileParser.PROBABILITY[5];
-        if(tileID == 136) return TileParser.PROBABILITY[6];
-        if(tileID == 136) return TileParser.PROBABILITY[7];
-        if(tileID == 136) return TileParser.PROBABILITY[8];
-        if(tileID == 136) return TileParser.PROBABILITY[9];
+        if(tileID === 122) return TileParser.PROBABILITY[0];
+        if(tileID === 123) return TileParser.PROBABILITY[1];
+        if(tileID === 124) return TileParser.PROBABILITY[2];
+        if(tileID === 125) return TileParser.PROBABILITY[3];
+        if(tileID === 126) return TileParser.PROBABILITY[4];
+        if(tileID === 136) return TileParser.PROBABILITY[5];
+        if(tileID === 136) return TileParser.PROBABILITY[6];
+        if(tileID === 136) return TileParser.PROBABILITY[7];
+        if(tileID === 136) return TileParser.PROBABILITY[8];
+        if(tileID === 136) return TileParser.PROBABILITY[9];
         return -1;
     }
 
     /**
-     * 
      * @param groundLayer groundLayer des Levels, um herauszufinden welcher Tile eine Wand, Ziel und Start ist 
      * @returns tileTuple, access the tiles in the tileTuple with coordinates, e.g. tileTuple[x+y*tilemapwidth], 
      *          wobei das erste Tile oben links ist, x=0 und y=0 ist oben links
@@ -82,11 +81,12 @@ export class TileParser {
                 y--;
                 x=0;
             }
-            if(this.tileIDToAPIID_scifiLVL_Ground(tile.index) === this.WALL_ID)
-                tileTuple.push(new TilePiece (x, y, 0 ,0, 0, 0, true, false, false));
+            const index: number = this.tileIDToAPIID_scifiLVL_Ground(tile.index);
+            if(index === this.WALL_ID)
+                tileTuple.push(new TilePiece (x, y, 15, 60, 10, 15, true, false, false));
 
-            else if (this.tileIDToAPIID_scifiLVL_Ground(tile.index) === this.STOP_ID)
-                tileTuple.push(new TilePiece (x, y, 0, 0, 0, 0, false, false, true));
+            else if (index === this.STOP_ID)
+                tileTuple.push(new TilePiece (x, y, 25, 40, 15, 20, false, false, true));
 
             else {
                 let action = false;
