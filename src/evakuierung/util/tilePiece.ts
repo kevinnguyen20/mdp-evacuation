@@ -28,7 +28,6 @@ export class TilePiece{
      * 
      * !!!!!! not yet tested
      * 
-     * @param tilePiece make sure that the Position for this TilePiece is already set
      * @param layer input the Probability-Layer from the Level
      */
     private setTileProbability (layer: Phaser.Tilemaps.Tilemap): void {

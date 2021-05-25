@@ -4,7 +4,6 @@ import { Figure } from "../util/figure"
 import { LevelFunctions } from "../util/levelFunctions";
 
 export class level1 extends Phaser.Scene {
-
     private score = 0;
     private scoreText: Phaser.GameObjects.Text = null;
 
@@ -16,7 +15,7 @@ export class level1 extends Phaser.Scene {
 
     private figureInitCount = 8;
     private figureList: Figure[];
-    private fiveTupelList: TilePiece[]; 
+    private tilesList: TilePiece[]; 
 
     private preMovePos = [];
 
@@ -92,7 +91,7 @@ export class level1 extends Phaser.Scene {
         });
 
         const mapPosX = 1/90 * window.screen.width;
-        const mapPosY = 1/20 * window.screen.height;
+        const mapPosY = 2/20 * window.screen.height;
 
         const tileset = this.map.addTilesetImage('scifi', 'tileset-scifi');
 
@@ -117,7 +116,7 @@ export class level1 extends Phaser.Scene {
             mapPosY              // y
         );
 
-        this.fiveTupelList = TileParser.tileTupleAPI(this.layerGround);
+        this.tilesList = TileParser.tileTupleAPI(this.layerGround);
 
         // sets the Startposition automatically by reading the Map
         const startingPosition: [number, number] = LevelFunctions.getStartPostition(this.layerGround);
@@ -166,52 +165,52 @@ export class level1 extends Phaser.Scene {
         //########################################
 
         this.input.keyboard.on('keydown-A', () =>{
-            if(LevelFunctions.queenValidMoveCheck(false, -32, this.layerGround, this.figureList[0])) {
+            if(LevelFunctions.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])) {
                 
                 this.queenPos[0] -= 1;
                 this.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.doSplit(false, -32);
+                this.doSplit(false, -Figure.STEP_SIZE);
 
                 this.preMovePos[0] -= Figure.STEP_SIZE;
             }
         });
 
         this.input.keyboard.on('keydown-D', () =>{
-            if (LevelFunctions.queenValidMoveCheck(false, +32, this.layerGround, this.figureList[0])){
+            if (LevelFunctions.queenValidMoveCheck(false, Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
 
                 this.queenPos[0] += 1;
                 this.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.doSplit(false, +32);
+                this.doSplit(false, Figure.STEP_SIZE);
 
                 this.preMovePos[0] += Figure.STEP_SIZE;
             }
         });
 
         this.input.keyboard.on('keydown-S', () =>{
-            if (LevelFunctions.queenValidMoveCheck(true, +32, this.layerGround, this.figureList[0])){
+            if (LevelFunctions.queenValidMoveCheck(true, Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
 
                 this.queenPos[1] += 1;
-                this.figureList[0] = this.movePlayer(true, +Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
+                this.figureList[0] = this.movePlayer(true, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.doSplit(true, +32);
+                this.doSplit(true, Figure.STEP_SIZE);
 
                 this.preMovePos[1] += Figure.STEP_SIZE;
             }
         });
 
         this.input.keyboard.on('keydown-W', () =>{
-            if (LevelFunctions.queenValidMoveCheck(true, -32, this.layerGround, this.figureList[0])){
+            if (LevelFunctions.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
 
                 this.queenPos[1] -= 1;
                 this.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.doSplit(true, -32);
+                this.doSplit(true, -Figure.STEP_SIZE);
 
                 this.preMovePos[1] -= Figure.STEP_SIZE;
             }
@@ -227,11 +226,11 @@ export class level1 extends Phaser.Scene {
     private doSplit(xory: boolean, pos: number): void {
         this.figureList.forEach( (element) =>{
             if(element.isQueen == false){
-                if(LevelFunctions.followQueen(this.fiveTupelList[(element.x + 23*element.y)/32])){
+                if(LevelFunctions.followQueen(this.tilesList[(element.x + 23*element.y)/32])){
                     element = this.movePlayer(xory, pos, this.layerGround, this.layerAction, this.map, element);
                 }
                 else{
-                    const direction: number = LevelFunctions.generateDirection(this.fiveTupelList[(element.x + element.y*23)/32]);
+                    const direction: number = LevelFunctions.generateDirection(this.tilesList[(element.x + element.y*23)/32]);
                     switch(direction){
                         case 0: 
                             element = this.movePlayer(true, -32, this.layerGround, this.layerAction, this.map, element);
@@ -277,7 +276,7 @@ export class level1 extends Phaser.Scene {
         // eslint-disable-next-line no-empty
         if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
         else {   
-            this.fiveTupelList[(element.x + 23*element.y)/32].playersOnTop--; 
+            this.tilesList[(element.x + 23*element.y)/32].playersOnTop--; 
 
             if(xory === false){                 
                 element.updateCoordinates(pos, 0);
@@ -286,7 +285,7 @@ export class level1 extends Phaser.Scene {
                 element.updateCoordinates(0, pos);
             }
 
-            this.fiveTupelList[(element.x + 23*element.y)/32].playersOnTop++;
+            this.tilesList[(element.x + 23*element.y)/32].playersOnTop++;
 
             if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
                 this.scoreText.setText('Your final score: ' + this.score + "!");

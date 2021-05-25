@@ -20,18 +20,6 @@ export class Figure{
         this.image.y += y;
     }
 
-    /* We will retrieve the probability from the tile.
-    Instead, use generateDirections from levelFunctions.
-
-    public followQueen():boolean {
-        const randomNum: number = Math.random();
-        if (randomNum < 0.92){
-            return true;
-        }
-        else return false;
-    }
-    */
-
 
     public toString = (): string => {
         return `Spawn position (${this.x} , ${this.y}), isQueen: ${this.isQueen}`;
