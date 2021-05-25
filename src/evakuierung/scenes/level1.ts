@@ -171,7 +171,7 @@ export class level1 extends Phaser.Scene {
                 this.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.doSplit(false, -Figure.STEP_SIZE);
+                this.decideDirection(false, -Figure.STEP_SIZE);
 
                 this.preMovePos[0] -= Figure.STEP_SIZE;
             }
@@ -184,7 +184,7 @@ export class level1 extends Phaser.Scene {
                 this.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.doSplit(false, Figure.STEP_SIZE);
+                this.decideDirection(false, Figure.STEP_SIZE);
 
                 this.preMovePos[0] += Figure.STEP_SIZE;
             }
@@ -197,7 +197,7 @@ export class level1 extends Phaser.Scene {
                 this.figureList[0] = this.movePlayer(true, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.doSplit(true, Figure.STEP_SIZE);
+                this.decideDirection(true, Figure.STEP_SIZE);
 
                 this.preMovePos[1] += Figure.STEP_SIZE;
             }
@@ -210,7 +210,7 @@ export class level1 extends Phaser.Scene {
                 this.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.doSplit(true, -Figure.STEP_SIZE);
+                this.decideDirection(true, -Figure.STEP_SIZE);
 
                 this.preMovePos[1] -= Figure.STEP_SIZE;
             }
@@ -219,11 +219,11 @@ export class level1 extends Phaser.Scene {
 
 
     /**
-     * Executes the split for the non-queen players
+     * Decides the direction in which the non-queen players should be moved
      * @param xory true when moving on the y axis (up/down), false if moving on the x axis (left/right)
      * @param pos always has the value +32 or -32, because the tiles are 32x32
      */
-    private doSplit(xory: boolean, pos: number): void {
+    private decideDirection(xory: boolean, pos: number): void {
         this.figureList.forEach( (element) =>{
             if(element.isQueen == false){
                 if(LevelFunctions.followQueen(this.tilesList[(element.x + 23*element.y)/32])){
