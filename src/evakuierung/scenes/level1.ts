@@ -91,7 +91,7 @@ export class level1 extends Phaser.Scene {
         });
 
         const mapPosX = 1/90 * window.screen.width;
-        const mapPosY = 2/20 * window.screen.height;
+        const mapPosY = 1/20 * window.screen.height;
 
         const tileset = this.map.addTilesetImage('scifi', 'tileset-scifi');
 
@@ -126,13 +126,11 @@ export class level1 extends Phaser.Scene {
 
         this.queenPos = [startingPosition[0] / 32, startingPosition[1] /32];
 
-        let queen: Figure;
-
         console.log("figureList");
         this.figureList.forEach((figure) => {
+            this.tilesList[(figure.x + 23*figure.y)/32].playersOnTop++;
             console.log(figure.toString());
             figure.image = this.add.image(mapPosX + figure.x + Figure.STEP_SIZE / 2, mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen');
-            if(figure.isQueen) queen = figure;
         });
         console.log("size: " + this.figureList.length) 
 
@@ -171,7 +169,8 @@ export class level1 extends Phaser.Scene {
                 this.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.moveInGeneratedDirection(false, -Figure.STEP_SIZE);
+                this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
+                    this.layerGround, this.layerAction, this.map);
 
                 this.preMovePos[0] -= Figure.STEP_SIZE;
             }
@@ -184,7 +183,8 @@ export class level1 extends Phaser.Scene {
                 this.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.moveInGeneratedDirection(false, Figure.STEP_SIZE);
+                this.moveInGeneratedDirection(false, Figure.STEP_SIZE, this.figureList, this.tilesList, 
+                    this.layerGround, this.layerAction, this.map);
 
                 this.preMovePos[0] += Figure.STEP_SIZE;
             }
@@ -197,7 +197,8 @@ export class level1 extends Phaser.Scene {
                 this.figureList[0] = this.movePlayer(true, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.moveInGeneratedDirection(true, Figure.STEP_SIZE);
+                this.moveInGeneratedDirection(true, Figure.STEP_SIZE, this.figureList, this.tilesList, 
+                    this.layerGround, this.layerAction, this.map);
 
                 this.preMovePos[1] += Figure.STEP_SIZE;
             }
@@ -210,46 +211,46 @@ export class level1 extends Phaser.Scene {
                 this.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.moveInGeneratedDirection(true, -Figure.STEP_SIZE);
+                this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
+                    this.layerGround, this.layerAction, this.map);
 
                 this.preMovePos[1] -= Figure.STEP_SIZE;
             }
         });
     }
 
-
     /**
      * Moves non-queen players in queen's or a random directions
      * @param xory true when moving on the y axis (up/down), false if moving on the x axis (left/right)
      * @param pos always has the value +32 or -32, because the tiles are 32x32
      */
-    private moveInGeneratedDirection(xory: boolean, pos: number): void {
-        this.figureList.forEach( (element) =>{
+    public moveInGeneratedDirection(xory: boolean, pos: number, figureList: Figure[], tilesList: TilePiece[],
+        layerGround: Phaser.Tilemaps.Tilemap, layerAction: Phaser.Tilemaps.Tilemap, map: Phaser.Tilemaps.Tilemap): void {
+        figureList.forEach( (element) =>{
             if(element.isQueen == false){
-                if(LevelFunctions.followQueen(this.tilesList[(element.x + 23*element.y)/32])){
-                    element = this.movePlayer(xory, pos, this.layerGround, this.layerAction, this.map, element);
+                if(LevelFunctions.followQueen(tilesList[(element.x + 23*element.y)/32])){
+                    element = this.movePlayer(xory, pos, layerGround, layerAction, map, element);
                 }
                 else{
-                    const direction: number = LevelFunctions.generateDirection(this.tilesList[(element.x + element.y*23)/32]);
+                    const direction: number = LevelFunctions.generateDirection(tilesList[(element.x + element.y*23)/32]);
                     switch(direction){
                         case 0: 
-                            element = this.movePlayer(true, -32, this.layerGround, this.layerAction, this.map, element);
+                            element = this.movePlayer(true, -Figure.STEP_SIZE, layerGround, layerAction, map, element);
                             break;
                         case 1: 
-                            element = this.movePlayer(false, +32, this.layerGround, this.layerAction, this.map, element);
+                            element = this.movePlayer(false, Figure.STEP_SIZE, layerGround, layerAction, map, element);
                             break;
                         case 2: 
-                            element = this.movePlayer(true, +32, this.layerGround, this.layerAction, this.map, element);
+                            element = this.movePlayer(true, Figure.STEP_SIZE, layerGround, layerAction, map, element);
                             break;
                         case 3: 
-                            element = this.movePlayer(false, -32, this.layerGround, this.layerAction, this.map, element);
+                            element = this.movePlayer(false, -Figure.STEP_SIZE, layerGround, layerAction, map, element);
                             break;
                     }
                 }
             }
         });
     }
-    
 
     /**
      * Moves a figure in a given direction (including the queen!)
@@ -267,12 +268,12 @@ export class level1 extends Phaser.Scene {
 
         // Determine if which axis we're moving on
         if (xory === false){
-            tile = layerGround.getTileAtWorldXY(element.x+pos, element.y, true);
-            tileAction = layerAction.getTileAtWorldXY(element.x+pos, element.y, true); 
+            tile = layerGround.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
+            tileAction = layerAction.getTileAtWorldXY(element.image.x+pos, element.image.y, true); 
         } else {
-            tile = layerGround.getTileAtWorldXY(element.x, element.y+pos, true); 
-            tileAction = layerAction.getTileAtWorldXY(element.x, element.y+pos, true); 
-        } 
+            tile = layerGround.getTileAtWorldXY(element.image.x, element.image.y+pos, true); 
+            tileAction = layerAction.getTileAtWorldXY(element.image.x, element.image.y+pos, true); 
+        }
         // eslint-disable-next-line no-empty
         if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
         else {   
@@ -293,7 +294,7 @@ export class level1 extends Phaser.Scene {
             }
 
             if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
-                map.putTileAt(0, tileAction.x, tileAction.y);
+                layerAction.putTileAt(0, tileAction.x, tileAction.y);
                 this.score += 1;
                 this.scoreText.setText('Score: ' + this.score);
             }

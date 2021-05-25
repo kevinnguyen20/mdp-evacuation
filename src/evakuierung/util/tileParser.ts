@@ -76,42 +76,43 @@ export class TileParser {
         let x = 0;
         let y = groundLayer.height - 1;
        
-        groundLayer.layer.data[0].forEach((tile) => {
-            if(x === groundLayer.width){
-                y--;
-                x=0;
-            }
-            const index: number = this.tileIDToAPIID_scifiLVL_Ground(tile.index);
-            if(index === this.WALL_ID)
-                tileTuple.push(new TilePiece(
-                    [x, y], 
-                    [15, 60, 10, 15, 92], // up, right, down, left, followQueen
-                    [true, false, false]
-                ));
+        groundLayer.layer.data.forEach((elem) => {
+            elem.forEach( (tile) =>{
+                if(x === groundLayer.width){
+                    y--;
+                    x=0;
+                }
+                const index: number = this.tileIDToAPIID_scifiLVL_Ground(tile.index);
+                if(index === this.WALL_ID)
+                    tileTuple.push(new TilePiece(
+                        [x, y], 
+                        [15, 60, 10, 15, 92], // up, right, down, left, followQueen
+                        [true, false, false]
+                    ));
 
-            else if (index === this.STOP_ID)
-                tileTuple.push(new TilePiece(
-                    [x, y], 
-                    [25, 40, 15, 20, 92], // up, right, down, left, followQueen
-                    [false, false, true]
-                ));
+                else if (index === this.STOP_ID)
+                    tileTuple.push(new TilePiece(
+                        [x, y], 
+                        [25, 40, 15, 20, 92], // up, right, down, left, followQueen
+                        [false, false, true]
+                    ));
 
-            else {
-                let action = false;
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                // carefull this may not work cuz only move Information is stored in the groundLayer, no Action Tiles
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                if (this.tileIDToAPIID_scifiLVL_Action(tile.index) === this.ACTIONFIELD_ID)
-                    action = true;
+                else {
+                    let action = false;
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    // carefull this may not work cuz only move Information is stored in the groundLayer, no Action Tiles
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    if (this.tileIDToAPIID_scifiLVL_Action(tile.index) === this.ACTIONFIELD_ID)
+                        action = true;
 
-                tileTuple.push(new TilePiece(
-                    [x, y], 
-                    [10, 30, 20, 40, 92], // up, right, down, left, followQueen
-                    [false, action, false]
-                ));
-            }
-            x++;
-                
+                    tileTuple.push(new TilePiece(
+                        [x, y], 
+                        [10, 30, 20, 40, 92], // up, right, down, left, followQueen
+                        [false, action, false]
+                    ));
+                }
+                x++;
+            });
         })
         return tileTuple;      
     }
