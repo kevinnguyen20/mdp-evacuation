@@ -61,27 +61,7 @@ export class level1 extends Phaser.Scene {
         this.data.set('playerWinningScore', 8);
     }
 
-
     /*********************************************
-    -------------FOR TILEMAP----------------------
-    **********************************************
-    x
-    |
-    |
-    |
-    |
-    |
-    |
-    |________________________ y
-    0
-
-    **********************************************
-    **********************************************
-    **********************************************/
-
-    /*********************************************
-    -------------FOR GAMESCREEN-------------------
-    **********************************************
 
     0 _______________________ x
     |
@@ -92,9 +72,7 @@ export class level1 extends Phaser.Scene {
     |
     |
     y 
-    
-    **********************************************
-    **********************************************
+
     **********************************************/
 
     /**
@@ -139,7 +117,7 @@ export class level1 extends Phaser.Scene {
             mapPosY              // y
         );
 
-        this.fiveTupelList = TileParser.fiveTupleAPI(this.layerGround, this.layerAction);
+        this.fiveTupelList = TileParser.tileTupleAPI(this.layerGround);
 
         // sets the Startposition automatically by reading the Map
         const startingPosition: [number, number] = LevelFunctions.getStartPostition(this.layerGround);
@@ -249,7 +227,7 @@ export class level1 extends Phaser.Scene {
     private doSplit(xory: boolean, pos: number): void {
         this.figureList.forEach( (element) =>{
             if(element.isQueen == false){
-                if(element.followQueen){
+                if(LevelFunctions.followQueen(this.fiveTupelList[(element.x + 23*element.y)/32])){
                     element = this.movePlayer(xory, pos, this.layerGround, this.layerAction, this.map, element);
                 }
                 else{

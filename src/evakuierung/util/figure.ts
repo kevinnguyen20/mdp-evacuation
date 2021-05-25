@@ -13,22 +13,16 @@ export class Figure{
         this.isQueen = isQueen;
     }
 
-    /**
-     * Add the given values to the Position and update the image
-     * @param x add value to the x-coordinate
-     * @param y add value to the y-coordinate
-     */
     public updateCoordinates(x:number, y: number): void {
         this.x += x;
         this.y += y;
         this.image.x += x;
         this.image.y += y;
     }
-    
-    /**
-     * Decides if a player should follow the queen
-     * @returns True if the player shold go with the queen or else false
-     */
+
+    /* We will retrieve the probability from the tile.
+    Instead, use generateDirections from levelFunctions.
+
     public followQueen():boolean {
         const randomNum: number = Math.random();
         if (randomNum < 0.92){
@@ -36,9 +30,11 @@ export class Figure{
         }
         else return false;
     }
+    */
+
 
     public toString = (): string => {
-        return `Player Position ( ${this.x} + ,  ${this.y}), isQueen: ${this.isQueen}`;
+        return `Spawn position (${this.x} , ${this.y}), isQueen: ${this.isQueen}`;
     }
 
 }
