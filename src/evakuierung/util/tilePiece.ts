@@ -4,7 +4,7 @@ import { TileParser } from "./tileParser";
 
 export class TilePiece{
     public tileCoordinates: number[] = [];
-    public directionProbabilities: number[] = []; // up right down left
+    public directionProbabilities: number[] = []; // up, right, down, left, followQueen
     public tileType: boolean[] = []; // wall action goal
 
     // this is where the players on top of a tile are stored, 
@@ -60,6 +60,11 @@ export class TilePiece{
             // left neighbour tile
             l = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_left.index);
             this.directionProbabilities[3] = l !== -1 ? l : -1;
+
+            /* Set probability for followQueen
+                here
+                somthing with this.directionProbabilities[4]
+            */
         }
     }
     

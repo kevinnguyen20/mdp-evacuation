@@ -85,14 +85,14 @@ export class TileParser {
             if(index === this.WALL_ID)
                 tileTuple.push(new TilePiece(
                     [x, y], 
-                    [15, 60, 10, 15], 
+                    [15, 60, 10, 15, 92], // up, right, down, left, followQueen
                     [true, false, false]
                 ));
 
             else if (index === this.STOP_ID)
                 tileTuple.push(new TilePiece(
                     [x, y], 
-                    [25, 40, 15, 20], 
+                    [25, 40, 15, 20, 92], // up, right, down, left, followQueen
                     [false, false, true]
                 ));
 
@@ -106,7 +106,7 @@ export class TileParser {
 
                 tileTuple.push(new TilePiece(
                     [x, y], 
-                    [0, 0, 0, 0], 
+                    [10, 30, 20, 40, 92], // up, right, down, left, followQueen
                     [false, action, false]
                 ));
             }
