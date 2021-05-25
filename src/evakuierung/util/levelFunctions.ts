@@ -66,6 +66,18 @@ export class LevelFunctions {
     }
 
     /**
+     * Decides if a player should follow the queen
+     * @returns True if the player shold go with the queen or else false
+     */
+    public static followQueen(tile: TilePiece):boolean {
+        const randomNum: number = Math.random();
+        if (randomNum < tile[4]){
+            return true;
+        }
+        else return false;
+    }
+
+    /**
      * @param xory true when moving on the y axis (up/down), false if moving on the x axis (left/right)
      * @param pos always has the value +32 or -32, because the tiles are 32x32
      * @param layer the layer we're operating on

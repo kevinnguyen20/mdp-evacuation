@@ -4,32 +4,27 @@ import { Figure } from "../util/figure"
 import { LevelFunctions } from "../util/levelFunctions";
 
 export class level1 extends Phaser.Scene {
-
-    private tileParser:TileParser = new TileParser();
-
-    private playercount: number;
-    private playerInstances = [];
-    private playercounttext: Phaser.GameObjects.Text;
-
     private score = 0;
     private scoreText: Phaser.GameObjects.Text = null;
 
     // ??????????????????????????????????
     //  do we still need this
     private queenPos:number[];
-    private queenAlive = true;
-    private queen = null;
     private queenPositionText = null;
     // ??????????????????????????????????
 
     private figureInitCount = 8;
-    private figureList: Figure[] = [];
+    private figureList: Figure[];
+    private tilesList: TilePiece[]; 
 
     private preMovePos = [];
 
     private map = null;
+    
 
-
+    private layerGround: Phaser.Tilemaps.Tilemap;
+    private layerAction: Phaser.Tilemaps.Tilemap;
+    private layerDesign: Phaser.Tilemaps.Tilemap;
 
 
     constructor() {
@@ -96,34 +91,35 @@ export class level1 extends Phaser.Scene {
         });
 
         const mapPosX = 1/90 * window.screen.width;
-        const mapPosY = 1/20 * window.screen.height;
+        const mapPosY = 2/20 * window.screen.height;
 
         const tileset = this.map.addTilesetImage('scifi', 'tileset-scifi');
 
-        const layerGround = this.map.createStaticLayer(
+        this.layerGround = this.map.createStaticLayer(
             'Ground', // layerID
             tileset,        // tileset
             mapPosX,              // x
             mapPosY              // y
         );
 
-        const layerDesign = this.map.createLayer(   // there is no need to read this layer ever, only create it
+        this.layerDesign = this.map.createLayer(   // there is no need to read this layer ever, only create it
             'Design', // layerID
             tileset,        // tileset
             mapPosX,              // x
             mapPosY              // y
         );
 
-        const layerAction = this.map.createLayer(
+        this.layerAction = this.map.createLayer(
             'Action', // layerID
             tileset,        // tileset
             mapPosX,              // x
             mapPosY              // y
         );
 
+        this.tilesList = TileParser.tileTupleAPI(this.layerGround);
 
         // sets the Startposition automatically by reading the Map
-        const startingPosition: [number, number] = LevelFunctions.getStartPostition(layerGround);
+        const startingPosition: [number, number] = LevelFunctions.getStartPostition(this.layerGround);
         console.log("Start at X:" + startingPosition[0] / 32 + " Y:" + startingPosition[1] / 32);
 
         this.figureList = LevelFunctions.initFigureList(this.figureInitCount, startingPosition);
@@ -169,70 +165,94 @@ export class level1 extends Phaser.Scene {
         //########################################
 
         this.input.keyboard.on('keydown-A', () =>{
-            if(this.queenAlive && LevelFunctions.queenValidMoveCheck(false, -Figure.STEP_SIZE, layerGround, queen)) {
+            if(LevelFunctions.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])) {
+                
                 this.queenPos[0] -= 1;
-                this.movePlayers(false, -Figure.STEP_SIZE, layerGround, layerAction, this.map);
+                this.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                //this.splitCalc(this.WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1] + 1]);
+                this.decideDirection(false, -Figure.STEP_SIZE);
 
                 this.preMovePos[0] -= Figure.STEP_SIZE;
             }
         });
 
         this.input.keyboard.on('keydown-D', () =>{
-            if(this.queenAlive && LevelFunctions.queenValidMoveCheck(false, Figure.STEP_SIZE, layerGround, queen)) {
+            if (LevelFunctions.queenValidMoveCheck(false, Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
+
                 this.queenPos[0] += 1;
-                this.movePlayers(false, Figure.STEP_SIZE, layerGround, layerAction, this.map);
+                this.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                //this.splitCalc(this.WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1] - 1]);
+                this.decideDirection(false, Figure.STEP_SIZE);
 
                 this.preMovePos[0] += Figure.STEP_SIZE;
             }
         });
 
         this.input.keyboard.on('keydown-S', () =>{
-            if(this.queenAlive && LevelFunctions.queenValidMoveCheck(true, Figure.STEP_SIZE, layerGround, queen)) {
+            if (LevelFunctions.queenValidMoveCheck(true, Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
+
                 this.queenPos[1] += 1;
-                this.movePlayers(true, Figure.STEP_SIZE, layerGround, layerAction, this.map)
+                this.figureList[0] = this.movePlayer(true, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                //this.splitCalc(this.WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1] + 1]);
+                this.decideDirection(true, Figure.STEP_SIZE);
 
                 this.preMovePos[1] += Figure.STEP_SIZE;
             }
         });
 
         this.input.keyboard.on('keydown-W', () =>{
-            if(this.queenAlive && LevelFunctions.queenValidMoveCheck(true, -Figure.STEP_SIZE, layerGround, queen)) {
+            if (LevelFunctions.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
+
                 this.queenPos[1] -= 1;
-                this.movePlayers(true, -Figure.STEP_SIZE, layerGround, layerAction, this.map)
+                this.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                //this.splitCalc(this.WAHRSCHEINLICHKEITEN[this.queenPos[0]][this.queenPos[1] - 1]);
+                this.decideDirection(true, -Figure.STEP_SIZE);
 
                 this.preMovePos[1] -= Figure.STEP_SIZE;
             }
         });
     }
 
-    /*
-
-    splitCalc IST NEU ZU IMPLEMENTIEREN !!!!!!!!!!!!!!
-
-    private splitCalc(arr:number[][]): void {
-        const nmbr = Phaser.Math.Between(1,150);
-        for(let i = 0; i<=3; i++)
-            if(arr[i] != null)
-                if(nmbr>=arr[i][0] && nmbr<=arr[i][1]) {
-                    //this.doSplit(i, arr[i][2]);
-                }
-    }
-    */
 
     /**
-     * Moves all the figures (including the queen!)
+     * Decides the direction in which the non-queen players should be moved
+     * @param xory true when moving on the y axis (up/down), false if moving on the x axis (left/right)
+     * @param pos always has the value +32 or -32, because the tiles are 32x32
+     */
+    private decideDirection(xory: boolean, pos: number): void {
+        this.figureList.forEach( (element) =>{
+            if(element.isQueen == false){
+                if(LevelFunctions.followQueen(this.tilesList[(element.x + 23*element.y)/32])){
+                    element = this.movePlayer(xory, pos, this.layerGround, this.layerAction, this.map, element);
+                }
+                else{
+                    const direction: number = LevelFunctions.generateDirection(this.tilesList[(element.x + element.y*23)/32]);
+                    switch(direction){
+                        case 0: 
+                            element = this.movePlayer(true, -32, this.layerGround, this.layerAction, this.map, element);
+                            break;
+                        case 1: 
+                            element = this.movePlayer(false, +32, this.layerGround, this.layerAction, this.map, element);
+                            break;
+                        case 2: 
+                            element = this.movePlayer(true, +32, this.layerGround, this.layerAction, this.map, element);
+                            break;
+                        case 3: 
+                            element = this.movePlayer(false, -32, this.layerGround, this.layerAction, this.map, element);
+                            break;
+                    }
+                }
+            }
+        });
+    }
+    
+
+    /**
+     * Moves a figure in a given direction (including the queen!)
      * 
      * @param xory true when moving on the y axis (up/down), false if moving on the x axis (left/right)
      * @param pos always has the value +32 or -32, because the tiles are 32x32
@@ -240,41 +260,46 @@ export class level1 extends Phaser.Scene {
      * @param map the map we're operating on
      */
 
-    private movePlayers(xory: boolean, pos: number, layerGround: Phaser.Tilemaps.Tilemap, layerAction: Phaser.Tilemaps.Tilemap, map:Phaser.Tilemaps.Tilemap): void {
-        this.figureList.forEach( (figure)=> {
-            let tile:Phaser.Tilemaps.Tile = null;
-            let tileAction:Phaser.Tilemaps.Tile = null;
+    private movePlayer(xory: boolean, pos: number, layerGround: Phaser.Tilemaps.Tilemap, layerAction: Phaser.Tilemaps.Tilemap, map:Phaser.Tilemaps.Tilemap, element: Figure): Figure {        
+        let tile:Phaser.Tilemaps.Tile = null;
+        let tileAction:Phaser.Tilemaps.Tile = null;
             
-            // Determine if which axis we're moving on
-            if (xory === false){
-                tile = layerGround.getTileAtWorldXY(figure.image.x+pos, figure.image.y, true);
-                tileAction = layerAction.getTileAtWorldXY(figure.image.x+pos, figure.image.y, true); 
-            } else {
-                tile = layerGround.getTileAtWorldXY(figure.image.x, figure.image.y+pos, true); 
-                tileAction = layerAction.getTileAtWorldXY(figure.image.x, figure.image.y+pos, true); 
+
+        // Determine if which axis we're moving on
+        if (xory === false){
+            tile = layerGround.getTileAtWorldXY(element.x+pos, element.y, true);
+            tileAction = layerAction.getTileAtWorldXY(element.x+pos, element.y, true); 
+        } else {
+            tile = layerGround.getTileAtWorldXY(element.x, element.y+pos, true); 
+            tileAction = layerAction.getTileAtWorldXY(element.x, element.y+pos, true); 
+        } 
+        // eslint-disable-next-line no-empty
+        if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
+        else {   
+            this.tilesList[(element.x + 23*element.y)/32].playersOnTop--; 
+
+            if(xory === false){                 
+                element.updateCoordinates(pos, 0);
             } 
-            // eslint-disable-next-line no-empty
-            if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
-            else {           
-                if(xory === false) {
-                    figure.updateCoordinates(pos, 0);
-                } else {
-                    figure.updateCoordinates(0, pos);
-                }
-                
-
-                if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
-                    this.scoreText.setText('Your penis has grown by: ' + this.score + "cm!");
-                    this.input.keyboard.enabled = false;
-                }
-
-                if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
-                    layerAction.putTileAt(0, tileAction.x, tileAction.y);
-                    this.score += 1;
-                    this.scoreText.setText('Score: ' + this.score);
-                }
+            else {
+                element.updateCoordinates(0, pos);
             }
-        });
+
+            this.tilesList[(element.x + 23*element.y)/32].playersOnTop++;
+
+            if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
+                this.scoreText.setText('Your final score: ' + this.score + "!");
+                this.input.keyboard.enabled = false;
+            }
+
+            if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
+                map.putTileAt(0, tileAction.x, tileAction.y);
+                this.score += 1;
+                this.scoreText.setText('Score: ' + this.score);
+            }
+        }
+        
+        return element;
     }
 
 
@@ -305,6 +330,7 @@ export class level1 extends Phaser.Scene {
     }
     */
 
+    /*
     private setFigureAt(x: number, y: number, percentage: number): void {
         const queen = this.add.image (x, y, 'queen');
         const neueGruppe = this.add.text(
@@ -321,6 +347,7 @@ export class level1 extends Phaser.Scene {
         this.playerInstances.push(neueGruppe);
         this.playerInstances.push(queen);
     }
+    */
 
     update(): void {
         console.log();

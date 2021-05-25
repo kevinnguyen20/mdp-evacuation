@@ -9,7 +9,7 @@ export class TilePiece{
 
     // this is where the players on top of a tile are stored, 
     // it should be a list of objects, when the piglet class is created
-    private _playersOnTop: Figure[] = [];
+    public playersOnTop: number;
 
     constructor(coordinates: number[], directionProbabilities: number[], tileType: boolean[]) {
         this.tileCoordinates = coordinates;
@@ -17,8 +17,9 @@ export class TilePiece{
         this.tileType = tileType;
     }
 
-    public get playersOnTop(): Figure[] {
-        return this._playersOnTop;
+    // can be accessed with dot notation
+    public get getPlayersOnTop(): number {
+        return this.playersOnTop;
     }
 
     /**
@@ -27,7 +28,6 @@ export class TilePiece{
      * 
      * !!!!!! not yet tested
      * 
-     * @param tilePiece make sure that the Position for this TilePiece is already set
      * @param layer input the Probability-Layer from the Level
      */
     private setTileProbability (layer: Phaser.Tilemaps.Tilemap): void {
@@ -60,11 +60,6 @@ export class TilePiece{
             // left neighbour tile
             l = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_left.index);
             this.directionProbabilities[3] = l !== -1 ? l : -1;
-
-            /* Set probability for followQueen
-                here
-                somthing with this.directionProbabilities[4]
-            */
         }
     }
     
