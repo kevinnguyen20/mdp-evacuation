@@ -69,7 +69,7 @@ export class LevelFunctions {
      * Decides if a player should follow the queen
      * @returns True if the player shold go with the queen or else false
      */
-     public static followQueen(tile: TilePiece):boolean {
+    public static followQueen(tile: TilePiece):boolean {
         const randomNum: number = Math.random();
         if (randomNum < tile[4]){
             return true;
