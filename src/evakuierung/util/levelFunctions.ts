@@ -71,7 +71,7 @@ export class LevelFunctions {
      */
     public static followQueen(tile: TilePiece):boolean {
         const randomNum: number = Math.random();
-        if (randomNum < tile[4]){
+        if (randomNum < tile.directionProbabilities[4]){
             return true;
         }
         else return false;

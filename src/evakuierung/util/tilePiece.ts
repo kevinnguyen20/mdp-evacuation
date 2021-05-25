@@ -9,7 +9,7 @@ export class TilePiece{
 
     // this is where the players on top of a tile are stored, 
     // it should be a list of objects, when the piglet class is created
-    public playersOnTop: number;
+    public playersOnTop: number = 0;
 
     constructor(coordinates: number[], directionProbabilities: number[], tileType: boolean[]) {
         this.tileCoordinates = coordinates;
