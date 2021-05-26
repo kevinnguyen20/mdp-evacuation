@@ -74,36 +74,36 @@ export class TileParser {
         const tileTuple = [];
        
         groundLayer.forEachTile((tile) => {
-                const index: number = this.tileIDToAPIID_scifiLVL_Ground(tile.index);
-                if(index === this.WALL_ID)
-                    tileTuple.push(new TilePiece(
-                        [tile.pixelX, tile.pixelY], 
-                        [15, 60, 10, 15, 92], // up, right, down, left, followQueen
-                        [true, false, false]
-                    ));
+            const index: number = this.tileIDToAPIID_scifiLVL_Ground(tile.index);
+            if(index === this.WALL_ID)
+                tileTuple.push(new TilePiece(
+                    [tile.pixelX, tile.pixelY], 
+                    [15, 60, 10, 15, 92], // up, right, down, left, followQueen
+                    [true, false, false]
+                ));
 
-                else if (index === this.STOP_ID)
-                    tileTuple.push(new TilePiece(
-                        [tile.pixelX, tile.pixelY], 
-                        [25, 40, 15, 20, 92], // up, right, down, left, followQueen
-                        [false, false, true]
-                    ));
+            else if (index === this.STOP_ID)
+                tileTuple.push(new TilePiece(
+                    [tile.pixelX, tile.pixelY], 
+                    [25, 40, 15, 20, 92], // up, right, down, left, followQueen
+                    [false, false, true]
+                ));
 
-                else {
-                    tileTuple.push(new TilePiece( //its a normal field
-                        [tile.pixelX, tile.pixelY], 
-                        [10, 30, 20, 40, 92], // up, right, down, left, followQueen
-                        [false, false, false]
-                    ));
-                }
-            });
-            actionLayer.forEachTile((tile) => { //check if it is a actionField
-                const index: number = this.tileIDToAPIID_scifiLVL_Action(tile.index);
-                if (index === this.ACTIONFIELD_ID){
-                  let x = tileTuple[tile.x+(tile.y*actionLayer.layer.width)];
-                  x.tileType[1] = true;
-                }
-            });
+            else {
+                tileTuple.push(new TilePiece( //its a normal field
+                    [tile.pixelX, tile.pixelY], 
+                    [10, 30, 20, 40, 92], // up, right, down, left, followQueen
+                    [false, false, false]
+                ));
+            }
+        });
+        actionLayer.forEachTile((tile) => { //check if it is a actionField
+            const index: number = this.tileIDToAPIID_scifiLVL_Action(tile.index);
+            if (index === this.ACTIONFIELD_ID){
+                let x = tileTuple[tile.x+(tile.y*actionLayer.layer.width)];
+                x.tileType[1] = true;
+            }
+        });
         
         return tileTuple;      
     }
