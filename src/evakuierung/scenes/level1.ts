@@ -122,7 +122,7 @@ export class level1 extends Phaser.Scene {
             mapPosY         // y
         );
 
-        this.tilesList = TileParser.tileTupleAPI(this.layerGround);
+        this.tilesList = TileParser.tileTupleAPI(this.layerGround, this.layerAction);
 
         // sets the Startposition automatically by reading the Map
         const startingPosition: [number, number] = LevelFunctions.getStartPostition(this.layerGround);
