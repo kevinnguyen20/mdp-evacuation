@@ -70,50 +70,41 @@ export class TileParser {
      * @returns tileTuple, access the tiles in the tileTuple with coordinates, e.g. tileTuple[x+y*tilemapwidth], 
      *          wobei das erste Tile oben links ist, x=0 und y=0 ist oben links
      */
-    public static tileTupleAPI (groundLayer: Phaser.Tilemaps.Tilemap) : TilePiece[] {
-        //TODO Wahrscheinlichkeiten in den einzelnen Tiles implementieren
+    public static tileTupleAPI (groundLayer: Phaser.Tilemaps.Tilemap, actionLayer: Phaser.Tilemaps.Tilemap) : TilePiece[] {
         const tileTuple = [];
-        let x = 0;
-        let y = groundLayer.height - 1;
        
-        groundLayer.layer.data.forEach((elem) => {
-            elem.forEach( (tile) =>{
-                if(x === groundLayer.width){
-                    y--;
-                    x=0;
-                }
+        groundLayer.forEachTile((tile) => {
                 const index: number = this.tileIDToAPIID_scifiLVL_Ground(tile.index);
                 if(index === this.WALL_ID)
                     tileTuple.push(new TilePiece(
-                        [x, y], 
+                        [tile.pixelX, tile.pixelY], 
                         [15, 60, 10, 15, 92], // up, right, down, left, followQueen
                         [true, false, false]
                     ));
 
                 else if (index === this.STOP_ID)
                     tileTuple.push(new TilePiece(
-                        [x, y], 
+                        [tile.pixelX, tile.pixelY], 
                         [25, 40, 15, 20, 92], // up, right, down, left, followQueen
                         [false, false, true]
                     ));
 
                 else {
-                    let action = false;
-                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    // carefull this may not work cuz only move Information is stored in the groundLayer, no Action Tiles
-                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    if (this.tileIDToAPIID_scifiLVL_Action(tile.index) === this.ACTIONFIELD_ID)
-                        action = true;
-
-                    tileTuple.push(new TilePiece(
-                        [x, y], 
+                    tileTuple.push(new TilePiece( //its a normal field
+                        [tile.pixelX, tile.pixelY], 
                         [10, 30, 20, 40, 92], // up, right, down, left, followQueen
-                        [false, action, false]
+                        [false, false, false]
                     ));
                 }
-                x++;
             });
-        })
+            actionLayer.forEachTile((tile) => { //check if it is a actionField
+                const index: number = this.tileIDToAPIID_scifiLVL_Action(tile.index);
+                if (index === this.ACTIONFIELD_ID){
+                  let x = tileTuple[tile.x+(tile.y*actionLayer.layer.width)];
+                  x.tileType[1] = true;
+                }
+            });
+        
         return tileTuple;      
     }
 }
