@@ -2,6 +2,7 @@ import { TileParser } from "../util/tileParser";
 import { TilePiece } from "../util/tilePiece";
 import { Figure } from "../util/figure"
 import { LevelFunctions } from "../util/levelFunctions";
+import { Game } from "phaser";
 
 export class level1 extends Phaser.Scene {
     private score = 0;
@@ -51,9 +52,8 @@ export class level1 extends Phaser.Scene {
         this.load.image('tileset-scifi','./assets/sprites/tileset-scifi.png');
         this.load.tilemapTiledJSON('map','./assets/sprites/Level_1.json');   
         this.load.image('queen', './assets/sprites/boar.png');
+        this.load.image('background', './assets/sprites/spaceBackground.jpg');  // credits to upklyak / Freepik
     }
-
-
 
     init(): void {
         this.data.set('playerScore', 0);
@@ -84,36 +84,42 @@ export class level1 extends Phaser.Scene {
 
 
     create(): void {
+        const backgroundImage = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background') 
+        const scaleX = this.cameras.main.width / backgroundImage.width
+        const scaleY = this.cameras.main.height / backgroundImage.height
+        const scale = Math.max(scaleX, scaleY)
+        backgroundImage.setScale(scale).setScrollFactor(0)
+
         this.map = this.make.tilemap({
             key: 'map',
             tileWidth: 32,
             tileHeight: 32
         });
 
-        const mapPosX = 1/90 * window.screen.width;
-        const mapPosY = 1/20 * window.screen.height;
+        const mapPosX = this.sys.game.config.width as number * 1/50;
+        const mapPosY = this.sys.game.config.height as number * 3.5/20;
 
         const tileset = this.map.addTilesetImage('scifi', 'tileset-scifi');
 
         this.layerGround = this.map.createStaticLayer(
-            'Ground', // layerID
+            'Ground',       // layerID
             tileset,        // tileset
-            mapPosX,              // x
-            mapPosY              // y
+            mapPosX,        // x
+            mapPosY         // y
         );
 
         this.layerDesign = this.map.createLayer(   // there is no need to read this layer ever, only create it
-            'Design', // layerID
+            'Design',       // layerID
             tileset,        // tileset
-            mapPosX,              // x
-            mapPosY              // y
+            mapPosX,        // x
+            mapPosY         // y
         );
 
         this.layerAction = this.map.createLayer(
-            'Action', // layerID
+            'Action',       // layerID
             tileset,        // tileset
-            mapPosX,              // x
-            mapPosY              // y
+            mapPosX,        // x
+            mapPosY         // y
         );
 
         this.tilesList = TileParser.tileTupleAPI(this.layerGround);
@@ -136,23 +142,23 @@ export class level1 extends Phaser.Scene {
 
 
         const layerPerspective = this.map.createLayer(
-            'Perspective', // layerID
+            'Perspective',  // layerID
             tileset,        // tileset
-            mapPosX,              // x
-            mapPosY              // y
+            mapPosX,        // x
+            mapPosY         // y
         );
         
         this.scoreText = this.add.text(
-            2 * mapPosX, 
-            mapPosY - 80,  
+            mapPosX + 70, 
+            mapPosY + 25,  
             'Score: ' + this.score
         );
         
         this.preMovePos = [400,48];
         
         this.queenPositionText = this.add.text(
-            2 * mapPosX, 
-            mapPosY - 60, 
+            mapPosX + 70, 
+            mapPosY + 50, 
             "Queen's position: (" + this.queenPos[0] + "," + this.queenPos[1] + ")"
         );
 
@@ -221,6 +227,7 @@ export class level1 extends Phaser.Scene {
 
     /**
      * Moves non-queen players in queen's or a random directions
+     * 
      * @param xory true when moving on the y axis (up/down), false if moving on the x axis (left/right)
      * @param pos always has the value +32 or -32, because the tiles are 32x32
      */
