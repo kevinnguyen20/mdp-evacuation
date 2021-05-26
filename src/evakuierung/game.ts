@@ -1,17 +1,16 @@
 import "phaser";
-import { AUTO } from "phaser";
+import { AUTO, Scale } from "phaser";
 
 import {level1} from "./scenes/level1";
 
 const config: Phaser.Types.Core.GameConfig = {
-    //backgroundColor: 0x1F1D2C,            // can be set if we decide to use some other background color, not important for now
+    type: Phaser.AUTO,
     scale: {
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.RESIZE,   // funktioniert bei mir (chri) nicht
+        mode: Phaser.Scale.NONE,
         width: 800,
-        height: 600
+        height: 600,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    type: AUTO,
     scene: [level1],
     physics: {
         default: 'arcade',
@@ -21,7 +20,8 @@ const config: Phaser.Types.Core.GameConfig = {
         }
     },
     render: {
-        pixelArt: true
+        pixelArt: true,
+        transparent: true,
     }
 };
 

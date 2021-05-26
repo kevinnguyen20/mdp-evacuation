@@ -2,7 +2,7 @@ import { TileParser } from "../util/tileParser";
 import { TilePiece } from "../util/tilePiece";
 import { Figure } from "../util/figure"
 import { LevelFunctions } from "../util/levelFunctions";
-import { Game } from "phaser";
+import { Game, Tilemaps } from "phaser";
 
 export class level1 extends Phaser.Scene {
     private score = 0;
@@ -21,11 +21,12 @@ export class level1 extends Phaser.Scene {
     private preMovePos = [];
 
     private map = null;
-    
+
 
     private layerGround: Phaser.Tilemaps.Tilemap;
     private layerAction: Phaser.Tilemaps.Tilemap;
     private layerDesign: Phaser.Tilemaps.Tilemap;
+    private layer: Phaser.Tilemaps.Tilemap;
 
 
     constructor() {
@@ -52,7 +53,6 @@ export class level1 extends Phaser.Scene {
         this.load.image('tileset-scifi','./assets/sprites/tileset-scifi.png');
         this.load.tilemapTiledJSON('map','./assets/sprites/Level_1.json');   
         this.load.image('queen', './assets/sprites/boar.png');
-        this.load.image('background', './assets/sprites/spaceBackground.jpg');  // credits to upklyak / Freepik
     }
 
     init(): void {
@@ -84,11 +84,7 @@ export class level1 extends Phaser.Scene {
 
 
     create(): void {
-        const backgroundImage = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background') 
-        const scaleX = this.cameras.main.width / backgroundImage.width
-        const scaleY = this.cameras.main.height / backgroundImage.height
-        const scale = Math.max(scaleX, scaleY)
-        backgroundImage.setScale(scale).setScrollFactor(0)
+
 
         this.map = this.make.tilemap({
             key: 'map',
@@ -96,6 +92,7 @@ export class level1 extends Phaser.Scene {
             tileHeight: 32
         });
 
+        this.cameras.main.setZoom(1.2,1.2);
         const mapPosX = this.sys.game.config.width as number * 1/50;
         const mapPosY = this.sys.game.config.height as number * 3.5/20;
 
