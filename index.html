@@ -6,13 +6,26 @@
     <script src="bundle.js"></script>
     <style>
         html, body {
+            height: 100%;
+        }
+
+        body {
             margin: 0;
             padding: 0;
-            overflow: hidden;
+            background: black url(https://image.freepik.com/free-vector/space-background-with-planet-landscape_107791-6146.jpg) no-repeat;
+            background-size: cover;
+            color: #eee;
+            font: caption;
         }
-        canvas {
-            display : block;
-            margin : auto;}
+
+        #version {
+            position: absolute;
+            left: 0;
+            top: 0;
+            padding: 0;
+            background: rgba(0, 0, 0, 0.5)
+        }
+        
     </style>
 </head>
     <body>

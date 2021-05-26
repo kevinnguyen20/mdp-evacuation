@@ -53,7 +53,6 @@ export class level1 extends Phaser.Scene {
         this.load.image('tileset-scifi','./assets/sprites/tileset-scifi.png');
         this.load.tilemapTiledJSON('map','./assets/sprites/Level_1.json');   
         this.load.image('queen', './assets/sprites/boar.png');
-        this.load.image('background', './assets/sprites/spaceBackground.jpg');  // credits to upklyak / Freepik
     }
 
     init(): void {
@@ -85,11 +84,6 @@ export class level1 extends Phaser.Scene {
 
 
     create(): void {
-        const backgroundImage = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background');
-        const scaleX = this.cameras.main.width / backgroundImage.width;
-        const scaleY = this.cameras.main.height / backgroundImage.height;
-        const scale = Math.max(scaleX, scaleY);
-        backgroundImage.setScale(scale).setScrollFactor(0);
 
 
         this.map = this.make.tilemap({
@@ -98,8 +92,9 @@ export class level1 extends Phaser.Scene {
             tileHeight: 32
         });
 
-        const mapPosX = this.scale.width / 4;
-        const mapPosY = this.scale.height / 4;
+        this.cameras.main.setZoom(1.2,1.2);
+        const mapPosX = this.sys.game.config.width as number * 1/50;
+        const mapPosY = this.sys.game.config.height as number * 3.5/20;
 
         const tileset = this.map.addTilesetImage('scifi', 'tileset-scifi');
 
@@ -132,7 +127,7 @@ export class level1 extends Phaser.Scene {
 
         this.figureList = LevelFunctions.initFigureList(this.figureInitCount, startingPosition);
 
-        this.queenPos = [startingPosition[0] / 32, startingPosition[1] / 32];
+        this.queenPos = [startingPosition[0] / 32, startingPosition[1] /32];
 
         console.log("figureList");
         this.figureList.forEach((figure) => {
