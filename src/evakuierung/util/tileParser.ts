@@ -100,7 +100,7 @@ export class TileParser {
         actionLayer.forEachTile((tile) => { //check if it is a actionField
             const index: number = this.tileIDToAPIID_scifiLVL_Action(tile.index);
             if (index === this.ACTIONFIELD_ID){
-                let x = tileTuple[tile.x+(tile.y*actionLayer.layer.width)];
+                const x = tileTuple[tile.x+(tile.y*actionLayer.layer.width)];
                 x.tileType[1] = true;
             }
         });
