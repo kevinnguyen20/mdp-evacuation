@@ -6,7 +6,7 @@ import {level1} from "./scenes/level1";
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
     scale: {
-        mode: Phaser.Scale.NONE,
+        mode: Phaser.Scale.FIT,
         width: 800,
         height: 600,
         autoCenter: Phaser.Scale.CENTER_BOTH,
