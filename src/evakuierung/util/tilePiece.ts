@@ -6,6 +6,7 @@ export class TilePiece{
     public tileCoordinates: number[] = [];
     public directionProbabilities: number[] = []; // up, right, down, left, followQueen
     public tileType: boolean[] = []; // wall action goal
+    public text;
 
     // this is where the players on top of a tile are stored, 
     // it should be a list of objects, when the piglet class is created

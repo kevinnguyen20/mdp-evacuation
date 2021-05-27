@@ -159,7 +159,7 @@ export class level1 extends Phaser.Scene {
             "Queen's position: (" + this.queenPos[0] + "," + this.queenPos[1] + ")"
         );
 
-        
+        this.createPlayerCountText(this.tilesList);
 
         //########################################
         // this.splitCalc() is producing a Uncaught TypeError, maybe cus the this.WAHRSCHEINLICHKEITEN[] is not updated for the new Levels
@@ -202,7 +202,6 @@ export class level1 extends Phaser.Scene {
 
                 this.moveInGeneratedDirection(true, Figure.STEP_SIZE, this.figureList, this.tilesList, 
                     this.layerGround, this.layerAction, this.map);
-
                 this.preMovePos[1] += Figure.STEP_SIZE;
             }
         });
@@ -306,7 +305,34 @@ export class level1 extends Phaser.Scene {
         
         return element;
     }
-
+    /**
+     * Initializes all the text objects for the playercount on each Tile
+     * @param tilesList 
+     */
+    private createPlayerCountText(tilesList: TilePiece[]) : void{
+        tilesList.forEach((element) => {
+            element.text = this.add.text (element.tileCoordinates[0]+102, element.tileCoordinates[1]+125, ''+element.playersOnTop, {color: '#FF0000'} );
+            if (element.playersOnTop === 0)
+                element.text.setVisible(false);
+        });
+    }
+    /**
+     * Updates all the text objects for the playercount on each Tile 
+     * !Should only be called after a Move has been processed!
+     * @param tileList 
+     */
+    private updatePlayerCountText (tileList: TilePiece[]) : void {
+        tileList.forEach((element) => {
+            if (element.text.visible === true && element.playersOnTop === 0) {
+                element.text.setText(''+element.playersOnTop)
+                element.text.setVisible(false);
+            }
+            else if (element.text.visible === false && element.playersOnTop > 0) {
+                element.text.setText(''+element.playersOnTop);
+                element.text.setVisible(true);
+            }
+        })
+    }
 
 
     /*
