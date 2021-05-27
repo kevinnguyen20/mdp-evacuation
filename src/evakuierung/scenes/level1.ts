@@ -174,6 +174,7 @@ export class level1 extends Phaser.Scene {
 
                 this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
                     this.layerGround, this.layerAction, this.map);
+                //this.updatePlayerCountText(this.tilesList);    
 
                 this.preMovePos[0] -= Figure.STEP_SIZE;
             }
@@ -188,6 +189,7 @@ export class level1 extends Phaser.Scene {
 
                 this.moveInGeneratedDirection(false, Figure.STEP_SIZE, this.figureList, this.tilesList, 
                     this.layerGround, this.layerAction, this.map);
+                //this.updatePlayerCountText(this.tilesList);
 
                 this.preMovePos[0] += Figure.STEP_SIZE;
             }
@@ -202,6 +204,8 @@ export class level1 extends Phaser.Scene {
 
                 this.moveInGeneratedDirection(true, Figure.STEP_SIZE, this.figureList, this.tilesList, 
                     this.layerGround, this.layerAction, this.map);
+                //this.updatePlayerCountText(this.tilesList);
+
                 this.preMovePos[1] += Figure.STEP_SIZE;
             }
         });
@@ -215,6 +219,7 @@ export class level1 extends Phaser.Scene {
 
                 this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
                     this.layerGround, this.layerAction, this.map);
+                //this.updatePlayerCountText(this.tilesList);    
 
                 this.preMovePos[1] -= Figure.STEP_SIZE;
             }
@@ -323,9 +328,14 @@ export class level1 extends Phaser.Scene {
      */
     private updatePlayerCountText (tileList: TilePiece[]) : void {
         tileList.forEach((element) => {
-            if (element.text.visible === true && element.playersOnTop === 0) {
-                element.text.setText(''+element.playersOnTop)
-                element.text.setVisible(false);
+            if (element.text.visible === true) {
+                if(element.playersOnTop === 0){
+                    element.text.setText(''+element.playersOnTop);
+                    element.text.setVisible(false);
+                }
+                else{
+                    element.text.setText(''+element.playersOnTop);
+                }        
             }
             else if (element.text.visible === false && element.playersOnTop > 0) {
                 element.text.setText(''+element.playersOnTop);

@@ -50,7 +50,7 @@ export class LevelFunctions {
      */
 
     public static generateDirection(tile: TilePiece): number {
-        const random: number = Math.random();
+        const random: number = Math.random()*100;
         if(random < tile.directionProbabilities[0])
             return 0;   // up
 
@@ -70,7 +70,7 @@ export class LevelFunctions {
      * @returns True if the player shold go with the queen or else false
      */
     public static followQueen(tile: TilePiece):boolean {
-        const randomNum: number = Math.random();
+        const randomNum: number = Math.random()*100;
         if (randomNum < tile.directionProbabilities[4]){
             return true;
         }
