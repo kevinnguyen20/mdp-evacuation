@@ -131,7 +131,7 @@ export class level1 extends Phaser.Scene {
 
         console.log("figureList");
         this.figureList.forEach((figure) => {
-            this.tilesList[(figure.x + 23*figure.y)/32].playersOnTop++;
+            this.tilesList[figure.x/32 + figure.y/32 * this.layerAction.layer.width].playersOnTop++;
             console.log(figure.toString());
             figure.image = this.add.image(mapPosX + figure.x + Figure.STEP_SIZE / 2, mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen');
         });
@@ -174,7 +174,7 @@ export class level1 extends Phaser.Scene {
 
                 this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
                     this.layerGround, this.layerAction, this.map);
-                //this.updatePlayerCountText(this.tilesList);    
+                this.updatePlayerCountText(this.tilesList);    
 
                 this.preMovePos[0] -= Figure.STEP_SIZE;
             }
@@ -189,7 +189,7 @@ export class level1 extends Phaser.Scene {
 
                 this.moveInGeneratedDirection(false, Figure.STEP_SIZE, this.figureList, this.tilesList, 
                     this.layerGround, this.layerAction, this.map);
-                //this.updatePlayerCountText(this.tilesList);
+                this.updatePlayerCountText(this.tilesList);
 
                 this.preMovePos[0] += Figure.STEP_SIZE;
             }
@@ -204,7 +204,7 @@ export class level1 extends Phaser.Scene {
 
                 this.moveInGeneratedDirection(true, Figure.STEP_SIZE, this.figureList, this.tilesList, 
                     this.layerGround, this.layerAction, this.map);
-                //this.updatePlayerCountText(this.tilesList);
+                this.updatePlayerCountText(this.tilesList);
 
                 this.preMovePos[1] += Figure.STEP_SIZE;
             }
@@ -219,7 +219,7 @@ export class level1 extends Phaser.Scene {
 
                 this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
                     this.layerGround, this.layerAction, this.map);
-                //this.updatePlayerCountText(this.tilesList);    
+                this.updatePlayerCountText(this.tilesList);    
 
                 this.preMovePos[1] -= Figure.STEP_SIZE;
             }
@@ -285,7 +285,7 @@ export class level1 extends Phaser.Scene {
         // eslint-disable-next-line no-empty
         if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
         else {   
-            this.tilesList[(element.x + 23*element.y)/32].playersOnTop--; 
+            this.tilesList[element.x/32 + (element.y/32 * layerGround.layer.width)].playersOnTop--; 
 
             if(xory === false){                 
                 element.updateCoordinates(pos, 0);
@@ -293,9 +293,7 @@ export class level1 extends Phaser.Scene {
             else {
                 element.updateCoordinates(0, pos);
             }
-
-            this.tilesList[(element.x + 23*element.y)/32].playersOnTop++;
-
+            this.tilesList[element.x/32 + (element.y/32 * layerGround.layer.width)].playersOnTop++;
             if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
                 this.scoreText.setText('Your final score: ' + this.score + "!");
                 this.input.keyboard.enabled = false;
@@ -316,7 +314,7 @@ export class level1 extends Phaser.Scene {
      */
     private createPlayerCountText(tilesList: TilePiece[]) : void{
         tilesList.forEach((element) => {
-            element.text = this.add.text (element.tileCoordinates[0]+102, element.tileCoordinates[1]+125, ''+element.playersOnTop, {color: '#FF0000'} );
+            element.text = this.add.text (element.tileCoordinates[0]+40, element.tileCoordinates[1]+125, ''+element.playersOnTop, {color: '#FF0000'} );
             if (element.playersOnTop === 0)
                 element.text.setVisible(false);
         });
