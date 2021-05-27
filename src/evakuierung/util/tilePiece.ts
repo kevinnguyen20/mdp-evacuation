@@ -15,6 +15,7 @@ export class TilePiece{
         this.tileCoordinates = coordinates;
         this.directionProbabilities = directionProbabilities;
         this.tileType = tileType;
+        const text = new Text ("aksdfhf");
     }
 
     // can be accessed with dot notation
