@@ -159,7 +159,7 @@ export class level1 extends Phaser.Scene {
             "Queen's position: (" + this.queenPos[0] + "," + this.queenPos[1] + ")"
         );
 
-        
+        this.createPlayerCountText(this.tilesList);
 
         //########################################
         // this.splitCalc() is producing a Uncaught TypeError, maybe cus the this.WAHRSCHEINLICHKEITEN[] is not updated for the new Levels
@@ -305,6 +305,14 @@ export class level1 extends Phaser.Scene {
         }
         
         return element;
+    }
+
+    private createPlayerCountText(tilesList: TilePiece[]) : void{
+        tilesList.forEach((element) => {
+            element.text = this.add.text (element.tileCoordinates[0]+102, element.tileCoordinates[1]+125, ''+element.playersOnTop, {color: '#FF0000'} );
+            if (element.playersOnTop === 0)
+                element.text.setVisible(false);
+        });
     }
 
 
