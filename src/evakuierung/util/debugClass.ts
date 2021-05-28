@@ -20,7 +20,7 @@ export class DebugClass {
      * @param figure the movable object on the map
      * @returns 
      */
-    public static Figure(figure: Figure | null | undefined): boolean {
+    public static checkFigureNull(figure: Figure | null | undefined): boolean {
         if(figure === undefined) {
             console.log("[-] <figure> ist undefinded");
             return false;
@@ -39,7 +39,7 @@ export class DebugClass {
     }
 
     public static printSpawnPosition(figure: Figure | null): void {
-        if(!(this.Figure(figure))) {
+        if(!(this.checkFigureNull(figure))) {
             console.log("[-] Fehler bei Debug-Info über <figure>");
             process.exit(1);
         }
@@ -59,7 +59,7 @@ export class DebugClass {
 
     public static printFigure(figure: Figure | null): void {
 
-        if(!(this.Figure(figure))) {
+        if(!(this.checkFigureNull(figure))) {
             console.log("[-] Fehler bei Debug-Info über <figure>");
             process.exit(1);
         } 
