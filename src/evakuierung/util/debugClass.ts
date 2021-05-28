@@ -6,14 +6,18 @@ import { LevelFunctions } from "./levelFunctions";
 type Coordination = {
     x: number;
     y: number;
-}
+};
 
 type debugFigure = {
-    spawnCoordination: Coordination;
-    coordination: Coordination;
+    spawnCoordinates: Coordination;
+    coordinates: Coordination;
     isQueen: boolean;
     image: Phaser.GameObjects.Image;
 };
+
+type debugTilePiece = {
+    coordinate
+}
 
 export class DebugClass {
 
@@ -48,34 +52,34 @@ export class DebugClass {
      */
 
     public static printSpawnPosition(figure: Figure | null | undefined): void {
-        if(!(this.checkFigureNull(figure))) {
+        if(this.checkFigureNull(figure)) {
             console.log("[-] Fehler bei Debug-Info über <figure>");
             process.exit(1);
         }
         else {
             const dFigure: debugFigure = null;
-            dFigure.spawnCoordination.x = figure.x;
-            dFigure.spawnCoordination.y = figure.y;
+            dFigure.spawnCoordinates.x = figure.x;
+            dFigure.spawnCoordinates.y = figure.y;
             
             if(dFigure.isQueen === true) 
                 console.log("Königin: -----------------------")
             else if(dFigure.isQueen === false)
                 console.log("Untertan: -----------------------");
 
-            console.log(`Koordinaten: [${dFigure.spawnCoordination.x}, ${dFigure.spawnCoordination.y}]`);
+            console.log(`Koordinaten: [${dFigure.spawnCoordinates.x}, ${dFigure.spawnCoordinates.y}]`);
         }
     }
 
     public static printFigure(figure: Figure | null | undefined): void {
 
-        if(!(this.checkFigureNull(figure))) {
+        if(this.checkFigureNull(figure)) {
             console.log("[-] Fehler bei Debug-Info über <figure>");
             process.exit(1);
         } 
         else {
             const dFigure: debugFigure = null;
-            dFigure.coordination.x = figure.x;
-            dFigure.coordination.x = figure.y;
+            dFigure.coordinates.x = figure.x;
+            dFigure.coordinates.x = figure.y;
             dFigure.isQueen = figure.isQueen;
             dFigure.image = figure.image;
 
@@ -89,7 +93,7 @@ export class DebugClass {
                 process.exit(1);
             }
 
-            console.log(`Koordinaten: [${dFigure.coordination.x}, ${dFigure.coordination.y}]`);
+            console.log(`Koordinaten: [${dFigure.coordinates.x}, ${dFigure.coordinates.y}]`);
             console.log(dFigure.image);
         }
     }
@@ -97,5 +101,13 @@ export class DebugClass {
     /* Debug information about <tilePiece>
      */
 
-    public
+    public static printTilePiece(tilePiece: TilePiece | null | undefined): void {
+        if(this.checkFigureNull) {
+            console.log("[-] Fehler bei Debug-Info über <tilePiece>");
+            process.exit(1);
+        }
+        else {
+
+        }
+    }
 }
