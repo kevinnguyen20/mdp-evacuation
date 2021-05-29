@@ -85,8 +85,6 @@ export class level1 extends Phaser.Scene {
 
 
     create(): void {
-
-
         this.map = this.make.tilemap({
             key: 'map',
             tileWidth: 32,
