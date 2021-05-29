@@ -4,4 +4,6 @@ We do not own any of these artworks! For details regarding copyright and distrib
 
 Restart button: https://opengameart.org/content/restart-button by Andi Peredri
 
-Space background: https://www.freepik.com/free-vector/space-background-with-planet-landscape_13643566.htm#page=1&query=space%20game%20background&position=0 designed by upklyak / Freepik 
+Space background: https://www.freepik.com/free-vector/space-background-with-planet-landscape_13643566.htm#page=1&query=space%20game%20background&position=0 designed by upklyak / Freepik
+
+Alien sprite: https://iconarchive.com/show/free-space-icons-by-goodstuff-no-nonsense/alien-2-icon.html by Good Stuff No Nonsense
