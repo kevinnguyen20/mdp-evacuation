@@ -20,13 +20,13 @@ export class level1 extends Phaser.Scene {
 
     private preMovePos = [];
 
-    private map = null;
+    private map: Phaser.Tilemaps.Tilemap;
 
 
-    private layerGround: Phaser.Tilemaps.Tilemap;
-    private layerAction: Phaser.Tilemaps.Tilemap;
-    private layerDesign: Phaser.Tilemaps.Tilemap;
-    private layer: Phaser.Tilemaps.Tilemap;
+    private layerGround: Phaser.Tilemaps.TilemapLayer;
+    private layerProbability: Phaser.Tilemaps.TilemapLayer;
+    private layerAction: Phaser.Tilemaps.TilemapLayer;
+    private layerDesign: Phaser.Tilemaps.TilemapLayer;
 
 
     constructor() {
@@ -98,22 +98,32 @@ export class level1 extends Phaser.Scene {
 
         const tileset = this.map.addTilesetImage('scifi', 'tileset-scifi');
 
-        this.layerGround = this.map.createStaticLayer(
+        this.layerGround = this.map.createLayer(
             'Ground',       // layerID
             tileset,        // tileset
             mapPosX,        // x
             mapPosY         // y
         );
 
-        this.layerDesign = this.map.createLayer(   // there is no need to read this layer ever, only create it
-            'Design',       // layerID
+        this.layerProbability = this.map.createLayer(   // there is no need to read this layer ever, only create it
+            'Probability',       // layerID
+            tileset,        // tileset
+            mapPosX,        // x
+            mapPosY,         // y
+
+        );
+        
+        this.layerProbability.setVisible(false);    // set true if you want to see the probabilities
+
+        this.layerAction = this.map.createLayer(
+            'Action',       // layerID
             tileset,        // tileset
             mapPosX,        // x
             mapPosY         // y
         );
 
-        this.layerAction = this.map.createLayer(
-            'Action',       // layerID
+        this.layerDesign = this.map.createLayer(
+            'Design',       // layerID
             tileset,        // tileset
             mapPosX,        // x
             mapPosY         // y
@@ -233,7 +243,7 @@ export class level1 extends Phaser.Scene {
      * @param pos always has the value +32 or -32, because the tiles are 32x32
      */
     public moveInGeneratedDirection(xory: boolean, pos: number, figureList: Figure[], tilesList: TilePiece[],
-        layerGround: Phaser.Tilemaps.Tilemap, layerAction: Phaser.Tilemaps.Tilemap, map: Phaser.Tilemaps.Tilemap): void {
+        layerGround: Phaser.Tilemaps.TilemapLayer, layerAction: Phaser.Tilemaps.TilemapLayer, map: Phaser.Tilemaps.Tilemap): void {
         figureList.forEach( (element) =>{
             if(element.isQueen == false){
                 if(LevelFunctions.followQueen(tilesList[(element.x + 23*element.y)/32])){
@@ -269,7 +279,7 @@ export class level1 extends Phaser.Scene {
      * @param map the map we're operating on
      */
 
-    private movePlayer(xory: boolean, pos: number, layerGround: Phaser.Tilemaps.Tilemap, layerAction: Phaser.Tilemaps.Tilemap, map:Phaser.Tilemaps.Tilemap, element: Figure): Figure {        
+    private movePlayer(xory: boolean, pos: number, layerGround: Phaser.Tilemaps.TilemapLayer, layerAction: Phaser.Tilemaps.TilemapLayer, map:Phaser.Tilemaps.Tilemap, element: Figure): Figure {        
         let tile:Phaser.Tilemaps.Tile = null;
         let tileAction:Phaser.Tilemaps.Tile = null;
             

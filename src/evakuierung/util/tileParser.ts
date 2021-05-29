@@ -13,8 +13,7 @@ export class TileParser {
     public static readonly PORTAL_BLUE_ID = 13;
     public static readonly PORTAL_ORANGE_ID = 14;
     // ----- Probability -----
-    // Why don't you use an array?
-    public static readonly PROBABILITY: number[] = [0,10,20,30,40,50,60,70,80,90,100]
+    public static readonly PROBABILITY: number[] = [0,30,60,100]
 
     
     
@@ -41,7 +40,7 @@ export class TileParser {
      * Use only the Action-Layer Tiles as Input
      */
     public static tileIDToAPIID_scifiLVL_Action(tileID: number): number {
-        if(tileID === 113) return TileParser.COIN_ID;
+        if(tileID === 155) return TileParser.COIN_ID;
         if(tileID === 93) return TileParser.PORTAL_BLUE_ID;
         if(tileID === 94) return TileParser.PORTAL_ORANGE_ID;
         return -1;
@@ -52,16 +51,10 @@ export class TileParser {
      * Use only the Probability-Layer Tiles as Input
      */
     public static tileIDToAPIID_scifiLVL_Probability(tileID: number): number {
-        if(tileID === 122) return TileParser.PROBABILITY[0];
-        if(tileID === 123) return TileParser.PROBABILITY[1];
-        if(tileID === 124) return TileParser.PROBABILITY[2];
-        if(tileID === 125) return TileParser.PROBABILITY[3];
-        if(tileID === 126) return TileParser.PROBABILITY[4];
-        if(tileID === 136) return TileParser.PROBABILITY[5];
-        if(tileID === 136) return TileParser.PROBABILITY[6];
-        if(tileID === 136) return TileParser.PROBABILITY[7];
-        if(tileID === 136) return TileParser.PROBABILITY[8];
-        if(tileID === 136) return TileParser.PROBABILITY[9];
+        if(tileID === 153) return TileParser.PROBABILITY[0];
+        if(tileID === 164) return TileParser.PROBABILITY[1];
+        if(tileID === 165) return TileParser.PROBABILITY[2];
+        if(tileID === 166) return TileParser.PROBABILITY[3];
         return -1;
     }
 
@@ -70,7 +63,7 @@ export class TileParser {
      * @returns tileTuple, access the tiles in the tileTuple with coordinates, e.g. tileTuple[x+y*tilemapwidth], 
      *          wobei das erste Tile oben links ist, x=0 und y=0 ist oben links
      */
-    public static tileTupleAPI (groundLayer: Phaser.Tilemaps.Tilemap, actionLayer: Phaser.Tilemaps.Tilemap) : TilePiece[] {
+    public static tileTupleAPI (groundLayer: Phaser.Tilemaps.TilemapLayer, actionLayer: Phaser.Tilemaps.TilemapLayer) : TilePiece[] {
         const tileTuple = [];
        
         groundLayer.forEachTile((tile) => {

@@ -27,7 +27,7 @@ export class LevelFunctions {
      * @returns Tupel [X, Y] and null if not Start was found
      */
 
-    public static getStartPostition(layerGround: Phaser.Tilemaps.Tilemap): [number, number] {
+    public static getStartPostition(layerGround: Phaser.Tilemaps.TilemapLayer): [number, number] {
         let X = 0;
         let Y = 0;
 
@@ -84,7 +84,7 @@ export class LevelFunctions {
      * @returns valid/invalid move
      */
 
-    public static queenValidMoveCheck(xory: boolean, pos: number, layer: Phaser.Tilemaps.Tilemap, queen: Figure): boolean {
+    public static queenValidMoveCheck(xory: boolean, pos: number, layer: Phaser.Tilemaps.TilemapLayer, queen: Figure): boolean {
         let tile: Phaser.Tilemaps.Tile = null;
         tile = xory ? tile = layer.getTileAtWorldXY(queen.image.x, queen.image.y + pos, true) :
             tile = layer.getTileAtWorldXY(queen.image.x + pos, queen.image.y, true);
