@@ -52,7 +52,7 @@ export class level1 extends Phaser.Scene {
 
         this.load.image('tileset-scifi','./assets/sprites/tileset-scifi.png');
         this.load.tilemapTiledJSON('map','./assets/sprites/Level_1.json');   
-        this.load.image('queen', './assets/sprites/boar.png');
+        this.load.image('queen', './assets/sprites/alien.svg');
         this.load.image('restartButton', './assets/sprites/restart.png');
     }
 
@@ -158,7 +158,7 @@ export class level1 extends Phaser.Scene {
         
         this.scoreText = this.add.text(
             mapPosX + 70, 
-            mapPosY + 25,  
+            mapPosY - 40,  
             'Score: ' + this.score
         );
         
@@ -166,16 +166,16 @@ export class level1 extends Phaser.Scene {
         
         this.queenPositionText = this.add.text(
             mapPosX + 70, 
-            mapPosY + 50, 
+            mapPosY - 20, 
             "Queen's position: (" + this.queenPos[0] + "," + this.queenPos[1] + ")"
         );
 
-        const restartButton = this.add.image(mapPosX + 650, mapPosY + 50, 'restartButton');
+        const restartButton = this.add.image(mapPosX + 650, mapPosY - 30, 'restartButton');
         restartButton.setInteractive();
         if (!this.input.keyboard.enabled) {
             this.input.keyboard.enabled = true;
         }
-        restartButton.on('gameobjectdown', () => {
+        restartButton.on('pointerup', () => {
             this.scene.restart();
         });
 
