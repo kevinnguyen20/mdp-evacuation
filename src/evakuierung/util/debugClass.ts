@@ -39,6 +39,7 @@ export class DebugClass {
 
     public static checkUndefined(object: Figure 
     | TilePiece 
+    | Phaser.GameObjects.Image
     | null 
     | undefined): boolean {
         if(typeof object === "undefined") {
@@ -55,6 +56,7 @@ export class DebugClass {
 
     public static checkNull(object: Figure 
     | TilePiece
+    | Phaser.GameObjects.Image
     | null 
     | undefined): boolean {
         if(this.checkUndefined(object)) {
@@ -65,7 +67,8 @@ export class DebugClass {
             return false;
         else if(object instanceof TilePiece)
             return false;
-
+        else if(object instanceof Phaser.GameObjects.Image)
+            return false;
 
 
         else {
@@ -128,7 +131,8 @@ export class DebugClass {
         else if(dFigure.isQueen === false)
             console.log("Untertan: -----------------------");
         else {
-            console.error("Unexpected error occured in <figure> isQueen")
+            console.error("Unexpected error occured in <figure> isQueen");
+            process.exit(1);
         }
     }
 
@@ -140,15 +144,22 @@ export class DebugClass {
         } 
         else {
             const dFigure: debugFigure = null;
-            dFigure.coordinates.x = figure.x;
-            dFigure.coordinates.x = figure.y;
-            dFigure.isQueen = figure.isQueen;
-            dFigure.image = figure.image;
 
+            if(this.checkNumber(figure.x))
+                dFigure.coordinates.x = figure.x;
 
-            this.isQueen(dFigure);
+            if(this.checkNumber(figure.y))
+                dFigure.coordinates.y = figure.y;
 
-            console.log(`Koordinaten: [${dFigure.coordinates.x}, ${dFigure.coordinates.y}]`);
+            if(this.checkBoolean(figure.isQueen))
+                dFigure.isQueen = figure.isQueen;
+
+            if(this.checkNull(figure.image))
+                dFigure.image = figure.image;
+
+            console.log(`FIGURE--------------------------------------------`);
+            console.log(`Koordinaten:           [${dFigure.coordinates.x}, ${dFigure.coordinates.y}]`);
+            console.log(`Königin:               ${dFigure.isQueen}`);
         }
     }
 
@@ -164,17 +175,51 @@ export class DebugClass {
         }
         else {
             const dTilePiece: debugTilePiece = null;
-            dTilePiece.coordinates.x = tilePiece.tileCoordinates[0];
-            dTilePiece.coordinates.y = tilePiece.tileCoordinates[1];
-            dTilePiece.probabilites.up = tilePiece.directionProbabilities[0];
-            dTilePiece.probabilites.right = tilePiece.directionProbabilities[1];
-            dTilePiece.probabilites.down = tilePiece.directionProbabilities[2];
-            dTilePiece.probabilites.left = tilePiece.directionProbabilities[3];
-            dTilePiece.tileType.wall = tilePiece.tileType[0];
-            dTilePiece.tileType.action = tilePiece.tileType[1];
-            dTilePiece.tileType.goal = tilePiece.tileType[2];
-            dTilePiece.playersOnTop = tilePiece.playersOnTop;
 
+            if(tilePiece.tileCoordinates.length === 2) {
+
+                if(this.checkNumber(tilePiece.tileCoordinates[0]))
+                    dTilePiece.coordinates.x = tilePiece.tileCoordinates[0];
+
+                if(this.checkNumber(tilePiece.tileCoordinates[1]))
+                    dTilePiece.coordinates.y = tilePiece.tileCoordinates[1];
+            }
+            else
+                console.error("tilePiece.tileCoordinates has wrong size");
+
+            if(tilePiece.directionProbabilities.length === 4) {
+                if(this.checkNumber(tilePiece.directionProbabilities[0]))
+                    dTilePiece.probabilites.up = tilePiece.directionProbabilities[0];
+
+                if(this.checkNumber(tilePiece.directionProbabilities[1]))
+                    dTilePiece.probabilites.right = tilePiece.directionProbabilities[1];
+
+                if(this.checkNumber(tilePiece.directionProbabilities[2]))
+                    dTilePiece.probabilites.down = tilePiece.directionProbabilities[2];
+
+                if(this.checkNumber(tilePiece.directionProbabilities[3]))
+                    dTilePiece.probabilites.left = tilePiece.directionProbabilities[3];
+            }
+            else
+                console.error("tilePiece.directionProbabilities has wrong size");
+
+            if(tilePiece.tileType.length === 3) {
+                if(this.checkBoolean(tilePiece.tileType[0]))
+                    dTilePiece.tileType.wall = tilePiece.tileType[0];
+
+                if(this.checkBoolean(tilePiece.tileType[1]))
+                    dTilePiece.tileType.action = tilePiece.tileType[1];
+
+                if(this.checkBoolean(tilePiece.tileType[2]))
+                    dTilePiece.tileType.goal = tilePiece.tileType[2];
+            }
+            else
+                console.error("tilePiece.tileType has wrong size");
+
+            if(this.checkNumber(tilePiece.playersOnTop))
+                dTilePiece.playersOnTop = tilePiece.playersOnTop;
+
+            console.log(`TILEPIECE-----------------------------------------`);
             console.log(`Koordinaten:           [${dTilePiece.coordinates.x}, ${dTilePiece.coordinates.y}]`);
             console.log(`Wahrscheinlichkeiten:`); 
             console.log(`Norden|  Osten|  Süden| Westen`);
