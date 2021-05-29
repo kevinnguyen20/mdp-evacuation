@@ -41,7 +41,7 @@ export class DebugClass {
     | TilePiece 
     | null 
     | undefined): boolean {
-        if(object === undefined) {
+        if(typeof object === "undefined") {
             console.error("object is undefinded");
             return true;
         }
@@ -49,31 +49,71 @@ export class DebugClass {
             console.error("object is null");
             return true;
         }
-        else if(typeof object === "object")
+        else
             return false;
-
-        else {
-            console.error("Unexpected error occured in checkUndefinded");
-            return true;
-        }
     }
 
     public static checkNull(object: Figure 
-    | TilePiece 
+    | TilePiece
     | null 
     | undefined): boolean {
         if(this.checkUndefined(object)) {
             console.error("Unexpected error occured in checkNull");
-            return false;
-        }
-        else if(typeof object === "object")
             return true;
+        }
+        else if(object instanceof Figure)
+            return false;
+        else if(object instanceof TilePiece)
+            return false;
+
+
+
+        else {
+            console.error("Unexpected error in checkNull");
+            process.exit(1);
+        }
 
     }
 
-    public static checkBoolean(object: Figure 
-    | TilePiece): boolean {
-        
+    public static checkBoolean(value: boolean | null | undefined): boolean {
+        if(value === true)
+            return true;
+        else if(value === false)
+            return true;
+        else if(typeof value === "undefined")
+            return false;
+        else if(value === null)
+            return false;
+        else {
+            console.error("Unexpected error in checkBoolean");
+            process.exit(1);
+        }
+    }
+
+    public static checkNumber(value: number | null | undefined): boolean {
+        if(typeof value === "number")
+            return true;
+        else if(typeof value === "undefined")
+            return false;
+        else if(value === null)
+            return false;
+        else {
+            console.error("Unexpected error in checkNumber");
+            process.exit(1);
+        }
+    }
+
+    public static checkString(value: string | null | undefined): boolean {
+        if(typeof value === "string")
+            return true;
+        else if(typeof value === "undefined")
+            return false;
+        else if(value === null)
+            return false;
+        else {
+            console.error("Unexpected error in checkString");
+            process.exit(1);
+        }
     }
 
 
