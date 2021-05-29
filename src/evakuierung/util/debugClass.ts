@@ -37,22 +37,43 @@ type debugTilePiece = {
 
 export class DebugClass {
 
-    public static checkNull(object: Figure | TilePiece | null | undefined): boolean {
+    public static checkUndefined(object: Figure 
+    | TilePiece 
+    | null 
+    | undefined): boolean {
         if(object === undefined) {
-            console.log("[-] object is undefinded");
-            return false;
+            console.error("object is undefinded");
+            return true;
         }
         else if(object === null) {
-            console.log("[-] object is null");
+            console.error("object is null");
+            return true;
+        }
+        else if(typeof object === "object")
+            return false;
+
+        else {
+            console.error("Unexpected error occured in checkUndefinded");
+            return true;
+        }
+    }
+
+    public static checkNull(object: Figure 
+    | TilePiece 
+    | null 
+    | undefined): boolean {
+        if(this.checkUndefined(object)) {
+            console.error("Unexpected error occured in checkNull");
             return false;
         }
         else if(typeof object === "object")
             return true;
 
-        else {
-            console.log("[-] Unexpected error occured in checkNull");
-            return false;
-        }
+    }
+
+    public static checkBoolean(object: Figure 
+    | TilePiece): boolean {
+        
     }
 
 
@@ -67,14 +88,14 @@ export class DebugClass {
         else if(dFigure.isQueen === false)
             console.log("Untertan: -----------------------");
         else {
-            console.log("[-] Unexpected error occured in <figure> isQueen")
+            console.error("Unexpected error occured in <figure> isQueen")
         }
     }
 
     public static printFigure(figure: Figure | null | undefined): void {
 
         if(this.checkNull(figure)) {
-            console.log("[-] Error in <figure>");
+            console.error("Error in <figure>");
             process.exit(1);
         } 
         else {
@@ -98,7 +119,7 @@ export class DebugClass {
 
     public static printTilePiece(tilePiece: TilePiece | null | undefined): void {
         if(this.checkNull(tilePiece)) {
-            console.log("[-] Error in <tilePiece>");
+            console.error("Error in <tilePiece>");
             process.exit(1);
         }
         else {
