@@ -339,7 +339,7 @@ export class level1 extends Phaser.Scene {
      */
     private createPlayerCountText(tilesList: TilePiece[]) : void{
         tilesList.forEach((element) => {
-            element.text = this.add.text (element.tileCoordinates[0]+40, element.tileCoordinates[1]+125, ''+element.playersOnTop, {color: '#FF0000'} );
+            element.text = this.add.text (element.tileCoordinates[0]+40, element.tileCoordinates[1]+125, ''+element.playersOnTop, {color: '#ffffff'} );
             if (element.playersOnTop === 0)
                 element.text.setVisible(false);
         });
