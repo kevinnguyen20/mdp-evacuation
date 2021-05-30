@@ -107,10 +107,10 @@ export class level1 extends Phaser.Scene {
         );
 
         this.layerProbability = this.map.createLayer(   // there is no need to read this layer ever, only create it
-            'Probability',       // layerID
+            'Probability',  // layerID
             tileset,        // tileset
             mapPosX,        // x
-            mapPosY,         // y
+            mapPosY,        // y
 
         );
         
@@ -172,10 +172,9 @@ export class level1 extends Phaser.Scene {
 
         const restartButton = this.add.image(mapPosX + 650, mapPosY - 30, 'restartButton');
         restartButton.setInteractive();
-        if (!this.input.keyboard.enabled) {
-            this.input.keyboard.enabled = true;
-        }
         restartButton.on('pointerup', () => {
+            this.input.keyboard.enabled = true;
+            this.score = 0;
             this.scene.restart();
         });
 
