@@ -53,7 +53,7 @@ export class level1 extends Phaser.Scene {
         this.load.image('tileset-scifi','./assets/sprites/tileset-scifi.png');
         this.load.tilemapTiledJSON('map','./assets/sprites/Level_1.json');   
         this.load.image('queen', './assets/sprites/alien.svg');
-        this.load.image('restartButton', './assets/sprites/restart.png');
+        this.load.spritesheet('restartButton', './assets/sprites/restart.png', {frameWidth: 60, frameHeight:60});
     }
 
     init(): void {
@@ -168,14 +168,19 @@ export class level1 extends Phaser.Scene {
             "Queen's position: (" + this.queenPos[0] + "," + this.queenPos[1] + ")"
         );
 
-        const restartButton = this.add.image(mapPosX + 650, mapPosY - 30, 'restartButton');
+        const restartButton = this.add.sprite(mapPosX + 650, mapPosY - 30, 'restartButton');
         restartButton.setInteractive();
         restartButton.on('pointerup', () => {
             this.input.keyboard.enabled = true;
             this.score = 0;
             this.scene.restart();
         });
-
+        restartButton.on('pointerover', function(pointer){
+            restartButton.setScale(1.1, 1.1);
+        })
+        restartButton.on('pointerout', function(pointer){
+            restartButton.setScale(1, 1);
+        })
 
         this.createPlayerCountText(this.tilesList);
 
@@ -298,20 +303,22 @@ export class level1 extends Phaser.Scene {
             tileAction = layerAction.getTileAtWorldXY(element.image.x+pos, element.image.y, true); 
         } else {
             tile = layerGround.getTileAtWorldXY(element.image.x, element.image.y+pos, true); 
-            tileAction = layerAction.getTileAtWorldXY(element.image.x, element.image.y+pos, true); 
+            tileAction = layerAction.getTileAtWorldXY(element.image.x, element.image.y+pos, true);
         }
         // eslint-disable-next-line no-empty
         if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
         else {   
-            this.tilesList[element.x/32 + (element.y/32 * layerGround.layer.width)].playersOnTop--; 
+            this.tilesList[(element.x + element.y * layerGround.layer.width)/32].playersOnTop--; 
 
             if(xory === false){                 
-                element.updateCoordinates(pos, 0);
+                element.updateCoordinates(pos, 0);   
             } 
             else {
                 element.updateCoordinates(0, pos);
             }
-            this.tilesList[element.x/32 + (element.y/32 * layerGround.layer.width)].playersOnTop++;
+
+            this.tilesList[(element.x + element.y * layerGround.layer.width)/32].playersOnTop++;
+
             if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
                 this.scoreText.setText('Your final score: ' + this.score + "!");
                 this.input.keyboard.enabled = false;
