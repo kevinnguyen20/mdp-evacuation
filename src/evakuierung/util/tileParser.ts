@@ -90,7 +90,7 @@ export class TileParser {
                 ));
             }
         });
-        actionLayer.forEachTile((tile) => { //check if it is a actionField
+        actionLayer.forEachTile((tile) => { //check if it is an actionField
             const index: number = this.tileIDToAPIID_scifiLVL_Action(tile.index);
             if (index === this.ACTIONFIELD_ID){
                 const x = tileTuple[tile.x+(tile.y*actionLayer.layer.width)];

@@ -3,31 +3,6 @@
     "files": [
       {
         "type": "image",
-        "key": "actionfield",
-        "url": "assets/sprites/actionfield.png"
-      },
-      {
-        "type": "image",
-        "key": "empty",
-        "url": "assets/sprites/empty.png"
-      },
-      {
-        "type": "image",
-        "key": "end",
-        "url": "assets/sprites/end.png"
-      },
-      {
-        "type": "image",
-        "key": "start",
-        "url": "assets/sprites/start.png"
-      },
-      {
-        "type": "image",
-        "key": "wall",
-        "url": "assets/sprites/wall.png"
-      },
-      {
-        "type": "image",
         "key": "border",
         "url": "assets/sprites/border.png"
       },
@@ -39,12 +14,27 @@
       {
         "type": "image",
         "key": "border",
-        "url": "assets/sprites/star32.png"
+        "url": "assets/sprites/zombie_character32x32.png"
       },
       {
         "type": "image",
-        "key": "border",
-        "url": "assets/sprites/zombie_character32x32.png"
+        "key": "green",
+        "url": "assets/sprites/green.png"
+      },
+      {
+        "type": "image",
+        "key": "yellow",
+        "url": "assets/sprites/yellow.png"
+      },
+      {
+        "type": "image",
+        "key": "red",
+        "url": "assets/sprites/red.png"
+      },
+      {
+        "type": "image",
+        "key": "orange",
+        "url": "assets/sprites/orange.png"
       }
     ]
   }
