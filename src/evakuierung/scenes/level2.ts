@@ -4,7 +4,7 @@ import { Figure } from "../util/figure"
 import { LevelFunctions } from "../util/levelFunctions";
 import { Game, Tilemaps } from "phaser";
 
-export class level1 extends Phaser.Scene {
+export class level2 extends Phaser.Scene {
     private score = 0;
     private scoreText: Phaser.GameObjects.Text = null;
 
@@ -35,7 +35,7 @@ export class level1 extends Phaser.Scene {
 
     constructor() {
         super({
-            key: "level1"
+            key: "level2"
         });
     }
 
@@ -55,7 +55,7 @@ export class level1 extends Phaser.Scene {
         );
 
         this.load.image('tileset-scifi','./assets/sprites/tileset-scifi.png');
-        this.load.tilemapTiledJSON('map','./assets/sprites/Level_1.json');   
+        this.load.tilemapTiledJSON('map2','./assets/sprites/Level_2.json');   
         this.load.image('queen', './assets/sprites/alien.svg');
         this.load.image('restartButton', './assets/sprites/restartButton.png');
         this.load.image('nextLevelButton', './assets/sprites/nextLevelButton.png');
@@ -95,7 +95,7 @@ export class level1 extends Phaser.Scene {
 
     create(): void {
         this.map = this.make.tilemap({
-            key: 'map',
+            key: 'map2',
             tileWidth: 32,
             tileHeight: 32
         });
@@ -377,7 +377,7 @@ export class level1 extends Phaser.Scene {
                     nextLevelButton.setInteractive();
                     nextLevelButton.on('pointerup', () => {
                         this.scene.transition({
-                            target: "level2",
+                            target: "level3",
                             duration: 10
                         })
                     });
@@ -390,7 +390,7 @@ export class level1 extends Phaser.Scene {
                     this.gameFinished = true;
                 }
             }
-
+            
             if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
                 layerAction.putTileAt(0, tileAction.x, tileAction.y);
                 this.score += 1;

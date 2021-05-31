@@ -4,7 +4,7 @@ import { Figure } from "../util/figure"
 import { LevelFunctions } from "../util/levelFunctions";
 import { Game, Tilemaps } from "phaser";
 
-export class level1 extends Phaser.Scene {
+export class level3 extends Phaser.Scene {
     private score = 0;
     private scoreText: Phaser.GameObjects.Text = null;
 
@@ -35,7 +35,7 @@ export class level1 extends Phaser.Scene {
 
     constructor() {
         super({
-            key: "level1"
+            key: "level3"
         });
     }
 
@@ -55,7 +55,7 @@ export class level1 extends Phaser.Scene {
         );
 
         this.load.image('tileset-scifi','./assets/sprites/tileset-scifi.png');
-        this.load.tilemapTiledJSON('map','./assets/sprites/Level_1.json');   
+        this.load.tilemapTiledJSON('map3','./assets/sprites/Level_3.json');   
         this.load.image('queen', './assets/sprites/alien.svg');
         this.load.image('restartButton', './assets/sprites/restartButton.png');
         this.load.image('nextLevelButton', './assets/sprites/nextLevelButton.png');
@@ -95,7 +95,7 @@ export class level1 extends Phaser.Scene {
 
     create(): void {
         this.map = this.make.tilemap({
-            key: 'map',
+            key: 'map3',
             tileWidth: 32,
             tileHeight: 32
         });
@@ -109,15 +109,15 @@ export class level1 extends Phaser.Scene {
         this.layerGround = this.map.createLayer(
             'Ground',       // layerID
             tileset,        // tileset
-            this.mapPosX,        // x
-            this.mapPosY         // y
+            this.mapPosX,   // x
+            this.mapPosY    // y
         );
 
         this.layerProbability = this.map.createLayer(   // there is no need to read this layer ever, only create it
             'Probability',  // layerID
             tileset,        // tileset
-            this.mapPosX,        // x
-            this.mapPosY,        // y
+            this.mapPosX,   // x
+            this.mapPosY,   // y
 
         );
         
@@ -126,15 +126,15 @@ export class level1 extends Phaser.Scene {
         this.layerAction = this.map.createLayer(
             'Action',       // layerID
             tileset,        // tileset
-            this.mapPosX,        // x
-            this.mapPosY         // y
+            this.mapPosX,   // x
+            this.mapPosY    // y
         );
 
         this.layerDesign = this.map.createLayer(
             'Design',       // layerID
             tileset,        // tileset
-            this.mapPosX,        // x
-            this.mapPosY         // y
+            this.mapPosX,   // x
+            this.mapPosY    // y
         );
 
         this.tilesList = TileParser.tileTupleAPI(this.layerGround, this.layerAction);
@@ -372,7 +372,9 @@ export class level1 extends Phaser.Scene {
                 if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
                     this.scoreText.setText('Your final score: ' + this.score + "!");
                     this.input.keyboard.enabled = false;
-                    const nextLevelButton = this.add.image(this.sys.game.config.width as number / 2, this.sys.game.config.height as number / 2, 'nextLevelButton');
+                    // transition to new levels
+                    /* const nextLevelButton = this.add.image(this.sys.game.config.width as number / 2, this.sys.game.config.height as number / 2, 'nextLevelButton');
+                    console.log("button initialized!!!")
                     nextLevelButton.depth = 3;    // brings the button to the front
                     nextLevelButton.setInteractive();
                     nextLevelButton.on('pointerup', () => {
@@ -386,11 +388,11 @@ export class level1 extends Phaser.Scene {
                     });
                     nextLevelButton.on('pointerout', function(pointer){
                         nextLevelButton.setScale(1, 1);
-                    });
+                    });*/
                     this.gameFinished = true;
                 }
             }
-
+            
             if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
                 layerAction.putTileAt(0, tileAction.x, tileAction.y);
                 this.score += 1;
