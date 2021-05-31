@@ -346,7 +346,7 @@ export class level1 extends Phaser.Scene {
                     this.input.keyboard.enabled = false;
                     this.gameFinished = true;
                     const nextLevelButton = this.add.image(this.sys.game.config.width as number / 2, this.sys.game.config.height as number / 2, 'nextLevelButton');
-                    nextLevelButton.depth = 3;    // brings the button to the front
+                    nextLevelButton.depth = 100;    // brings the button to the front
                     nextLevelButton.setInteractive();
                     nextLevelButton.on('pointerup', () => {
                         this.scene.transition({
