@@ -101,7 +101,7 @@ export class LevelFunctions {
      * 
      * @param tileList 
      */
-     public static updatePlayerCountText (tileList: TilePiece[]) : void {
+    public static updatePlayerCountText (tileList: TilePiece[]) : void {
         tileList.forEach((element) => {
             if (element.text.visible === true) {
                 if(element.playersOnTop === 0){
@@ -126,7 +126,7 @@ export class LevelFunctions {
      * @param tilesList 
      * @param add set to this.add
      */
-     public static createPlayerCountText(tilesList: TilePiece[], add: Phaser.GameObjects.GameObjectFactory) : void{
+    public static createPlayerCountText(tilesList: TilePiece[], add: Phaser.GameObjects.GameObjectFactory) : void{
         tilesList.forEach((element) => {
             element.text = add.text (element.tileCoordinates[0]+38, element.tileCoordinates[1]+104, ''+element.playersOnTop, {color: '#ffffff'} ).setDepth(5);
             if (element.playersOnTop === 0)

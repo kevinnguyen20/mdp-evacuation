@@ -324,7 +324,7 @@ export class level1 extends Phaser.Scene {
             this.tilesList[(element.x + element.y * layerGround.layer.width)/32].playersOnTop++;
 
 
-            let depth = 1;
+            const depth = 1;
             if(element.isQueen){
                 if(tilePr.index == 153){
                     this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'green').setDepth(depth);
