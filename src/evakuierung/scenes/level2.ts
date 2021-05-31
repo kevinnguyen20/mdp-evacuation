@@ -217,7 +217,7 @@ export class level2 extends Phaser.Scene {
                     setTimeout(() => {
                         this.fieldColor.destroy();
                         this.input.keyboard.enabled = true; }, 220);
-                    }
+                }
             }
         });
 
@@ -239,7 +239,7 @@ export class level2 extends Phaser.Scene {
                     setTimeout(() => {
                         this.fieldColor.destroy();
                         this.input.keyboard.enabled = true; }, 220);
-                    }
+                }
             }
         });
 
@@ -261,7 +261,7 @@ export class level2 extends Phaser.Scene {
                     setTimeout(() => {
                         this.fieldColor.destroy();
                         this.input.keyboard.enabled = true; }, 220);
-                    } 
+                } 
             }
         });
 
@@ -283,7 +283,7 @@ export class level2 extends Phaser.Scene {
                     setTimeout(() => {
                         this.fieldColor.destroy();
                         this.input.keyboard.enabled = true; }, 220);
-                    }
+                }
             }
         });
     }
