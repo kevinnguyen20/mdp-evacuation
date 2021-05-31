@@ -4,7 +4,7 @@ import { Figure } from "../util/figure"
 import { LevelFunctions } from "../util/levelFunctions";
 import { Game, Tilemaps } from "phaser";
 
-export class level1 extends Phaser.Scene {
+export class level2 extends Phaser.Scene {
     private score = 0;
     private scoreText: Phaser.GameObjects.Text = null;
 
@@ -35,7 +35,7 @@ export class level1 extends Phaser.Scene {
 
     constructor() {
         super({
-            key: "level1"
+            key: "level2"
         });
     }
 
@@ -55,10 +55,9 @@ export class level1 extends Phaser.Scene {
         );
 
         this.load.image('tileset-scifi','./assets/sprites/tileset-scifi.png');
-        this.load.tilemapTiledJSON('map','./assets/sprites/Level_1.json');   
+        this.load.tilemapTiledJSON('map2','./assets/sprites/Level_2.json');   
         this.load.image('queen', './assets/sprites/alien.svg');
-        this.load.image('restartButton', './assets/sprites/restartButton.png');
-        this.load.image('nextLevelButton', './assets/sprites/nextLevelButton.png');
+        this.load.spritesheet('restartButton', './assets/sprites/restart.png', {frameWidth: 60, frameHeight:60});
         this.load.image('green', './assets/sprites/green.png');
         this.load.image('red', './assets/sprites/red.png');
         this.load.image('orange', './assets/sprites/orange.png');
@@ -95,7 +94,7 @@ export class level1 extends Phaser.Scene {
 
     create(): void {
         this.map = this.make.tilemap({
-            key: 'map',
+            key: 'map2',
             tileWidth: 32,
             tileHeight: 32
         });
@@ -177,7 +176,7 @@ export class level1 extends Phaser.Scene {
             "Queen's position: (" + this.queenPos[0] + "," + this.queenPos[1] + ")"
         );
 
-        const restartButton = this.add.sprite(this.mapPosX + 610, this.mapPosY - 27, 'restartButton');
+        const restartButton = this.add.sprite(this.mapPosX + 650, this.mapPosY - 30, 'restartButton');
         restartButton.setInteractive();
         restartButton.on('pointerup', () => {
             this.input.keyboard.enabled = true;
@@ -186,10 +185,10 @@ export class level1 extends Phaser.Scene {
         });
         restartButton.on('pointerover', function(pointer){
             restartButton.setScale(0.85, 0.85);
-        });
+        })
         restartButton.on('pointerout', function(pointer){
             restartButton.setScale(1, 1);
-        });
+        })
 
         this.createPlayerCountText(this.tilesList);
 
@@ -371,20 +370,11 @@ export class level1 extends Phaser.Scene {
             if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
                 this.scoreText.setText('Your final score: ' + this.score + "!");
                 this.input.keyboard.enabled = false;
-                const nextLevelButton = this.add.sprite(this.sys.game.config.width as number / 2, this.sys.game.config.height as number / 2, 'nextLevelButton');
-                nextLevelButton.depth = 100;    // brings the button to the front
-                nextLevelButton.setInteractive();
-                nextLevelButton.on('pointerup', () => {
+                this.input.on('pointerup', () => {
                     this.scene.transition({
-                        target: "level2",
+                        target: "level3",
                         duration: 10
                     })
-                });
-                nextLevelButton.on('pointerover', function(pointer){
-                    nextLevelButton.setScale(0.85, 0.85);
-                });
-                nextLevelButton.on('pointerout', function(pointer){
-                    nextLevelButton.setScale(1, 1);
                 });
             }
 
