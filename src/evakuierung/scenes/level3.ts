@@ -17,7 +17,7 @@ export class level3 extends Phaser.Scene {
     private figureInitCount = 8;
     private figureList: Figure[];
     private tilesList: TilePiece[]; 
-
+    private gameFinished = false;
     private preMovePos = [];
 
     private map: Phaser.Tilemaps.Tilemap;
@@ -57,7 +57,8 @@ export class level3 extends Phaser.Scene {
         this.load.image('tileset-scifi','./assets/sprites/tileset-scifi.png');
         this.load.tilemapTiledJSON('map3','./assets/sprites/Level_3.json');   
         this.load.image('queen', './assets/sprites/alien.svg');
-        this.load.spritesheet('restartButton', './assets/sprites/restart.png', {frameWidth: 60, frameHeight:60});
+        this.load.image('restartButton', './assets/sprites/restartButton.png');
+        this.load.image('nextLevelButton', './assets/sprites/nextLevelButton.png');
         this.load.image('green', './assets/sprites/green.png');
         this.load.image('red', './assets/sprites/red.png');
         this.load.image('orange', './assets/sprites/orange.png');
@@ -108,15 +109,15 @@ export class level3 extends Phaser.Scene {
         this.layerGround = this.map.createLayer(
             'Ground',       // layerID
             tileset,        // tileset
-            this.mapPosX,        // x
-            this.mapPosY         // y
+            this.mapPosX,   // x
+            this.mapPosY    // y
         );
 
         this.layerProbability = this.map.createLayer(   // there is no need to read this layer ever, only create it
             'Probability',  // layerID
             tileset,        // tileset
-            this.mapPosX,        // x
-            this.mapPosY,        // y
+            this.mapPosX,   // x
+            this.mapPosY,   // y
 
         );
         
@@ -125,15 +126,15 @@ export class level3 extends Phaser.Scene {
         this.layerAction = this.map.createLayer(
             'Action',       // layerID
             tileset,        // tileset
-            this.mapPosX,        // x
-            this.mapPosY         // y
+            this.mapPosX,   // x
+            this.mapPosY    // y
         );
 
         this.layerDesign = this.map.createLayer(
             'Design',       // layerID
             tileset,        // tileset
-            this.mapPosX,        // x
-            this.mapPosY         // y
+            this.mapPosX,   // x
+            this.mapPosY    // y
         );
 
         this.tilesList = TileParser.tileTupleAPI(this.layerGround, this.layerAction);
@@ -176,7 +177,7 @@ export class level3 extends Phaser.Scene {
             "Queen's position: (" + this.queenPos[0] + "," + this.queenPos[1] + ")"
         );
 
-        const restartButton = this.add.sprite(this.mapPosX + 650, this.mapPosY - 30, 'restartButton');
+        const restartButton = this.add.image(this.mapPosX + 610, this.mapPosY - 27, 'restartButton');
         restartButton.setInteractive();
         restartButton.on('pointerup', () => {
             this.input.keyboard.enabled = true;
@@ -185,10 +186,11 @@ export class level3 extends Phaser.Scene {
         });
         restartButton.on('pointerover', function(pointer){
             restartButton.setScale(0.85, 0.85);
-        })
+        });
         restartButton.on('pointerout', function(pointer){
             restartButton.setScale(1, 1);
-        })
+        });
+        
 
         this.createPlayerCountText(this.tilesList);
 
@@ -210,7 +212,7 @@ export class level3 extends Phaser.Scene {
 
                 this.preMovePos[0] -= Figure.STEP_SIZE;
 
-                setTimeout((funtion) => {
+                setTimeout(() => {
                     this.fieldColor.destroy();
                     this.input.keyboard.enabled = true; }, 220);    
             }
@@ -230,7 +232,7 @@ export class level3 extends Phaser.Scene {
 
                 this.preMovePos[0] += Figure.STEP_SIZE;
 
-                setTimeout((funtion) => {
+                setTimeout(() => {
                     this.fieldColor.destroy();
                     this.input.keyboard.enabled = true; }, 220);    
             }
@@ -250,7 +252,7 @@ export class level3 extends Phaser.Scene {
 
                 this.preMovePos[1] += Figure.STEP_SIZE;
 
-                setTimeout((funtion) => {
+                setTimeout(() => {
                     this.fieldColor.destroy();
                     this.input.keyboard.enabled = true; }, 220);    
             }
@@ -270,7 +272,7 @@ export class level3 extends Phaser.Scene {
                 
                 this.preMovePos[1] -= Figure.STEP_SIZE;
                 
-                setTimeout((funtion) => {
+                setTimeout(() => {
                     this.fieldColor.destroy();
                     this.input.keyboard.enabled = true; }, 220);    
             }
@@ -366,13 +368,31 @@ export class level3 extends Phaser.Scene {
                 }
             }
 
-
-            if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
-                this.scoreText.setText('Your final score: ' + this.score + "!");
-                this.input.keyboard.enabled = false;
-                // we have to transition to an end menu or new levels here
+            if(!this.gameFinished) {
+                if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
+                    this.scoreText.setText('Your final score: ' + this.score + "!");
+                    this.input.keyboard.enabled = false;
+                    // transition to new levels
+                    /* const nextLevelButton = this.add.image(this.sys.game.config.width as number / 2, this.sys.game.config.height as number / 2, 'nextLevelButton');
+                    console.log("button initialized!!!")
+                    nextLevelButton.depth = 3;    // brings the button to the front
+                    nextLevelButton.setInteractive();
+                    nextLevelButton.on('pointerup', () => {
+                        this.scene.transition({
+                            target: "level2",
+                            duration: 10
+                        })
+                    });
+                    nextLevelButton.on('pointerover', function(pointer){
+                        nextLevelButton.setScale(0.85, 0.85);
+                    });
+                    nextLevelButton.on('pointerout', function(pointer){
+                        nextLevelButton.setScale(1, 1);
+                    });*/
+                    this.gameFinished = true;
+                }
             }
-
+            
             if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
                 layerAction.putTileAt(0, tileAction.x, tileAction.y);
                 this.score += 1;
@@ -384,6 +404,7 @@ export class level3 extends Phaser.Scene {
     }
     /**
      * Initializes all the text objects for the playercount on each Tile
+     * 
      * @param tilesList 
      */
     private createPlayerCountText(tilesList: TilePiece[]) : void{
@@ -395,7 +416,8 @@ export class level3 extends Phaser.Scene {
     }
     /**
      * Updates all the text objects for the playercount on each Tile 
-     * !Should only be called after a Move has been processed!
+     * !!! Should only be called after a Move has been processed !!!
+     * 
      * @param tileList 
      */
     private updatePlayerCountText (tileList: TilePiece[]) : void {
