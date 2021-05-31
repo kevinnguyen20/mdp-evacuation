@@ -181,6 +181,7 @@ export class level2 extends Phaser.Scene {
         restartButton.setInteractive();
         restartButton.on('pointerup', () => {
             this.input.keyboard.enabled = true;
+            this.gameFinished = false;
             this.score = 0;
             this.scene.restart();
         });
@@ -200,81 +201,89 @@ export class level2 extends Phaser.Scene {
 
         this.input.keyboard.on('keydown-A', () =>{
             if(LevelFunctions.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])) {
-                this.input.keyboard.enabled = false;
+                if(!this.gameFinished) {
+                    this.input.keyboard.enabled = false;
 
-                this.queenPos[0] -= 1;
-                this.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
-                this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
-                
-                this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
-                    this.layerGround, this.layerAction, this.map);
-                this.updatePlayerCountText(this.tilesList);  
+                    this.queenPos[0] -= 1;
+                    this.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
+                    this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
+                    
+                    this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
+                        this.layerGround, this.layerAction, this.map);
+                    this.updatePlayerCountText(this.tilesList);  
 
-                this.preMovePos[0] -= Figure.STEP_SIZE;
+                    this.preMovePos[0] -= Figure.STEP_SIZE;
 
-                setTimeout(() => {
-                    this.fieldColor.destroy();
-                    this.input.keyboard.enabled = true; }, 220);    
+                    setTimeout(() => {
+                        this.fieldColor.destroy();
+                        this.input.keyboard.enabled = true; }, 220);
+                    }
             }
         });
 
         this.input.keyboard.on('keydown-D', () =>{
             if (LevelFunctions.queenValidMoveCheck(false, Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
-                this.input.keyboard.enabled = false;
+                if(!this.gameFinished) {
+                    this.input.keyboard.enabled = false;
 
-                this.queenPos[0] += 1;
-                this.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
-                this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
+                    this.queenPos[0] += 1;
+                    this.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
+                    this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.moveInGeneratedDirection(false, Figure.STEP_SIZE, this.figureList, this.tilesList, 
-                    this.layerGround, this.layerAction, this.map);
-                this.updatePlayerCountText(this.tilesList);
+                    this.moveInGeneratedDirection(false, Figure.STEP_SIZE, this.figureList, this.tilesList, 
+                        this.layerGround, this.layerAction, this.map);
+                    this.updatePlayerCountText(this.tilesList);
 
-                this.preMovePos[0] += Figure.STEP_SIZE;
+                    this.preMovePos[0] += Figure.STEP_SIZE;
 
-                setTimeout(() => {
-                    this.fieldColor.destroy();
-                    this.input.keyboard.enabled = true; }, 220);    
+                    setTimeout(() => {
+                        this.fieldColor.destroy();
+                        this.input.keyboard.enabled = true; }, 220);
+                    }
             }
         });
 
         this.input.keyboard.on('keydown-S', () =>{
             if (LevelFunctions.queenValidMoveCheck(true, Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
-                this.input.keyboard.enabled = false;
+                if(!this.gameFinished) {
+                    this.input.keyboard.enabled = false;
 
-                this.queenPos[1] += 1;
-                this.figureList[0] = this.movePlayer(true, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
-                this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
+                    this.queenPos[1] += 1;
+                    this.figureList[0] = this.movePlayer(true, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
+                    this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.moveInGeneratedDirection(true, Figure.STEP_SIZE, this.figureList, this.tilesList, 
-                    this.layerGround, this.layerAction, this.map);
-                this.updatePlayerCountText(this.tilesList);    
+                    this.moveInGeneratedDirection(true, Figure.STEP_SIZE, this.figureList, this.tilesList, 
+                        this.layerGround, this.layerAction, this.map);
+                    this.updatePlayerCountText(this.tilesList);    
 
-                this.preMovePos[1] += Figure.STEP_SIZE;
+                    this.preMovePos[1] += Figure.STEP_SIZE;
 
-                setTimeout(() => {
-                    this.fieldColor.destroy();
-                    this.input.keyboard.enabled = true; }, 220);    
+                    setTimeout(() => {
+                        this.fieldColor.destroy();
+                        this.input.keyboard.enabled = true; }, 220);
+                    } 
             }
         });
 
         this.input.keyboard.on('keydown-W', () =>{
             if (LevelFunctions.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
-                this.input.keyboard.enabled = false;
+                if(!this.gameFinished) {
+                    this.input.keyboard.enabled = false;
+                    
+                    this.queenPos[1] -= 1;
+                    this.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
+                    this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
-                this.queenPos[1] -= 1;
-                this.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
-                this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
-
-                this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
-                    this.layerGround, this.layerAction, this.map);
-                this.updatePlayerCountText(this.tilesList);    
-                
-                this.preMovePos[1] -= Figure.STEP_SIZE;
-                
-                setTimeout(() => {
-                    this.fieldColor.destroy();
-                    this.input.keyboard.enabled = true; }, 220);    
+                    this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
+                        this.layerGround, this.layerAction, this.map);
+                    this.updatePlayerCountText(this.tilesList);    
+                    
+                    this.preMovePos[1] -= Figure.STEP_SIZE;
+                    
+                    setTimeout(() => {
+                        this.fieldColor.destroy();
+                        this.input.keyboard.enabled = true; }, 220);
+                    }
             }
         });
     }
@@ -372,6 +381,7 @@ export class level2 extends Phaser.Scene {
                 if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
                     this.scoreText.setText('Your final score: ' + this.score + "!");
                     this.input.keyboard.enabled = false;
+                    this.gameFinished = true;
                     const nextLevelButton = this.add.image(this.sys.game.config.width as number / 2, this.sys.game.config.height as number / 2, 'nextLevelButton');
                     nextLevelButton.depth = 3;    // brings the button to the front
                     nextLevelButton.setInteractive();
@@ -387,7 +397,6 @@ export class level2 extends Phaser.Scene {
                     nextLevelButton.on('pointerout', function(pointer){
                         nextLevelButton.setScale(1, 1);
                     });
-                    this.gameFinished = true;
                 }
             }
             
