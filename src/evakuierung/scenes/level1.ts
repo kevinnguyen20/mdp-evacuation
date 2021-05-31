@@ -125,11 +125,8 @@ export class level1 extends Phaser.Scene {
         this.queenPos = [startingPosition[0] / 32, startingPosition[1] /32];
         this.figureList.forEach((figure) => {
             this.tilesList[figure.x/32 + figure.y/32 * this.layerAction.layer.width].playersOnTop++;
-            figure.image = this.add.image(this.mapPosX + figure.x + Figure.STEP_SIZE / 2, this.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(1);
+            figure.image = this.add.image(this.mapPosX + figure.x + Figure.STEP_SIZE / 2, this.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(4);
         });
-
-
-        
         
         this.scoreText = this.add.text(
             this.mapPosX + 70, 
@@ -326,11 +323,8 @@ export class level1 extends Phaser.Scene {
 
             this.tilesList[(element.x + element.y * layerGround.layer.width)/32].playersOnTop++;
 
-            //reveals the colour of the field after the queen steps on it
-            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // the layer depth can't be correctly set this way, we have to work on layers not with images i guess. But for now it's fine
-            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            let depth = 0;
+
+            let depth = 1;
             if(element.isQueen){
                 if(tilePr.index == 153){
                     this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'green').setDepth(depth);

@@ -128,14 +128,26 @@ export class LevelFunctions {
      */
      public static createPlayerCountText(tilesList: TilePiece[], add: Phaser.GameObjects.GameObjectFactory) : void{
         tilesList.forEach((element) => {
-            element.text = add.text (element.tileCoordinates[0]+40, element.tileCoordinates[1]+125, ''+element.playersOnTop, {color: '#ffffff'} ).setDepth(2);
+            element.text = add.text (element.tileCoordinates[0]+38, element.tileCoordinates[1]+104, ''+element.playersOnTop, {color: '#ffffff'} ).setDepth(5);
             if (element.playersOnTop === 0)
                 element.text.setVisible(false);
         });
     }
 
-    // LevelFunctions.setupLayer(tileset, this.mapPosX, this.mapPosY, this.map, this.layerGround, this.layerProbability, this.layerAction, this.layerDesign);
-    
+
+    /**
+     * load the Layers according to the structure in Tiled
+     * @param tileset 
+     * @param x layer Postition X
+     * @param y layer Position Y
+     * @param map the map we create the layers on
+     * @param layerGround 
+     * @param layerProbability 
+     * @param layerAction 
+     * @param layerDesign 
+     * @param layerPerspective 
+     * @returns returns layers in the input order
+     */
     public static setupLayer(tileset: Tilemaps.Tileset, x: number, y: number, map: Tilemaps.Tilemap, 
         layerGround: Tilemaps.TilemapLayer, layerProbability: Tilemaps.TilemapLayer,layerAction: Tilemaps.TilemapLayer,layerDesign: Tilemaps.TilemapLayer, layerPerspective: Tilemaps.TilemapLayer,): 
         [Tilemaps.TilemapLayer, Tilemaps.TilemapLayer, Tilemaps.TilemapLayer, Tilemaps.TilemapLayer, Tilemaps.TilemapLayer]{
@@ -153,7 +165,6 @@ export class LevelFunctions {
             y,        // y
 
         );
-        
         layerProbability.setVisible(false);    // set true if you want to see the probabilities
 
         layerAction = map.createLayer(
@@ -177,8 +188,11 @@ export class LevelFunctions {
             y         // y
         );
 
-        
-        layerPerspective.setDepth(5);
+        layerGround.setDepth(0);
+        layerProbability.setDepth(1);
+        layerAction.setDepth(2);
+        layerDesign.setDepth(3);
+        layerPerspective.setDepth(20);
 
         return [layerGround, layerProbability, layerAction, layerDesign, layerPerspective];
 
