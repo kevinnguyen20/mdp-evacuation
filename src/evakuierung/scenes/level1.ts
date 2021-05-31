@@ -27,6 +27,10 @@ export class level1 extends Phaser.Scene {
     private layerProbability: Phaser.Tilemaps.TilemapLayer;
     private layerAction: Phaser.Tilemaps.TilemapLayer;
     private layerDesign: Phaser.Tilemaps.TilemapLayer;
+    private fieldColor: Phaser.GameObjects.Image
+
+    private mapPosX;
+    private mapPosY;
 
 
     constructor() {
@@ -54,6 +58,10 @@ export class level1 extends Phaser.Scene {
         this.load.tilemapTiledJSON('map','./assets/sprites/Level_1.json');   
         this.load.image('queen', './assets/sprites/alien.svg');
         this.load.spritesheet('restartButton', './assets/sprites/restart.png', {frameWidth: 60, frameHeight:60});
+        this.load.image('green', './assets/sprites/green.png');
+        this.load.image('red', './assets/sprites/red.png');
+        this.load.image('orange', './assets/sprites/orange.png');
+        this.load.image('yellow', './assets/sprites/yellow.png');
     }
 
     init(): void {
@@ -92,23 +100,23 @@ export class level1 extends Phaser.Scene {
         });
 
         this.cameras.main.setZoom(1.2,1.2);
-        const mapPosX = this.sys.game.config.width as number * 1/50;
-        const mapPosY = this.sys.game.config.height as number * 3.5/20;
+        this.mapPosX = this.sys.game.config.width as number * 1/50;
+        this.mapPosY = this.sys.game.config.height as number * 3.5/20;
 
         const tileset = this.map.addTilesetImage('scifi', 'tileset-scifi');
 
         this.layerGround = this.map.createLayer(
             'Ground',       // layerID
             tileset,        // tileset
-            mapPosX,        // x
-            mapPosY         // y
+            this.mapPosX,        // x
+            this.mapPosY         // y
         );
 
         this.layerProbability = this.map.createLayer(   // there is no need to read this layer ever, only create it
             'Probability',  // layerID
             tileset,        // tileset
-            mapPosX,        // x
-            mapPosY,        // y
+            this.mapPosX,        // x
+            this.mapPosY,        // y
 
         );
         
@@ -117,15 +125,15 @@ export class level1 extends Phaser.Scene {
         this.layerAction = this.map.createLayer(
             'Action',       // layerID
             tileset,        // tileset
-            mapPosX,        // x
-            mapPosY         // y
+            this.mapPosX,        // x
+            this.mapPosY         // y
         );
 
         this.layerDesign = this.map.createLayer(
             'Design',       // layerID
             tileset,        // tileset
-            mapPosX,        // x
-            mapPosY         // y
+            this.mapPosX,        // x
+            this.mapPosY         // y
         );
 
         this.tilesList = TileParser.tileTupleAPI(this.layerGround, this.layerAction);
@@ -142,7 +150,7 @@ export class level1 extends Phaser.Scene {
         this.figureList.forEach((figure) => {
             this.tilesList[figure.x/32 + figure.y/32 * this.layerAction.layer.width].playersOnTop++;
             console.log(figure.toString());
-            figure.image = this.add.image(mapPosX + figure.x + Figure.STEP_SIZE / 2, mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen');
+            figure.image = this.add.image(this.mapPosX + figure.x + Figure.STEP_SIZE / 2, this.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(2);
         });
         console.log("size: " + this.figureList.length) 
 
@@ -150,25 +158,25 @@ export class level1 extends Phaser.Scene {
         const layerPerspective = this.map.createLayer(
             'Perspective',  // layerID
             tileset,        // tileset
-            mapPosX,        // x
-            mapPosY         // y
+            this.mapPosX,        // x
+            this.mapPosY         // y
         );
         
         this.scoreText = this.add.text(
-            mapPosX + 70, 
-            mapPosY - 40,  
+            this.mapPosX + 70, 
+            this.mapPosY - 40,  
             'Score: ' + this.score
         );
         
         this.preMovePos = [400,48];
         
         this.queenPositionText = this.add.text(
-            mapPosX + 70, 
-            mapPosY - 20, 
+            this.mapPosX + 70, 
+            this.mapPosY - 20, 
             "Queen's position: (" + this.queenPos[0] + "," + this.queenPos[1] + ")"
         );
 
-        const restartButton = this.add.sprite(mapPosX + 650, mapPosY - 30, 'restartButton');
+        const restartButton = this.add.sprite(this.mapPosX + 650, this.mapPosY - 30, 'restartButton');
         restartButton.setInteractive();
         restartButton.on('pointerup', () => {
             this.input.keyboard.enabled = true;
@@ -176,7 +184,7 @@ export class level1 extends Phaser.Scene {
             this.scene.restart();
         });
         restartButton.on('pointerover', function(pointer){
-            restartButton.setScale(1.1, 1.1);
+            restartButton.setScale(0.85, 0.85);
         })
         restartButton.on('pointerout', function(pointer){
             restartButton.setScale(1, 1);
@@ -190,21 +198,27 @@ export class level1 extends Phaser.Scene {
 
         this.input.keyboard.on('keydown-A', () =>{
             if(LevelFunctions.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])) {
-                
+                this.input.keyboard.enabled = false;
+
                 this.queenPos[0] -= 1;
                 this.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                 this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
-
+                
                 this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
                     this.layerGround, this.layerAction, this.map);
-                this.updatePlayerCountText(this.tilesList);    
+                this.updatePlayerCountText(this.tilesList);  
 
                 this.preMovePos[0] -= Figure.STEP_SIZE;
+
+                setTimeout((funtion) => {
+                    this.fieldColor.destroy();
+                    this.input.keyboard.enabled = true; }, 220);    
             }
         });
 
         this.input.keyboard.on('keydown-D', () =>{
             if (LevelFunctions.queenValidMoveCheck(false, Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
+                this.input.keyboard.enabled = false;
 
                 this.queenPos[0] += 1;
                 this.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
@@ -215,11 +229,16 @@ export class level1 extends Phaser.Scene {
                 this.updatePlayerCountText(this.tilesList);
 
                 this.preMovePos[0] += Figure.STEP_SIZE;
+
+                setTimeout((funtion) => {
+                    this.fieldColor.destroy();
+                    this.input.keyboard.enabled = true; }, 220);    
             }
         });
 
         this.input.keyboard.on('keydown-S', () =>{
             if (LevelFunctions.queenValidMoveCheck(true, Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
+                this.input.keyboard.enabled = false;
 
                 this.queenPos[1] += 1;
                 this.figureList[0] = this.movePlayer(true, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
@@ -227,14 +246,19 @@ export class level1 extends Phaser.Scene {
 
                 this.moveInGeneratedDirection(true, Figure.STEP_SIZE, this.figureList, this.tilesList, 
                     this.layerGround, this.layerAction, this.map);
-                this.updatePlayerCountText(this.tilesList);
+                this.updatePlayerCountText(this.tilesList);    
 
                 this.preMovePos[1] += Figure.STEP_SIZE;
+
+                setTimeout((funtion) => {
+                    this.fieldColor.destroy();
+                    this.input.keyboard.enabled = true; }, 220);    
             }
         });
 
         this.input.keyboard.on('keydown-W', () =>{
             if (LevelFunctions.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
+                this.input.keyboard.enabled = false;
 
                 this.queenPos[1] -= 1;
                 this.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
@@ -243,8 +267,12 @@ export class level1 extends Phaser.Scene {
                 this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
                     this.layerGround, this.layerAction, this.map);
                 this.updatePlayerCountText(this.tilesList);    
-
+                
                 this.preMovePos[1] -= Figure.STEP_SIZE;
+                
+                setTimeout((funtion) => {
+                    this.fieldColor.destroy();
+                    this.input.keyboard.enabled = true; }, 220);    
             }
         });
     }
@@ -295,15 +323,18 @@ export class level1 extends Phaser.Scene {
     private movePlayer(xory: boolean, pos: number, layerGround: Phaser.Tilemaps.TilemapLayer, layerAction: Phaser.Tilemaps.TilemapLayer, map:Phaser.Tilemaps.Tilemap, element: Figure): Figure {        
         let tile:Phaser.Tilemaps.Tile = null;
         let tileAction:Phaser.Tilemaps.Tile = null;
+        let tilePr:Phaser.Tilemaps.Tile = null;
             
 
         // Determine if which axis we're moving on
         if (xory === false){
             tile = layerGround.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
-            tileAction = layerAction.getTileAtWorldXY(element.image.x+pos, element.image.y, true); 
+            tileAction = layerAction.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
+            tilePr = this.layerProbability.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
         } else {
             tile = layerGround.getTileAtWorldXY(element.image.x, element.image.y+pos, true); 
             tileAction = layerAction.getTileAtWorldXY(element.image.x, element.image.y+pos, true);
+            tilePr = this.layerProbability.getTileAtWorldXY(element.image.x, element.image.y+pos, true);
         }
         // eslint-disable-next-line no-empty
         if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
@@ -318,6 +349,23 @@ export class level1 extends Phaser.Scene {
             }
 
             this.tilesList[(element.x + element.y * layerGround.layer.width)/32].playersOnTop++;
+
+            //reveals the colour of the field after the queen steps on it
+            if(element.isQueen){
+                if(tilePr.index == 153){
+                    this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'green').setDepth(1);
+                }
+                else if(tilePr.index == 165){
+                    this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'orange').setDepth(1);
+                }
+                else if(tilePr.index == 164){
+                    this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'yellow').setDepth(1);
+                }
+                else if(tilePr.index == 166){
+                    this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'red').setDepth(1);
+                }
+            }
+
 
             if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
                 this.scoreText.setText('Your final score: ' + this.score + "!");
@@ -339,7 +387,7 @@ export class level1 extends Phaser.Scene {
      */
     private createPlayerCountText(tilesList: TilePiece[]) : void{
         tilesList.forEach((element) => {
-            element.text = this.add.text (element.tileCoordinates[0]+40, element.tileCoordinates[1]+125, ''+element.playersOnTop, {color: '#ffffff'} );
+            element.text = this.add.text (element.tileCoordinates[0]+40, element.tileCoordinates[1]+125, ''+element.playersOnTop, {color: '#ffffff'} ).setDepth(2);
             if (element.playersOnTop === 0)
                 element.text.setVisible(false);
         });
