@@ -27,7 +27,7 @@ export class level3 extends Phaser.Scene {
     private layerProbability: Phaser.Tilemaps.TilemapLayer;
     private layerAction: Phaser.Tilemaps.TilemapLayer;
     private layerDesign: Phaser.Tilemaps.TilemapLayer;
-    private fieldColor: Phaser.GameObjects.Image
+    private fieldColor: Phaser.GameObjects.Image = null;
 
     private mapPosX;
     private mapPosY;
@@ -202,8 +202,6 @@ export class level3 extends Phaser.Scene {
         this.input.keyboard.on('keydown-A', () =>{
             if(LevelFunctions.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])) {
                 if(!this.gameFinished) {
-                    this.input.keyboard.enabled = false;
-
                     this.queenPos[0] -= 1;
                     this.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                     this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
@@ -213,10 +211,6 @@ export class level3 extends Phaser.Scene {
                     this.updatePlayerCountText(this.tilesList);  
 
                     this.preMovePos[0] -= Figure.STEP_SIZE;
-
-                    setTimeout(() => {
-                        this.fieldColor.destroy();
-                        this.input.keyboard.enabled = true; }, 220);
                 }
             }
         });
@@ -224,8 +218,6 @@ export class level3 extends Phaser.Scene {
         this.input.keyboard.on('keydown-D', () =>{
             if (LevelFunctions.queenValidMoveCheck(false, Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
                 if(!this.gameFinished) {
-                    this.input.keyboard.enabled = false;
-
                     this.queenPos[0] += 1;
                     this.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                     this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
@@ -235,10 +227,6 @@ export class level3 extends Phaser.Scene {
                     this.updatePlayerCountText(this.tilesList);
 
                     this.preMovePos[0] += Figure.STEP_SIZE;
-
-                    setTimeout(() => {
-                        this.fieldColor.destroy();
-                        this.input.keyboard.enabled = true; }, 220);
                 }
             }
         });
@@ -246,8 +234,6 @@ export class level3 extends Phaser.Scene {
         this.input.keyboard.on('keydown-S', () =>{
             if (LevelFunctions.queenValidMoveCheck(true, Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
                 if(!this.gameFinished) {
-                    this.input.keyboard.enabled = false;
-
                     this.queenPos[1] += 1;
                     this.figureList[0] = this.movePlayer(true, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                     this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
@@ -257,10 +243,6 @@ export class level3 extends Phaser.Scene {
                     this.updatePlayerCountText(this.tilesList);    
 
                     this.preMovePos[1] += Figure.STEP_SIZE;
-
-                    setTimeout(() => {
-                        this.fieldColor.destroy();
-                        this.input.keyboard.enabled = true; }, 220);
                 } 
             }
         });
@@ -268,8 +250,6 @@ export class level3 extends Phaser.Scene {
         this.input.keyboard.on('keydown-W', () =>{
             if (LevelFunctions.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
                 if(!this.gameFinished) {
-                    this.input.keyboard.enabled = false;
-
                     this.queenPos[1] -= 1;
                     this.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
                     this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
@@ -279,10 +259,6 @@ export class level3 extends Phaser.Scene {
                     this.updatePlayerCountText(this.tilesList);    
                     
                     this.preMovePos[1] -= Figure.STEP_SIZE;
-                    
-                    setTimeout(() => {
-                        this.fieldColor.destroy();
-                        this.input.keyboard.enabled = true; }, 220);
                 }
             }
         });
@@ -351,6 +327,10 @@ export class level3 extends Phaser.Scene {
         if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
         else {   
             this.tilesList[(element.x + element.y * layerGround.layer.width)/32].playersOnTop--; 
+
+            if(element.isQueen && this.fieldColor != null){
+                this.fieldColor.destroy();
+            }
 
             if(xory === false){                 
                 element.updateCoordinates(pos, 0);   
