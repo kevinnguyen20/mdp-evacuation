@@ -1,3 +1,4 @@
+import { Tilemaps } from "phaser";
 import { Figure } from "./figure";
 import { TileParser } from "./tileParser";
 import { TilePiece } from "./tilePiece";
@@ -91,6 +92,110 @@ export class LevelFunctions {
 
         return TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID ?
             false : true;   // false means blocked, freeze
+    }
+
+
+    /**
+     * Updates all the text objects for the playercount on each Tile 
+     * !!! Should only be called after a Move has been processed !!!
+     * 
+     * @param tileList 
+     */
+    public static updatePlayerCountText (tileList: TilePiece[]) : void {
+        tileList.forEach((element) => {
+            if (element.text.visible === true) {
+                if(element.playersOnTop === 0){
+                    element.text.setText(''+element.playersOnTop);
+                    element.text.setVisible(false);
+                }
+                else{
+                    element.text.setText(''+element.playersOnTop);
+                }        
+            }
+            else if (element.text.visible === false && element.playersOnTop > 0) {
+                element.text.setText(''+element.playersOnTop);
+                element.text.setVisible(true);
+            }
+        })
+    }
+
+
+    /**
+     * Initializes all the text objects for the playercount on each Tile
+     * 
+     * @param tilesList 
+     * @param add set to this.add
+     */
+    public static createPlayerCountText(tilesList: TilePiece[], add: Phaser.GameObjects.GameObjectFactory) : void{
+        tilesList.forEach((element) => {
+            element.text = add.text (element.tileCoordinates[0]+38, element.tileCoordinates[1]+104, ''+element.playersOnTop, {color: '#ffffff'} ).setDepth(5);
+            if (element.playersOnTop === 0)
+                element.text.setVisible(false);
+        });
+    }
+
+
+    /**
+     * load the Layers according to the structure in Tiled
+     * @param tileset 
+     * @param x layer Postition X
+     * @param y layer Position Y
+     * @param map the map we create the layers on
+     * @param layerGround 
+     * @param layerProbability 
+     * @param layerAction 
+     * @param layerDesign 
+     * @param layerPerspective 
+     * @returns returns layers in the input order
+     */
+    public static setupLayer(tileset: Tilemaps.Tileset, x: number, y: number, map: Tilemaps.Tilemap, 
+        layerGround: Tilemaps.TilemapLayer, layerProbability: Tilemaps.TilemapLayer,layerAction: Tilemaps.TilemapLayer,layerDesign: Tilemaps.TilemapLayer, layerPerspective: Tilemaps.TilemapLayer,): 
+        [Tilemaps.TilemapLayer, Tilemaps.TilemapLayer, Tilemaps.TilemapLayer, Tilemaps.TilemapLayer, Tilemaps.TilemapLayer]{
+        layerGround = map.createLayer(
+            'Ground',       // layerID
+            tileset,        // tileset
+            x,        // x
+            y         // y
+        );
+
+        layerProbability = map.createLayer(   // there is no need to read this layer ever, only create it
+            'Probability',  // layerID
+            tileset,        // tileset
+            x,        // x
+            y,        // y
+
+        );
+        layerProbability.setVisible(false);    // set true if you want to see the probabilities
+
+        layerAction = map.createLayer(
+            'Action',       // layerID
+            tileset,        // tileset
+            x,        // x
+            y         // y
+        );
+
+        layerDesign = map.createLayer(
+            'Design',       // layerID
+            tileset,        // tileset
+            x,        // x
+            y         // y
+        );
+
+        layerPerspective = map.createLayer(
+            'Perspective',  // layerID
+            tileset,        // tileset
+            x,        // x
+            y         // y
+        );
+
+        layerGround.setDepth(0);
+        layerProbability.setDepth(1);
+        layerAction.setDepth(2);
+        layerDesign.setDepth(3);
+        layerPerspective.setDepth(20);
+
+        return [layerGround, layerProbability, layerAction, layerDesign, layerPerspective];
+
     }
 
 }
