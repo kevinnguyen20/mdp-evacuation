@@ -45,14 +45,36 @@ export class LevelFunctions {
      * @returns the goal Tile
      */
     public static getGoalTile(tileList: TilePiece[]): TilePiece{
+        let goal = null;
         tileList.forEach((tile) => {
             if (tile.tileType[2] === true){
-                return tile;
+                goal = tile;
             }
         })
-        return null;
+        return goal;
     }
 
+    /**
+     * This function removes the Figures that reached the goal out of the figureList Array, so they won't move anymore
+     * when they reach the goal
+     * @param figureList our figureList
+     * @param goalTile ourGoalTile
+     */
+    public static chainCharacters (figureList: Figure[], goalTile: TilePiece){
+        let arr = [];
+        let x = 0;
+        figureList.forEach((element) => {
+            if (element.x === goalTile.tileCoordinates[0] && element.y === goalTile.tileCoordinates[1]){
+                arr.push(x);
+            }
+            x++;
+        })
+        let tmp = 0;
+        arr.forEach((element) => {
+            figureList.splice(element-tmp, 1);
+            tmp++;
+        })
+    }
     // Please don't use the term "split". Instead, use followQueen or disobeyQueen :)
     // kevinnguyen changed this method radically (runtime optimized)
     /**
