@@ -21,6 +21,7 @@ export class level1 extends Phaser.Scene {
     private preMovePos = [];
     private survivorScore = 0;
     private survivorScoreText = Phaser.GameObjects.Text = null;
+    private winCond = 6;
 
     private map: Phaser.Tilemaps.Tilemap;
 
@@ -132,6 +133,12 @@ export class level1 extends Phaser.Scene {
             figure.image = this.add.image(this.mapPosX + figure.x + Figure.STEP_SIZE / 2, this.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(4);
         });
         
+        
+        const winCondText = this.add.text (
+            this.mapPosX + 70, 
+            this.mapPosY - 0,  
+            '' + this.winCond+ ' Aliens need to reach the goal! '
+        )
         this.scoreText = this.add.text(
             this.mapPosX + 70, 
             this.mapPosY - 40,  
@@ -139,8 +146,8 @@ export class level1 extends Phaser.Scene {
         );
         
         this.survivorScoreText = this.add.text(
-            this.mapPosX + 200, 
-            this.mapPosY - 0,  
+            this.mapPosX + 70, 
+            this.mapPosY + 20,  
             'Survivors at Goal: ' + this.goalTile.playersOnTop
         );
         
@@ -184,7 +191,8 @@ export class level1 extends Phaser.Scene {
                         this.layerGround, this.layerAction, this.map);
                     LevelFunctions.updatePlayerCountText(this.tilesList);  
                     this.preMovePos[0] -= Figure.STEP_SIZE;    
-                    LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
+                    LevelFunctions.chainCharacters(this.figureList, this.goalTile);
+                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this);              
                 }
             }
         });
@@ -204,8 +212,7 @@ export class level1 extends Phaser.Scene {
 
                     this.preMovePos[0] += Figure.STEP_SIZE;
                     LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
-
-
+                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this);              
                     
                 }
             }
@@ -226,7 +233,7 @@ export class level1 extends Phaser.Scene {
 
                     this.preMovePos[1] += Figure.STEP_SIZE;
                     LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
-
+                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this);              
 
                     
                 } 
@@ -248,8 +255,8 @@ export class level1 extends Phaser.Scene {
                     
                     this.preMovePos[1] -= Figure.STEP_SIZE;
                     LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
+                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this);              
 
-                    
                     
                 }
             }
@@ -354,27 +361,8 @@ export class level1 extends Phaser.Scene {
                 if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
                     if (element.isQueen) {
                         this.scoreText.setText('Your final score: ' + this.score + "!");
-                        this.survivorScoreText.setText(""+this.goalTile.playersOnTop+" Survivors have reached the Goal!")
                         this.input.keyboard.enabled = false;
                         this.gameFinished = true;
-                        const nextLevelButton = this.add.image(this.sys.game.config.width as number / 2, this.sys.game.config.height as number / 2, 'nextLevelButton');
-                        nextLevelButton.depth = 100;    // brings the button to the front
-                        nextLevelButton.setInteractive();
-                        nextLevelButton.on('pointerup', () => {
-                            this.scene.transition({
-                                target: "level2",
-                                duration: 10
-                            })
-                        });
-                        nextLevelButton.on('pointerover', function(pointer){
-                            nextLevelButton.setScale(0.85, 0.85);
-                        });
-                        nextLevelButton.on('pointerout', function(pointer){
-                            nextLevelButton.setScale(1, 1);
-                        });
-                    }
-                    else {
-                        this.survivorScoreText.setText("Survivors at Goal:" +this.goalTile.playersOnTop);
                     }
                 }
             }
