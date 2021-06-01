@@ -19,6 +19,9 @@ export class level1 extends Phaser.Scene {
     private tilesList: TilePiece[]; 
     private gameFinished = false;
     private preMovePos = [];
+    private survivorScore = 0;
+    private survivorScoreText = Phaser.GameObjects.Text = null;
+    private winCond = 6;
 
     private map: Phaser.Tilemaps.Tilemap;
 
@@ -29,6 +32,7 @@ export class level1 extends Phaser.Scene {
     private layerDesign: Phaser.Tilemaps.TilemapLayer;
     private layerPerspective: Phaser.Tilemaps.TilemapLayer;
     private fieldColor: Phaser.GameObjects.Image = null;
+    private goalTile: TilePiece;
 
     private mapPosX;
     private mapPosY;
@@ -117,6 +121,7 @@ export class level1 extends Phaser.Scene {
 
 
         this.tilesList = TileParser.tileTupleAPI(this.layerGround, this.layerAction);
+        this.goalTile = LevelFunctions.getGoalTile(this.tilesList);
 
         // sets the Startposition automatically by reading the Map
         const startingPosition: [number, number] = LevelFunctions.getStartPostition(this.layerGround);
@@ -128,10 +133,22 @@ export class level1 extends Phaser.Scene {
             figure.image = this.add.image(this.mapPosX + figure.x + Figure.STEP_SIZE / 2, this.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(4);
         });
         
+        
+        const winCondText = this.add.text (
+            this.mapPosX + 70, 
+            this.mapPosY - 0,  
+            '' + this.winCond+ ' Aliens need to reach the goal! '
+        )
         this.scoreText = this.add.text(
             this.mapPosX + 70, 
             this.mapPosY - 40,  
             'Score: ' + this.score
+        );
+        
+        this.survivorScoreText = this.add.text(
+            this.mapPosX + 70, 
+            this.mapPosY + 20,  
+            'Survivors at Goal: ' + this.goalTile.playersOnTop
         );
         
         this.preMovePos = [400,48];
@@ -173,10 +190,9 @@ export class level1 extends Phaser.Scene {
                     this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
                         this.layerGround, this.layerAction, this.map);
                     LevelFunctions.updatePlayerCountText(this.tilesList);  
-
-                    this.preMovePos[0] -= Figure.STEP_SIZE;
-
-                    
+                    this.preMovePos[0] -= Figure.STEP_SIZE;    
+                    LevelFunctions.chainCharacters(this.figureList, this.goalTile);
+                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this);              
                 }
             }
         });
@@ -195,7 +211,8 @@ export class level1 extends Phaser.Scene {
                     LevelFunctions.updatePlayerCountText(this.tilesList);
 
                     this.preMovePos[0] += Figure.STEP_SIZE;
-
+                    LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
+                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this);              
                     
                 }
             }
@@ -215,6 +232,8 @@ export class level1 extends Phaser.Scene {
                     LevelFunctions.updatePlayerCountText(this.tilesList);    
 
                     this.preMovePos[1] += Figure.STEP_SIZE;
+                    LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
+                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this);              
 
                     
                 } 
@@ -235,7 +254,9 @@ export class level1 extends Phaser.Scene {
                     LevelFunctions.updatePlayerCountText(this.tilesList);    
                     
                     this.preMovePos[1] -= Figure.STEP_SIZE;
-                    
+                    LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
+                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this);              
+
                     
                 }
             }
@@ -338,24 +359,11 @@ export class level1 extends Phaser.Scene {
 
             if(!this.gameFinished) {
                 if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
-                    this.scoreText.setText('Your final score: ' + this.score + "!");
-                    this.input.keyboard.enabled = false;
-                    this.gameFinished = true;
-                    const nextLevelButton = this.add.image(this.sys.game.config.width as number / 2, this.sys.game.config.height as number / 2, 'nextLevelButton');
-                    nextLevelButton.depth = 100;    // brings the button to the front
-                    nextLevelButton.setInteractive();
-                    nextLevelButton.on('pointerup', () => {
-                        this.scene.transition({
-                            target: "level2",
-                            duration: 10
-                        })
-                    });
-                    nextLevelButton.on('pointerover', function(pointer){
-                        nextLevelButton.setScale(0.85, 0.85);
-                    });
-                    nextLevelButton.on('pointerout', function(pointer){
-                        nextLevelButton.setScale(1, 1);
-                    });
+                    if (element.isQueen) {
+                        this.scoreText.setText('Your final score: ' + this.score + "!");
+                        this.input.keyboard.enabled = false;
+                        this.gameFinished = true;
+                    }
                 }
             }
             
