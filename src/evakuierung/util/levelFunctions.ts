@@ -53,6 +53,42 @@ export class LevelFunctions {
         })
         return goal;
     }
+    /**
+     * @param finished bool if game is in a finished state
+     * @param survivorScoreText 
+     * @param survivorScore Aliens that reached the goal
+     * @param condition Amount of Aliens that have to reach the goal to proceed to the next level
+     * @param scene our level scene
+     */
+    public static winConditionReachedCheck (finished: boolean, survivorScoreText: Phaser.GameObjects.Text, survivorScore: number, condition: number, scene: Phaser.Scene){
+        if (finished){
+            if (survivorScore >= condition){
+                survivorScoreText.setText(""+survivorScore+" Aliens have reached the Goal")
+                const nextLevelButton = scene.add.image(scene.sys.game.config.width as number / 2, scene.sys.game.config.height as number / 2, 'nextLevelButton');
+                nextLevelButton.depth = 100;    // brings the button to the front
+                nextLevelButton.setInteractive();
+                nextLevelButton.on('pointerup', () => {
+                    scene.scene.transition({
+                        target: "level2",
+                        duration: 10
+                    })
+                });
+                nextLevelButton.on('pointerover', function(pointer){
+                    nextLevelButton.setScale(0.85, 0.85);
+                });
+                nextLevelButton.on('pointerout', function(pointer){
+                    nextLevelButton.setScale(1, 1);
+                });
+            }
+            else {
+                survivorScoreText.setText("Not enough Aliens have reached the Goal! "+survivorScore+ " < "+condition+ "\nRestart and keep on trying!");
+            }
+
+        }
+        else {
+            survivorScoreText.setText("Survivors at Goal: " +survivorScore);
+        }
+    }
 
     /**
      * This function removes the Figures that reached the goal out of the figureList Array, so they won't move anymore
