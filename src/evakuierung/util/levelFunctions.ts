@@ -61,7 +61,7 @@ export class LevelFunctions {
      * @param goalTile ourGoalTile
      */
     public static chainCharacters (figureList: Figure[], goalTile: TilePiece){
-        let arr = [];
+        const arr = [];
         let x = 0;
         figureList.forEach((element) => {
             if (element.x === goalTile.tileCoordinates[0] && element.y === goalTile.tileCoordinates[1]){
