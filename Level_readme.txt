@@ -1,12 +1,14 @@
 Level-Aufbau:
 
-Das Level ist in "4" Layer unterteil:
+Das Level ist in 5 Layer unterteil:
 
     - Ground: Enthält die Grundstruktur der Levels und von ihr ist zu entnehmen wo sich der Spieler Bewegen darf und wo nicht.
     - Probability: Enthält die Wahrscheinlichkeiten und den optimale Pfad.
     - Action: Enthält alle Actionsfelder wie Coins, Portale, ... wenn der Spieler auf sie stößt sollte ein Event getriggered werden.
     - Design: Enthält nur perspektivische, design Tiles, welche keine Interaktion benötigen (im Code ignoriern)
     - Perspective: Muss der oberste Layer sein, um die Perspektive zu bewahren.
+
+Sie werden genau in dieser Reihenfolge von unten (Ground) nach oben (Perspective) aufgebaut.
 
 Das Level wurde mit dem Programm Tiled erstellt.
 
