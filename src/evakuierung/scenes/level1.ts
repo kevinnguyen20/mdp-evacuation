@@ -28,7 +28,7 @@ export class level1 extends Phaser.Scene {
     private layerAction: Phaser.Tilemaps.TilemapLayer;
     private layerDesign: Phaser.Tilemaps.TilemapLayer;
     private layerPerspective: Phaser.Tilemaps.TilemapLayer;
-    private fieldColor: Phaser.GameObjects.Image
+    private fieldColor: Phaser.GameObjects.Image = null;
 
     private mapPosX;
     private mapPosY;
@@ -224,7 +224,7 @@ export class level1 extends Phaser.Scene {
         this.input.keyboard.on('keydown-W', () =>{
             if (LevelFunctions.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
                 if(!this.gameFinished) {
-                   // this.input.keyboard.enabled = false;
+                    // this.input.keyboard.enabled = false;
 
                     this.queenPos[1] -= 1;
                     this.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
@@ -306,8 +306,8 @@ export class level1 extends Phaser.Scene {
         else {   
             this.tilesList[(element.x + element.y * layerGround.layer.width)/32].playersOnTop--; 
 
-            if(element.isQueen){
-                this.fieldColor.destroy;
+            if(element.isQueen && this.fieldColor != null){
+                this.fieldColor.destroy();
             }
             
             if(xory === false){                 
