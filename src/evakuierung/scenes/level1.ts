@@ -202,7 +202,7 @@ export class level1 extends Phaser.Scene {
         this.input.keyboard.on('keydown-A', () =>{
             if(LevelFunctions.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])) {
                 if(!this.gameFinished) {
-                    this.input.keyboard.enabled = false;
+                    //this.input.keyboard.enabled = false;
 
                     this.queenPos[0] -= 1;
                     this.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
@@ -214,9 +214,7 @@ export class level1 extends Phaser.Scene {
 
                     this.preMovePos[0] -= Figure.STEP_SIZE;
 
-                    setTimeout(() => {
-                        this.fieldColor.destroy();
-                        this.input.keyboard.enabled = true; }, 220);
+                    
                 }
             }
         });
@@ -224,7 +222,7 @@ export class level1 extends Phaser.Scene {
         this.input.keyboard.on('keydown-D', () =>{
             if (LevelFunctions.queenValidMoveCheck(false, Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
                 if(!this.gameFinished) {
-                    this.input.keyboard.enabled = false;
+                    //this.input.keyboard.enabled = false;
 
                     this.queenPos[0] += 1;
                     this.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
@@ -236,9 +234,7 @@ export class level1 extends Phaser.Scene {
 
                     this.preMovePos[0] += Figure.STEP_SIZE;
 
-                    setTimeout(() => {
-                        this.fieldColor.destroy();
-                        this.input.keyboard.enabled = true; }, 220);
+                    
                 }
             }
         });
@@ -246,7 +242,7 @@ export class level1 extends Phaser.Scene {
         this.input.keyboard.on('keydown-S', () =>{
             if (LevelFunctions.queenValidMoveCheck(true, Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
                 if(!this.gameFinished) {
-                    this.input.keyboard.enabled = false;
+                    //this.input.keyboard.enabled = false;
 
                     this.queenPos[1] += 1;
                     this.figureList[0] = this.movePlayer(true, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
@@ -258,9 +254,7 @@ export class level1 extends Phaser.Scene {
 
                     this.preMovePos[1] += Figure.STEP_SIZE;
 
-                    setTimeout(() => {
-                        this.fieldColor.destroy();
-                        this.input.keyboard.enabled = true; }, 220);
+                    
                 } 
             }
         });
@@ -268,7 +262,7 @@ export class level1 extends Phaser.Scene {
         this.input.keyboard.on('keydown-W', () =>{
             if (LevelFunctions.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
                 if(!this.gameFinished) {
-                    this.input.keyboard.enabled = false;
+                   // this.input.keyboard.enabled = false;
 
                     this.queenPos[1] -= 1;
                     this.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
@@ -280,9 +274,7 @@ export class level1 extends Phaser.Scene {
                     
                     this.preMovePos[1] -= Figure.STEP_SIZE;
                     
-                    setTimeout(() => {
-                        this.fieldColor.destroy();
-                        this.input.keyboard.enabled = true; }, 220);
+                    
                 }
             }
         });
@@ -352,6 +344,10 @@ export class level1 extends Phaser.Scene {
         else {   
             this.tilesList[(element.x + element.y * layerGround.layer.width)/32].playersOnTop--; 
 
+            if(element.isQueen){
+                this.fieldColor.destroy;
+            }
+            
             if(xory === false){                 
                 element.updateCoordinates(pos, 0);   
             } 
