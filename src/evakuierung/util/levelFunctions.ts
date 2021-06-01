@@ -40,6 +40,18 @@ export class LevelFunctions {
         })
         return [X, Y];
     }
+    /**
+     * @param tileList our tileList consisting of our API
+     * @returns the goal Tile
+     */
+    public static getGoalTile(tileList: TilePiece[]): TilePiece{
+        tileList.forEach((tile) => {
+            if (tile.tileType[2] === true){
+                return tile;
+            }
+        })
+        return null;
+    }
 
     // Please don't use the term "split". Instead, use followQueen or disobeyQueen :)
     // kevinnguyen changed this method radically (runtime optimized)
