@@ -60,7 +60,7 @@ export class LevelFunctions {
      * @param condition Amount of Aliens that have to reach the goal to proceed to the next level
      * @param scene our level scene
      */
-    public static winConditionReachedCheck (finished: boolean, survivorScoreText: Phaser.GameObjects.Text, survivorScore: number, condition: number, scene: Phaser.Scene){
+    public static winConditionReachedCheck (finished: boolean, survivorScoreText: Phaser.GameObjects.Text, survivorScore: number, condition: number, scene: Phaser.Scene, nextLevel: number){
         if (finished){
             if (survivorScore >= condition){
                 survivorScoreText.setText(""+survivorScore+" Aliens have reached the Goal")
@@ -69,7 +69,7 @@ export class LevelFunctions {
                 nextLevelButton.setInteractive();
                 nextLevelButton.on('pointerup', () => {
                     scene.scene.transition({
-                        target: "level2",
+                        target: "level" + nextLevel,
                         duration: 10
                     })
                 });
