@@ -19,6 +19,9 @@ export class level3 extends Phaser.Scene {
     private tilesList: TilePiece[]; 
     private gameFinished = false;
     private preMovePos = [];
+    private survivorScore = 0;
+    private survivorScoreText = Phaser.GameObjects.Text = null;
+    private winCond = 6;
 
     private map: Phaser.Tilemaps.Tilemap;
 
@@ -27,7 +30,9 @@ export class level3 extends Phaser.Scene {
     private layerProbability: Phaser.Tilemaps.TilemapLayer;
     private layerAction: Phaser.Tilemaps.TilemapLayer;
     private layerDesign: Phaser.Tilemaps.TilemapLayer;
+    private layerPerspective: Phaser.Tilemaps.TilemapLayer; 
     private fieldColor: Phaser.GameObjects.Image = null;
+    private goalTile: TilePiece;
 
     private mapPosX;
     private mapPosY;
@@ -106,67 +111,50 @@ export class level3 extends Phaser.Scene {
 
         const tileset = this.map.addTilesetImage('scifi', 'tileset-scifi');
 
-        this.layerGround = this.map.createLayer(
-            'Ground',       // layerID
-            tileset,        // tileset
-            this.mapPosX,   // x
-            this.mapPosY    // y
-        );
-
-        this.layerProbability = this.map.createLayer(   // there is no need to read this layer ever, only create it
-            'Probability',  // layerID
-            tileset,        // tileset
-            this.mapPosX,   // x
-            this.mapPosY,   // y
-
-        );
-        
-        this.layerProbability.setVisible(false);    // set true if you want to see the probabilities
-
-        this.layerAction = this.map.createLayer(
-            'Action',       // layerID
-            tileset,        // tileset
-            this.mapPosX,   // x
-            this.mapPosY    // y
-        );
-
-        this.layerDesign = this.map.createLayer(
-            'Design',       // layerID
-            tileset,        // tileset
-            this.mapPosX,   // x
-            this.mapPosY    // y
-        );
+        const setupLayer = LevelFunctions.setupLayer(tileset, this.mapPosX, this.mapPosY, this.map, this.layerGround, this.layerProbability, this.layerAction, this.layerDesign, this.layerPerspective);
+        this.layerGround = setupLayer[0];
+        this.layerProbability = setupLayer[1];
+        this.layerAction = setupLayer[2];
+        this.layerDesign = setupLayer[3];
+        this.layerPerspective = setupLayer[4];
 
         this.tilesList = TileParser.tileTupleAPI(this.layerGround, this.layerAction);
+        this.goalTile = LevelFunctions.getGoalTile(this.tilesList);
+
+
+        // set the probabilities per Tile according to the map
+        this.tilesList.forEach((tile) => {
+            tile.setTileProbability(this.layerProbability);
+        });
 
         // sets the Startposition automatically by reading the Map
         const startingPosition: [number, number] = LevelFunctions.getStartPostition(this.layerGround);
-        console.log("Start at X:" + startingPosition[0] / 32 + " Y:" + startingPosition[1] / 32);
 
         this.figureList = LevelFunctions.initFigureList(this.figureInitCount, startingPosition);
 
         this.queenPos = [startingPosition[0] / 32, startingPosition[1] /32];
 
-        console.log("figureList");
         this.figureList.forEach((figure) => {
             this.tilesList[figure.x/32 + figure.y/32 * this.layerAction.layer.width].playersOnTop++;
-            console.log(figure.toString());
             figure.image = this.add.image(this.mapPosX + figure.x + Figure.STEP_SIZE / 2, this.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(2);
         });
-        console.log("size: " + this.figureList.length) 
 
-
-        const layerPerspective = this.map.createLayer(
-            'Perspective',  // layerID
-            tileset,        // tileset
-            this.mapPosX,        // x
-            this.mapPosY         // y
+        const winCondText = this.add.text (
+            this.mapPosX + 70, 
+            this.mapPosY - 0,  
+            '' + this.winCond+ ' Aliens need to reach the goal! '
         );
         
         this.scoreText = this.add.text(
             this.mapPosX + 70, 
             this.mapPosY - 40,  
             'Score: ' + this.score
+        );
+
+        this.survivorScoreText = this.add.text(
+            this.mapPosX + 70, 
+            this.mapPosY + 20,  
+            'Survivors at Goal: ' + this.goalTile.playersOnTop
         );
         
         this.preMovePos = [400,48];
@@ -193,11 +181,8 @@ export class level3 extends Phaser.Scene {
         });
         
 
-        this.createPlayerCountText(this.tilesList);
+        LevelFunctions.createPlayerCountText(this.tilesList, this.add);
 
-        //########################################
-        // this.splitCalc() is producing a Uncaught TypeError, maybe cus the this.WAHRSCHEINLICHKEITEN[] is not updated for the new Levels
-        //########################################
 
         this.input.keyboard.on('keydown-A', () =>{
             if(LevelFunctions.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])) {
@@ -208,9 +193,12 @@ export class level3 extends Phaser.Scene {
                     
                     this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
                         this.layerGround, this.layerAction, this.map);
-                    this.updatePlayerCountText(this.tilesList);  
 
-                    this.preMovePos[0] -= Figure.STEP_SIZE;
+                    LevelFunctions.updatePlayerCountText(this.tilesList);  
+                    this.preMovePos[0] -= Figure.STEP_SIZE;    
+                    LevelFunctions.chainCharacters(this.figureList, this.goalTile);
+                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this, 1);
+
                 }
             }
         });
@@ -224,9 +212,12 @@ export class level3 extends Phaser.Scene {
 
                     this.moveInGeneratedDirection(false, Figure.STEP_SIZE, this.figureList, this.tilesList, 
                         this.layerGround, this.layerAction, this.map);
-                    this.updatePlayerCountText(this.tilesList);
+                    LevelFunctions.updatePlayerCountText(this.tilesList);
 
                     this.preMovePos[0] += Figure.STEP_SIZE;
+                    LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
+                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this, 1);
+
                 }
             }
         });
@@ -240,9 +231,12 @@ export class level3 extends Phaser.Scene {
 
                     this.moveInGeneratedDirection(true, Figure.STEP_SIZE, this.figureList, this.tilesList, 
                         this.layerGround, this.layerAction, this.map);
-                    this.updatePlayerCountText(this.tilesList);    
+                    LevelFunctions.updatePlayerCountText(this.tilesList);    
 
                     this.preMovePos[1] += Figure.STEP_SIZE;
+                    LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
+                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this, 1);
+
                 } 
             }
         });
@@ -256,9 +250,12 @@ export class level3 extends Phaser.Scene {
 
                     this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
                         this.layerGround, this.layerAction, this.map);
-                    this.updatePlayerCountText(this.tilesList);    
+                    LevelFunctions.updatePlayerCountText(this.tilesList);    
                     
                     this.preMovePos[1] -= Figure.STEP_SIZE;
+                    LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
+                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this, 1);
+
                 }
             }
         });
@@ -341,44 +338,32 @@ export class level3 extends Phaser.Scene {
 
             this.tilesList[(element.x + element.y * layerGround.layer.width)/32].playersOnTop++;
 
-            //reveals the colour of the field after the queen steps on it
+            const depth = 1;
             if(element.isQueen){
+                ///////// log Tile at queens position //////////
+                console.log(this.tilesList.find((tile) => (tile.tileCoordinates[0] === element.x && tile.tileCoordinates[1] === element.y)).toString());
+                ////////////////////////////////////////////////
                 if(tilePr.index == 153){
-                    this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'green').setDepth(1);
+                    this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'green').setDepth(depth);
                 }
                 else if(tilePr.index == 165){
-                    this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'orange').setDepth(1);
+                    this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'orange').setDepth(depth);
                 }
                 else if(tilePr.index == 164){
-                    this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'yellow').setDepth(1);
+                    this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'yellow').setDepth(depth);
                 }
                 else if(tilePr.index == 166){
-                    this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'red').setDepth(1);
+                    this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'red').setDepth(depth);
                 }
             }
 
             if(!this.gameFinished) {
                 if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
-                    this.scoreText.setText('Your final score: ' + this.score + "!");
-                    this.input.keyboard.enabled = false;
-                    this.gameFinished = true;
-                    // transition to new levels
-                    /* const nextLevelButton = this.add.image(this.sys.game.config.width as number / 2, this.sys.game.config.height as number / 2, 'nextLevelButton');
-                    console.log("button initialized!!!")
-                    nextLevelButton.depth = 3;    // brings the button to the front
-                    nextLevelButton.setInteractive();
-                    nextLevelButton.on('pointerup', () => {
-                        this.scene.transition({
-                            target: "level2",
-                            duration: 10
-                        })
-                    });
-                    nextLevelButton.on('pointerover', function(pointer){
-                        nextLevelButton.setScale(0.85, 0.85);
-                    });
-                    nextLevelButton.on('pointerout', function(pointer){
-                        nextLevelButton.setScale(1, 1);
-                    });*/
+                    if(element.isQueen){
+                        this.scoreText.setText('Your final score: ' + this.score + "!");
+                        this.input.keyboard.enabled = false;
+                        this.gameFinished = true;
+                    }
                 }
             }
             
@@ -391,87 +376,7 @@ export class level3 extends Phaser.Scene {
         
         return element;
     }
-    /**
-     * Initializes all the text objects for the playercount on each Tile
-     * 
-     * @param tilesList 
-     */
-    private createPlayerCountText(tilesList: TilePiece[]) : void{
-        tilesList.forEach((element) => {
-            element.text = this.add.text (element.tileCoordinates[0]+40, element.tileCoordinates[1]+125, ''+element.playersOnTop, {color: '#ffffff'} ).setDepth(2);
-            if (element.playersOnTop === 0)
-                element.text.setVisible(false);
-        });
-    }
-    /**
-     * Updates all the text objects for the playercount on each Tile 
-     * !!! Should only be called after a Move has been processed !!!
-     * 
-     * @param tileList 
-     */
-    private updatePlayerCountText (tileList: TilePiece[]) : void {
-        tileList.forEach((element) => {
-            if (element.text.visible === true) {
-                if(element.playersOnTop === 0){
-                    element.text.setText(''+element.playersOnTop);
-                    element.text.setVisible(false);
-                }
-                else{
-                    element.text.setText(''+element.playersOnTop);
-                }        
-            }
-            else if (element.text.visible === false && element.playersOnTop > 0) {
-                element.text.setText(''+element.playersOnTop);
-                element.text.setVisible(true);
-            }
-        })
-    }
-
-
-    /*
-
-    doSplit() ist erstmal nicht benötigt...die Funktion bitte so lassen, vllt wird sie nützlich
-
-    /**
-     * 
-     * @param direction the direction of the movement - 0 (up), 1 (right), 2 (down), 3 (left)
-     *                   W(0)
-     *              A(3) S(2) D(1)
-     * @param percentage 
-     
-    private doSplit(direction: number, percentage: number): void {
-        if (direction === 0)
-            this.setFigureAt(this.preMovePos[0], this.preMovePos[1] - 32, percentage);
-
-        else if (direction === 1)
-            this.setFigureAt(this.preMovePos[0] + 32, this.preMovePos[1], percentage);
-
-        else if (direction === 2)
-            this.setFigureAt(this.preMovePos[0], this.preMovePos[1] + 32, percentage);
-
-        else
-            this.setFigureAt(this.preMovePos[0] - 32, this.preMovePos[1], percentage);
-    }
-    */
-
-    /*
-    private setFigureAt(x: number, y: number, percentage: number): void {
-        const queen = this.add.image (x, y, 'queen');
-        const neueGruppe = this.add.text(
-            x, 
-            y, 
-            '' + percentage, 
-            {
-                color: '#FF0000'
-            }
-        );
-
-        this.figureInitCount -= percentage;
-        this.playercounttext.setText('' + this.figureInitCount);
-        this.playerInstances.push(neueGruppe);
-        this.playerInstances.push(queen);
-    }
-    */
+   
 
     update(): void {
         console.log();
