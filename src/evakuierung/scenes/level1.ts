@@ -123,6 +123,11 @@ export class level1 extends Phaser.Scene {
         this.tilesList = TileParser.tileTupleAPI(this.layerGround, this.layerAction);
         this.goalTile = LevelFunctions.getGoalTile(this.tilesList);
 
+        // set the probabilities per Tile according to the map
+        this.tilesList.forEach((tile) => {
+            tile.setTileProbability(this.layerProbability);
+        });
+
         // sets the Startposition automatically by reading the Map
         const startingPosition: [number, number] = LevelFunctions.getStartPostition(this.layerGround);
 
@@ -132,7 +137,6 @@ export class level1 extends Phaser.Scene {
             this.tilesList[figure.x/32 + figure.y/32 * this.layerAction.layer.width].playersOnTop++;
             figure.image = this.add.image(this.mapPosX + figure.x + Figure.STEP_SIZE / 2, this.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(4);
         });
-        
         
         const winCondText = this.add.text (
             this.mapPosX + 70, 
@@ -343,6 +347,9 @@ export class level1 extends Phaser.Scene {
 
             const depth = 1;
             if(element.isQueen){
+                ///////// log Tile at queens position //////////
+                console.log(this.tilesList.find((tile) => (tile.tileCoordinates[0] === element.x && tile.tileCoordinates[1] === element.y)).toString());
+                ////////////////////////////////////////////////
                 if(tilePr.index == 153){
                     this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'green').setDepth(depth);
                 }

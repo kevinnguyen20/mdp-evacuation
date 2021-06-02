@@ -2,8 +2,8 @@
 import { Figure } from "./figure"
 import { TileParser } from "./tileParser";
 
-export class TilePiece{
-    public tileCoordinates: number[] = [];
+export class TilePiece {
+    public tileCoordinates: number[] = []; // x, y in Pixel
     public directionProbabilities: number[] = []; // up, right, down, left, followQueen
     public tileType: boolean[] = []; // wall action goal
     public text;
@@ -23,45 +23,52 @@ export class TilePiece{
         return this.playersOnTop;
     }
 
+    public toString = (): string => {
+        return `Tile pos (${this.tileCoordinates[0]/Figure.STEP_SIZE}, ${this.tileCoordinates[1]/Figure.STEP_SIZE}), prob.: [${this.directionProbabilities[0]}, ${this.directionProbabilities[1]}, ${this.directionProbabilities[2]}, ${this.directionProbabilities[3]}, ${this.directionProbabilities[4]}]`;
+    }
+
     /**
      * Sets the TileProbabilities for the given TilePiece
      * If it has no Probability or Something went wrong -> -1
      * 
      * !!!!!! not yet tested
      * 
-     * @param layer input the Probability-Layer from the Level
+     * @param layerProbability input the Probability-Layer from the Level
      */
-    private setTileProbability (layer: Phaser.Tilemaps.Tilemap): void {
-        const x = this.tileCoordinates[0];
-        const y = this.tileCoordinates[1];
-        if(x !== null && y !== null){
-    
-            const tile_up = layer.getTileAtWorldXY(x, y + Figure.STEP_SIZE);
-            const tile_right = layer.getTileAtWorldXY(x + Figure.STEP_SIZE, y);
-            const tile_down = layer.getTileAtWorldXY(x, y - Figure.STEP_SIZE);
-            const tile_left = layer.getTileAtWorldXY(x - Figure.STEP_SIZE, y);
+    public setTileProbability(layerProbability: Phaser.Tilemaps.TilemapLayer): void {
+        const x = this.tileCoordinates[0] / Figure.STEP_SIZE;
+        const y = this.tileCoordinates[1] / Figure.STEP_SIZE;
 
-            let u = -1;
-            let r = -1;
-            let d = -1;
-            let l = -1;
+        //console.log("x: " +x+ " y: " +y+ ", index:"+ layerProbability.layer.data[y][x].index);
+        
+        if (x !== null && y !== null ) { //no walkable Tile is on the Edge
 
-            // up neighbour tile
-            u = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_up.index);
-            this.directionProbabilities[0] = u !== -1 ? u : -1;
+            if (layerProbability.layer.data[y][x].index == -1) { //not walkable
+                this.directionProbabilities[0] = 0;
+                this.directionProbabilities[1] = 0;
+                this.directionProbabilities[2] = 0;
+                this.directionProbabilities[3] = 0;
+                this.directionProbabilities[4] = 100;
+            } else { //walkable
+                
+                this.toString;
+                //console.log(layerProbability.layer.data[y][x].index);
 
-            // right neighbour tile
-            r = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_right.index);
-            this.directionProbabilities[1] = r !== -1 ? r : -1;
+                const tile_up = layerProbability.layer.data[y - 1][x].index;
+                const tile_right = layerProbability.layer.data[y][x + 1].index;
+                const tile_down = layerProbability.layer.data[y + 1][x].index;
+                const tile_left = layerProbability.layer.data[y][x - 1].index;
 
-            // down neighbour tile
-            d = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_down.index);
-            this.directionProbabilities[2] = d !== -1 ? d : -1;
+                this.directionProbabilities[0] = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_up);    // up neighbour tile
+                this.directionProbabilities[1] = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_right); // right neighbour tile
+                this.directionProbabilities[2] = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_down);  // down neighbour tile
+                this.directionProbabilities[3] = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_left);  // left neighbour tile
 
-            // left neighbour tile
-            l = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_left.index);
-            this.directionProbabilities[3] = l !== -1 ? l : -1;
+                this.directionProbabilities[4] = 92; // set follow queen to 92%
+
+            }
         }
+        
     }
-    
+
 }
