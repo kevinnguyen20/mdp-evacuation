@@ -81,9 +81,6 @@ export class LevelFunctions {
                 survivorScoreText.setText("Not enough aliens have reached the goal! "+survivorScore+ " < "+condition+ "\nRestart and keep on trying!");
             }
         }
-        else {
-            survivorScoreText.setText("Survivors at Goal: " +survivorScore);
-        }
     }
 
     /**
