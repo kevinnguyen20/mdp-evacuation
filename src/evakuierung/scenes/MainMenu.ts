@@ -40,7 +40,7 @@ export class MainMenu extends Phaser.Scene{
 
 
     create(): void{
-        const text1 = this.add.text(130, 100,'EVAKULIERUNG', {font : " 74px Arial Black",}).setDepth(1);
+        const text1 = this.add.text(130, 100,'EVAKUIERUNG', {font : " 74px Arial Black",}).setDepth(1);
         text1.setFill('#00f');
         text1.setColor('#00f')
         text1.setStroke('#fff', 16);
