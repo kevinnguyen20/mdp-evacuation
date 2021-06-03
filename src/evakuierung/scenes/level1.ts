@@ -141,7 +141,7 @@ export class level1 extends Phaser.Scene {
         const winCondText = this.add.text (
             this.mapPosX + 70, 
             this.mapPosY - 0,  
-            '' + this.winCond+ ' Aliens need to reach the goal! '
+            '' + this.winCond+ ' Aliens + Queen need to reach the goal! '
         );
 
         this.scoreText = this.add.text(
