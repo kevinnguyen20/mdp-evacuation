@@ -11,11 +11,11 @@ export class MainMenu extends Phaser.Scene{
 
 
     preload(): void{
-        this.load.image('title', './assets/sprites/2_curved.png');
+        //this.load.image('title', './assets/sprites/2_curved.png');
         this.load.image('play_button','./assets/sprites/play.png');
         this.load.image('alien', './assets/sprites/alien.svg');
         this.load.image('level_button', './assets/sprites/level_button.png');
-        this.load.image('support_button', './assets/sprites/supportus.png');
+        //this.load.image('support_button', './assets/sprites/supportus.png');
         this.load.image('backgroundimage', './assets/sprites/Zabelin.png' );
         // ./home/programmer/playingarea/markov-decision-processes-2/src/evakuierung/assets/sprites/Zabelin.png
         
@@ -53,41 +53,25 @@ export class MainMenu extends Phaser.Scene{
         const hoversprite = this.add.sprite(this.game.renderer.width/2-(200) , this.game.renderer.height/2,'alien');
         hoversprite.setScale(2);
 
-        playButton.setInteractive();
 
-        playButton.on("pointerover",()=>{console.log("over")});
-        playButton.on("pointerout",()=>{console.log("out")});
-
+        // PLAY BUTTON
+        playButton.setInteractive()
         playButton.on("pointerdown",()=>{
-            console.log("pressed");
-            this.scene.start('level1')
+            this.scene.transition({
+                target: "level1",
+                duration: 10
+            })
         });
-        
-        playButton.on('pointerover', function(pointer){
-            playButton.setScale(0.85, 0.85);
-        });
-        playButton.on('pointerout', function(pointer){
-            playButton.setScale(1, 1);
-        });
+        playButton.on('pointerover', function(){playButton.setScale(0.85, 0.85)});
+        playButton.on('pointerout', function(){ playButton.setScale(1, 1)});
 
-        // level button console output
-
+        // LEVEL MENU BUTTON
         levelButton.setInteractive();
-
-        levelButton.on("pointerover",()=>{console.log("over level button ")});
-        levelButton.on("pointerout",()=>{console.log("out from level button")});
-
         levelButton.on("pointerdown",()=>{
-            console.log("pressed level button");
-            this.scene.start('LevelMenu')
+            this.scene.start('LevelMenu');
         });
-
-        levelButton.on('pointerover', function(pointer){
-            levelButton.setScale(0.85, 0.85);
-        });
-        levelButton.on('pointerout', function(pointer){
-            levelButton.setScale(1, 1);
-        });
+        levelButton.on('pointerover', function(){levelButton.setScale(0.85, 0.85)});
+        levelButton.on('pointerout', function(){ levelButton.setScale(1, 1)});
 
         // support button 
         /*
