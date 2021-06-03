@@ -57,14 +57,14 @@ export class LevelFunctions {
      * @param gameFinished bool if game is in a finished state
      * @param survivorScoreText 
      * @param survivorScore aliens that reached the goal
-     * @param condition amount of Aliens that have to reach the goal to proceed to the next level
+     * @param condition amount of aliens that have to reach the goal to proceed to the next level
      * @param scene the scene (level) you're currently in
      * @param nextLevel the level you're transitioning to
      */
     public static winConditionReachedCheck(gameFinished: boolean, survivorScoreText: Phaser.GameObjects.Text, survivorScore: number, condition: number, scene: Phaser.Scene, nextLevel: number){
         if (gameFinished){
             if (survivorScore >= condition){
-                survivorScoreText.setText(""+survivorScore+" Aliens have reached the Goal")
+                survivorScoreText.setText(""+survivorScore+" aliens have reached the goal")
                 const nextLevelButton = scene.add.image(scene.sys.game.config.width as number / 2, scene.sys.game.config.height as number / 2, 'nextLevelButton');
                 nextLevelButton.depth = 100;    // brings the button to the front
                 nextLevelButton.setInteractive();
@@ -78,7 +78,7 @@ export class LevelFunctions {
                 nextLevelButton.on('pointerout', function(){nextLevelButton.setScale(1, 1)});
             }
             else {
-                survivorScoreText.setText("Not enough Aliens have reached the Goal! "+survivorScore+ " < "+condition+ "\nRestart and keep on trying!");
+                survivorScoreText.setText("Not enough aliens have reached the goal! "+survivorScore+ " < "+condition+ "\nRestart and keep on trying!");
             }
         }
         else {
