@@ -2,6 +2,7 @@ import "phaser";
 import { AUTO, Scale } from "phaser";
 
 import { MainMenu } from "./scenes/MainMenu";
+import {LevelMenu} from "./scenes/LevelMenu";
 import {level1} from "./scenes/level1";
 import {level2} from "./scenes/level2";
 import {level3} from "./scenes/level3";
@@ -14,7 +15,7 @@ const config: Phaser.Types.Core.GameConfig = {
         height: 600,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [MainMenu, level1, level2, level3],
+    scene: [MainMenu, LevelMenu, level1, level2, level3],
     physics: {
         default: 'arcade',
         arcade: {
