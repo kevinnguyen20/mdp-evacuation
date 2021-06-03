@@ -11,7 +11,6 @@ export class level3 extends Phaser.Scene {
     // ??????????????????????????????????
     //  do we still need this
     private queenPos:number[];
-    private queenPositionText = null;
     // ??????????????????????????????????
 
     private figureInitCount = 8;
@@ -132,33 +131,21 @@ export class level3 extends Phaser.Scene {
             this.tilesList[figure.x/32 + figure.y/32 * this.layerAction.layer.width].playersOnTop++;
             figure.image = this.add.image(this.mapPosX + figure.x + Figure.STEP_SIZE / 2, this.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(2);
         });
-
-        const winCondText = this.add.text (
-            this.mapPosX + 70, 
-            this.mapPosY - 0,  
-            '' + this.winCond + ' aliens need to reach the goal! '
-        );
         
         this.scoreText = this.add.text(
             this.mapPosX + 70, 
             this.mapPosY - 40,  
-            'Score: ' + this.score
+            'Coins collected: ' + this.score
         );
 
         this.survivorScoreText = this.add.text(
             this.mapPosX + 70, 
-            this.mapPosY + 20,  
-            'Survivors at Goal: ' + this.goalTile.playersOnTop
+            this.mapPosY - 20,  
+            '' + this.winCond + ' aliens must reach the goal! ' 
         );
         
         this.preMovePos = [400,48];
         
-        this.queenPositionText = this.add.text(
-            this.mapPosX + 70, 
-            this.mapPosY - 20, 
-            "Queen's position: (" + this.queenPos[0] + "," + this.queenPos[1] + ")"
-        );
-
         const restartButton = this.add.image(this.mapPosX + 610, this.mapPosY - 27, 'restartButton');
         restartButton.setInteractive();
         restartButton.on('pointerup', () => {
@@ -179,7 +166,6 @@ export class level3 extends Phaser.Scene {
                 if(!this.gameFinished) {
                     this.queenPos[0] -= 1;
                     this.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
-                    this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
                     
                     this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
                         this.layerGround, this.layerAction, this.map);
@@ -198,7 +184,6 @@ export class level3 extends Phaser.Scene {
                 if(!this.gameFinished) {
                     this.queenPos[0] += 1;
                     this.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
-                    this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
                     this.moveInGeneratedDirection(false, Figure.STEP_SIZE, this.figureList, this.tilesList, 
                         this.layerGround, this.layerAction, this.map);
@@ -216,7 +201,6 @@ export class level3 extends Phaser.Scene {
                 if(!this.gameFinished) {
                     this.queenPos[1] += 1;
                     this.figureList[0] = this.movePlayer(true, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
-                    this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
                     this.moveInGeneratedDirection(true, Figure.STEP_SIZE, this.figureList, this.tilesList, 
                         this.layerGround, this.layerAction, this.map);
@@ -234,7 +218,6 @@ export class level3 extends Phaser.Scene {
                 if(!this.gameFinished) {
                     this.queenPos[1] -= 1;
                     this.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
-                    this.queenPositionText.setText("Queen's position: (" + this.queenPos + ")");
 
                     this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
                         this.layerGround, this.layerAction, this.map);
@@ -357,7 +340,7 @@ export class level3 extends Phaser.Scene {
             if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
                 layerAction.putTileAt(0, tileAction.x, tileAction.y);
                 this.score += 1;
-                this.scoreText.setText('Score: ' + this.score);
+                this.scoreText.setText('Coins collected: ' + this.score);
             }
         }
         return element;
