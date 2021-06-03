@@ -25,17 +25,13 @@ export class MainMenu extends Phaser.Scene{
             fillStyle: {
                 color: 0xffffff // white
             }
-
-
-
-        })
+        });
         // add lag to show the loading bar
 
         this.load.on("progress",(percent)=>{
             loadingBar.fillRect(0,this.game.renderer.height / 2, this.game.renderer.width *percent,50);
             console.log(percent);
-        })
-
+        });
     }
 
 
@@ -46,56 +42,52 @@ export class MainMenu extends Phaser.Scene{
         text1.setStroke('#fff', 16);
         text1.setShadow(2,2,'#00f',2,true,true);
 
-
         this.add .image(this.game.renderer.width/2, this.game.renderer.height/2,'backgroundimage');
         // this.add.image(this.game.renderer.width/2, this.game.renderer.height*0.20,'title').setDepth(1);
         // could add some alien images near the logo
         // could be done better with image editor
         //this.add.image(30, this.game.renderer.height*0.10,'alien').setDepth(0);
-        const playerbutton = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2,'play_button');
-        const levelbutton = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2 + 100,'level_button');
+        const playButton = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2,'play_button');
+        const levelButton = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2 + 100,'level_button');
         
         const hoversprite = this.add.sprite(this.game.renderer.width/2-(200) , this.game.renderer.height/2,'alien');
         hoversprite.setScale(2);
 
+        playButton.setInteractive();
 
-        playerbutton.setInteractive();
+        playButton.on("pointerover",()=>{console.log("over")});
+        playButton.on("pointerout",()=>{console.log("out")});
 
-        playerbutton.on("pointerover",()=>{
-            console.log("over");
-            
-        })
-
-        playerbutton.on("pointerout",()=>{
-            console.log("out");
-            
-        })
-
-        playerbutton.on("pointerdown",()=>{
+        playButton.on("pointerdown",()=>{
             console.log("pressed");
             this.scene.start('level1')
-            
-        })
+        });
+        
+        playButton.on('pointerover', function(pointer){
+            playButton.setScale(0.85, 0.85);
+        });
+        playButton.on('pointerout', function(pointer){
+            playButton.setScale(1, 1);
+        });
 
         // level button console output
 
-        levelbutton.setInteractive();
+        levelButton.setInteractive();
 
-        levelbutton.on("pointerover",()=>{
-            console.log("over level button ");
-            
-        })
+        levelButton.on("pointerover",()=>{console.log("over level button ")});
+        levelButton.on("pointerout",()=>{console.log("out from level button")});
 
-        levelbutton.on("pointerout",()=>{
-            console.log("out from level button");
-            
-        })
-
-        levelbutton.on("pointerdown",()=>{
+        levelButton.on("pointerdown",()=>{
             console.log("pressed level button");
             this.scene.start('LevelMenu')
-            
-        })
+        });
+
+        levelButton.on('pointerover', function(pointer){
+            levelButton.setScale(0.85, 0.85);
+        });
+        levelButton.on('pointerout', function(pointer){
+            levelButton.setScale(1, 1);
+        });
 
         // support button 
         /*
@@ -118,46 +110,5 @@ export class MainMenu extends Phaser.Scene{
             
         })
         */
-
-
-
-
-       
-
-
-
-
-
-
     }
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

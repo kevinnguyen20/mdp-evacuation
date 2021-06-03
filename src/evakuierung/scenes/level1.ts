@@ -178,10 +178,8 @@ export class level1 extends Phaser.Scene {
         restartButton.on('pointerout', function(pointer){
             restartButton.setScale(1, 1);
         });
-        
 
         LevelFunctions.createPlayerCountText(this.tilesList, this.add);
-
 
         this.input.keyboard.on('keydown-A', () =>{
             if(LevelFunctions.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])) {

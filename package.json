@@ -1,7 +1,7 @@
 {
   "name": "modysy-orbit",
   "version": "1.0.0",
-  "description": "A minimal game about orbital dynamics.",
+  "description": "A game based on Markov Decission Processes (MDP).",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
@@ -15,7 +15,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "phaser": "^3.54.0"
+    "phaser": "^3.55.2"
   },
   "scripts": {
     "dev": "webpack serve --mode development",
