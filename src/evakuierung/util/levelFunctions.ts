@@ -64,7 +64,7 @@ export class LevelFunctions {
     public static winConditionReachedCheck(gameFinished: boolean, survivorScoreText: Phaser.GameObjects.Text, survivorScore: number, condition: number, scene: Phaser.Scene, nextLevel: number){
         if (gameFinished){
             if (survivorScore >= condition){
-                survivorScoreText.setText(""+survivorScore+" aliens have reached the goal")
+                survivorScoreText.setText("Congrats level passed with "+survivorScore+" aliens!")
                 const nextLevelButton = scene.add.image(scene.sys.game.config.width as number / 2, scene.sys.game.config.height as number / 2, 'nextLevelButton');
                 nextLevelButton.depth = 100;    // brings the button to the front
                 nextLevelButton.setInteractive();
