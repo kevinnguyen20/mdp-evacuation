@@ -7,20 +7,15 @@ export class LevelMenu extends Phaser.Scene{
         super({
             key: "LevelMenu"
         });
-
     }
 
     preload(): void{
-
         this.load.image('level1_button','./assets/sprites/level1_button.png');
-
         this.load.image('level2_button','./assets/sprites/level2_button.png');
         this.load.image('level3_button','./assets/sprites/level3_button.png');
         this.load.image('back_button','./assets/sprites/back_button.png');
         this.load.image('backgroundimage', './assets/sprites/Zabelin.png');
-
         //this.load.image('level1_button','./assets/sprites/level1_button.png');
-
     }
 
 
@@ -29,117 +24,82 @@ export class LevelMenu extends Phaser.Scene{
         const level1button = this.add.image(200, this.game.renderer.height/2,'level1_button').setDepth(1);
         const level2button = this.add.image(400, this.game.renderer.height/2,'level2_button').setDepth(1);
         const level3button = this.add.image(600, this.game.renderer.height/2,'level3_button').setDepth(1);
-        const backbutton = this.add.image(700, this.game.renderer.height-100,'back_button').setDepth(1);
+        const backButton = this.add.image(700, this.game.renderer.height-100,'back_button').setDepth(1);
         
         // level1button 
 
         level1button.setInteractive();
 
-        level1button.on("pointerover",()=>{
-            console.log("over level1button");
-            
-        })
-
-        level1button.on("pointerout",()=>{
-            console.log("out level1button");
-            
-        })
+        level1button.on("pointerover",()=>{console.log("over level1button")});
+        level1button.on("pointerout",()=>{console.log("out level1button")});
 
         level1button.on("pointerdown",()=>{
             console.log("pressed level 1 button");
             this.scene.start('level1');
-            
-        })
+        });
+
+        level1button.on('pointerover', function(pointer){
+            level1button.setScale(0.85, 0.85);
+        });
+        level1button.on('pointerout', function(pointer){
+            level1button.setScale(1, 1);
+        });
 
         // level 2 button
 
         level2button.setInteractive();
 
-        level2button.on("pointerover",()=>{
-            console.log("over level2button");
-            
-        })
-
-        level2button.on("pointerout",()=>{
-            console.log("out level2button");
-            
-        })
+        level2button.on("pointerover",()=>{console.log("over level1button")});
+        level2button.on("pointerout",()=>{console.log("out level1button")});
 
         level2button.on("pointerdown",()=>{
             console.log("pressed level 2 button");
             this.scene.start('level2');
-            
-        })
+        });
+
+        level2button.on('pointerover', function(pointer){
+            level2button.setScale(0.85, 0.85);
+        });
+        level2button.on('pointerout', function(pointer){
+            level2button.setScale(1, 1);
+        });
 
         // level 3 button 
 
         level3button.setInteractive();
 
-        level3button.on("pointerover",()=>{
-            console.log("over level3button");
-            
-        })
-
-        level3button.on("pointerout",()=>{
-            console.log("out level3button");
-            
-        })
+        level3button.on("pointerover",()=>{console.log("over level1button")});
+        level3button.on("pointerout",()=>{console.log("out level1button")});
 
         level3button.on("pointerdown",()=>{
-            console.log("pressed level3 button");
+            console.log("pressed level 3 button");
             this.scene.start('level3');
-            
-        })
+        });
+
+        level3button.on('pointerover', function(pointer){
+            level3button.setScale(0.85, 0.85);
+        });
+        level3button.on('pointerout', function(pointer){
+            level3button.setScale(1, 1);
+        });
 
         // back button
         
-        backbutton.setInteractive();
+        backButton.setInteractive();
 
-        backbutton.on("pointerover",()=>{
-            console.log("over backbutton");
-            
-        })
+        backButton.on("pointerover",()=>{console.log("over backButton")});
+        backButton.on("pointerout",()=>{console.log("out backButton")});
 
-        backbutton.on("pointerout",()=>{
-            console.log("out backbutton");
-            
-        })
-
-        backbutton.on("pointerdown",()=>{
-            console.log("pressed backbutton");
+        backButton.on("pointerdown",()=>{
+            console.log("pressed backButton");
             this.scene.start('MainMenu');
-            
-        })
+        });
 
-       
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        backButton.on('pointerover', function(pointer){
+            backButton.setScale(0.85, 0.85);
+        });
+        backButton.on('pointerout', function(pointer){
+            backButton.setScale(1, 1);
+        });
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 } 
