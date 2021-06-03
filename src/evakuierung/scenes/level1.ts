@@ -25,7 +25,6 @@ export class level1 extends Phaser.Scene {
 
     private map: Phaser.Tilemaps.Tilemap;
 
-
     private layerGround: Phaser.Tilemaps.TilemapLayer;
     private layerProbability: Phaser.Tilemaps.TilemapLayer;
     private layerAction: Phaser.Tilemaps.TilemapLayer;
@@ -44,13 +43,9 @@ export class level1 extends Phaser.Scene {
         });
     }
 
-
-
     gameRestart(): void {
         this.scene.restart();
     }
-
-
 
     preload(): void {
         this.load.pack(
@@ -64,6 +59,7 @@ export class level1 extends Phaser.Scene {
         this.load.image('queen', './assets/sprites/alien.svg');
         this.load.image('restartButton', './assets/sprites/restartButton.png');
         this.load.image('nextLevelButton', './assets/sprites/nextLevelButton.png');
+        this.load.image('returnMainMenuButton', './assets/sprites/returnMainMenu.png');
         this.load.image('green', './assets/sprites/green.png');
         this.load.image('red', './assets/sprites/red.png');
         this.load.image('orange', './assets/sprites/orange.png');
@@ -96,9 +92,9 @@ export class level1 extends Phaser.Scene {
      *          A(3) S(2) D(1)
      */
 
-
-
     create(): void {
+        this.gameFinished = false;
+        this.input.keyboard.enabled = true;
         this.map = this.make.tilemap({
             key: 'map',
             tileWidth: 32,
@@ -110,7 +106,6 @@ export class level1 extends Phaser.Scene {
         this.mapPosY = this.sys.game.config.height as number * 3.5/20;
 
         const tileset = this.map.addTilesetImage('scifi', 'tileset-scifi');
-
         
         const setupLayer = LevelFunctions.setupLayer(tileset, this.mapPosX, this.mapPosY, this.map, this.layerGround, this.layerProbability, this.layerAction, this.layerDesign, this.layerPerspective);
         this.layerGround = setupLayer[0];
@@ -172,15 +167,12 @@ export class level1 extends Phaser.Scene {
             this.score = 0;
             this.scene.restart();
         });
-        restartButton.on('pointerover', function(pointer){
-            restartButton.setScale(0.85, 0.85);
-        });
-        restartButton.on('pointerout', function(pointer){
-            restartButton.setScale(1, 1);
-        });
+        restartButton.on('pointerover', function(){restartButton.setScale(0.85, 0.85)});
+        restartButton.on('pointerout', function(){restartButton.setScale(1, 1)});
 
+        LevelFunctions.addReturnButton(this);
         LevelFunctions.createPlayerCountText(this.tilesList, this.add);
-
+        
         this.input.keyboard.on('keydown-A', () =>{
             if(LevelFunctions.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])) {
                 if(!this.gameFinished) {
@@ -213,8 +205,7 @@ export class level1 extends Phaser.Scene {
 
                     this.preMovePos[0] += Figure.STEP_SIZE;
                     LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
-                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this, 2);              
-                    
+                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this, 2); 
                 }
             }
         });
@@ -253,8 +244,7 @@ export class level1 extends Phaser.Scene {
                     
                     this.preMovePos[1] -= Figure.STEP_SIZE;
                     LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
-                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this, 2);              
-              
+                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this, 2);
                 }
             }
         });
@@ -361,7 +351,7 @@ export class level1 extends Phaser.Scene {
                 if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
                     if (element.isQueen) {
                         this.scoreText.setText('Your final score: ' + this.score + "!");
-                        this.input.keyboard.enabled = false;
+                        //this.input.keyboard.enabled = false;
                         this.gameFinished = true;
                     }
                 }
@@ -373,10 +363,8 @@ export class level1 extends Phaser.Scene {
                 this.scoreText.setText('Score: ' + this.score);
             }
         }
-        
         return element;
     }
-    
 
     update(): void {
         console.log();

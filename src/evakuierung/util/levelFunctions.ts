@@ -54,14 +54,15 @@ export class LevelFunctions {
         return goal;
     }
     /**
-     * @param finished bool if game is in a finished state
+     * @param gameFinished bool if game is in a finished state
      * @param survivorScoreText 
-     * @param survivorScore Aliens that reached the goal
-     * @param condition Amount of Aliens that have to reach the goal to proceed to the next level
-     * @param scene our level scene
+     * @param survivorScore aliens that reached the goal
+     * @param condition amount of Aliens that have to reach the goal to proceed to the next level
+     * @param scene the scene (level) you're currently in
+     * @param nextLevel the level you're transitioning to
      */
-    public static winConditionReachedCheck (finished: boolean, survivorScoreText: Phaser.GameObjects.Text, survivorScore: number, condition: number, scene: Phaser.Scene, nextLevel: number){
-        if (finished){
+    public static winConditionReachedCheck(gameFinished: boolean, survivorScoreText: Phaser.GameObjects.Text, survivorScore: number, condition: number, scene: Phaser.Scene, nextLevel: number){
+        if (gameFinished){
             if (survivorScore >= condition){
                 survivorScoreText.setText(""+survivorScore+" Aliens have reached the Goal")
                 const nextLevelButton = scene.add.image(scene.sys.game.config.width as number / 2, scene.sys.game.config.height as number / 2, 'nextLevelButton');
@@ -73,21 +74,35 @@ export class LevelFunctions {
                         duration: 10
                     })
                 });
-                nextLevelButton.on('pointerover', function(pointer){
-                    nextLevelButton.setScale(0.85, 0.85);
-                });
-                nextLevelButton.on('pointerout', function(pointer){
-                    nextLevelButton.setScale(1, 1);
-                });
+                nextLevelButton.on('pointerover', function(){nextLevelButton.setScale(0.85, 0.85)});
+                nextLevelButton.on('pointerout', function(){nextLevelButton.setScale(1, 1)});
             }
             else {
                 survivorScoreText.setText("Not enough Aliens have reached the Goal! "+survivorScore+ " < "+condition+ "\nRestart and keep on trying!");
             }
-
         }
         else {
             survivorScoreText.setText("Survivors at Goal: " +survivorScore);
         }
+    }
+
+    /**
+     * Adds the return button to the lower right corner
+     * 
+     * @param scene the scene (level) you're currently in
+     */
+    public static addReturnButton(scene: Phaser.Scene) {
+        const returnMainMenuButton = scene.add.image(scene.sys.game.config.width as number * 1/50 + 610, scene.sys.game.config.height as number * 3.5/20 + 415, 'returnMainMenuButton');
+        returnMainMenuButton.setInteractive();
+        returnMainMenuButton.on('pointerup', () => {
+            scene.scene.transition({
+                target: "MainMenu",
+                allowInput: true,
+                duration: 10
+            })
+        });
+        returnMainMenuButton.on('pointerover', function(){returnMainMenuButton.setScale(0.85, 0.85)});
+        returnMainMenuButton.on('pointerout', function(){returnMainMenuButton.setScale(1, 1)});
     }
 
     /**

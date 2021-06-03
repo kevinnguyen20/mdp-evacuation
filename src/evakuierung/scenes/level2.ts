@@ -25,7 +25,6 @@ export class level2 extends Phaser.Scene {
 
     private map: Phaser.Tilemaps.Tilemap;
 
-
     private layerGround: Phaser.Tilemaps.TilemapLayer;
     private layerProbability: Phaser.Tilemaps.TilemapLayer;
     private layerAction: Phaser.Tilemaps.TilemapLayer;
@@ -37,14 +36,11 @@ export class level2 extends Phaser.Scene {
     private mapPosX;
     private mapPosY;
 
-
     constructor() {
         super({
             key: "level2"
         });
     }
-
-
 
     gameRestart(): void {
         this.scene.restart();
@@ -87,7 +83,7 @@ export class level2 extends Phaser.Scene {
     |
     y 
 
-    **********************************************/
+    *************************s*********************/
 
     /**
      * -----------DIRECTIONS-----------
@@ -96,9 +92,9 @@ export class level2 extends Phaser.Scene {
      *          A(3) S(2) D(1)
      */
 
-
-
     create(): void {
+        this.gameFinished = false;
+        this.input.keyboard.enabled = true;
         this.map = this.make.tilemap({
             key: 'map2',
             tileWidth: 32,
@@ -173,16 +169,11 @@ export class level2 extends Phaser.Scene {
             this.score = 0;
             this.scene.restart();
         });
-        restartButton.on('pointerover', function(pointer){
-            restartButton.setScale(0.85, 0.85);
-        });
-        restartButton.on('pointerout', function(pointer){
-            restartButton.setScale(1, 1);
-        });
+        restartButton.on('pointerover', function(){restartButton.setScale(0.85, 0.85)});
+        restartButton.on('pointerout', function(){restartButton.setScale(1, 1)});
         
-
+        LevelFunctions.addReturnButton(this);
         LevelFunctions.createPlayerCountText(this.tilesList, this.add);
-
 
         this.input.keyboard.on('keydown-A', () =>{
             if(LevelFunctions.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])) {
@@ -198,7 +189,6 @@ export class level2 extends Phaser.Scene {
                     this.preMovePos[0] -= Figure.STEP_SIZE;    
                     LevelFunctions.chainCharacters(this.figureList, this.goalTile);
                     LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this, 3);
-
                 }
             }
         });
@@ -217,7 +207,6 @@ export class level2 extends Phaser.Scene {
                     this.preMovePos[0] += Figure.STEP_SIZE;
                     LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
                     LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this, 3);
-
                 }
             }
         });
@@ -236,7 +225,6 @@ export class level2 extends Phaser.Scene {
                     this.preMovePos[1] += Figure.STEP_SIZE;
                     LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
                     LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this, 3);
-
                 } 
             }
         });
@@ -255,7 +243,6 @@ export class level2 extends Phaser.Scene {
                     this.preMovePos[1] -= Figure.STEP_SIZE;
                     LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
                     LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this, 3);
-
                 }
             }
         });
@@ -373,10 +360,8 @@ export class level2 extends Phaser.Scene {
                 this.scoreText.setText('Score: ' + this.score);
             }
         }
-        
         return element;
     }
-   
 
     update(): void {
         console.log();
