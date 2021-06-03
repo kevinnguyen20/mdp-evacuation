@@ -21,7 +21,7 @@ export class level2 extends Phaser.Scene {
     private preMovePos = [];
     private survivorScore = 0;
     private survivorScoreText = Phaser.GameObjects.Text = null;
-    private winCond = 6;
+    private winCond = 5;
 
     private map: Phaser.Tilemaps.Tilemap;
 
