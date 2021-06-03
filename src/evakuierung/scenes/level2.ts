@@ -21,7 +21,7 @@ export class level2 extends Phaser.Scene {
     private preMovePos = [];
     private survivorScore = 0;
     private survivorScoreText = Phaser.GameObjects.Text = null;
-    private winCond = 6;
+    private winCond = 5;
 
     private map: Phaser.Tilemaps.Tilemap;
 
@@ -142,7 +142,7 @@ export class level2 extends Phaser.Scene {
         const winCondText = this.add.text (
             this.mapPosX + 70, 
             this.mapPosY - 0,  
-            '' + this.winCond+ ' Aliens need to reach the goal! '
+            '' + this.winCond+ ' Aliens + Queen need to reach the goal! '
         );
         
         this.scoreText = this.add.text(
