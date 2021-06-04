@@ -13,7 +13,7 @@ export class TileParser {
     public static readonly PORTAL_BLUE_ID = 13;
     public static readonly PORTAL_ORANGE_ID = 14;
     // ----- Probability -----
-    public static readonly PROBABILITY: number[] = [0,30,60,100]
+    public static readonly PROBABILITY: number[] = [0,15,30,55]
 
     
     
@@ -51,10 +51,10 @@ export class TileParser {
      * Use only the Probability-Layer Tiles as Input
      */
     public static tileIDToAPIID_scifiLVL_Probability(tileID: number): number {
-        if(tileID === 153) return TileParser.PROBABILITY[0];
-        if(tileID === 164) return TileParser.PROBABILITY[1];
-        if(tileID === 165) return TileParser.PROBABILITY[2];
-        if(tileID === 166) return TileParser.PROBABILITY[3];
+        if(tileID === 153) return TileParser.PROBABILITY[0]; //green
+        if(tileID === 164) return TileParser.PROBABILITY[1]; //yellow
+        if(tileID === 165) return TileParser.PROBABILITY[2]; //orange
+        if(tileID === 166) return TileParser.PROBABILITY[3]; //red
         return 0;
     }
 

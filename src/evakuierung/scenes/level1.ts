@@ -243,11 +243,11 @@ export class level1 extends Phaser.Scene {
         layerGround: Phaser.Tilemaps.TilemapLayer, layerAction: Phaser.Tilemaps.TilemapLayer, map: Phaser.Tilemaps.Tilemap): void {
         figureList.forEach( (element) =>{
             if(element.isQueen == false){
-                if(LevelFunctions.followQueen(tilesList[(element.x + 23*element.y)/32])){
+                if(LevelFunctions.followQueen(tilesList[(element.x + element.y * layerGround.layer.width)/32])){
                     element = this.movePlayer(xory, pos, layerGround, layerAction, map, element);
                 }
                 else{
-                    const direction: number = LevelFunctions.generateDirection(tilesList[(element.x + element.y*23)/32]);
+                    const direction: number = LevelFunctions.generateDirection(tilesList[(element.x + element.y * layerGround.layer.width)/32]);
                     switch(direction){
                         case 0: 
                             element = this.movePlayer(true, -Figure.STEP_SIZE, layerGround, layerAction, map, element);
