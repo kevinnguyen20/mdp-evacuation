@@ -4,7 +4,16 @@ export class level1prob {
     getProbs(): [number][number] {
         // [Westen, Norden, Osten, Süden]
 
-        // Erfolgspfad
+        /* Erfolgspfad
+        Der Erfolgspfad verläuft nicht mehr geradelinig, sondern eher schlangenlinienformig.
+        Ich selbst habe es mehrere Stunden getestet (im Kopf, die Wahrscheinlichkeiten werden vom Level
+        noch nicht gelesen) und habe festgestellt, dass dieser Pfad sehr herausfordernd ist. Zumal
+        eine Bestrafung fehlt, wird dieses (eher kleines) Level sehr schnell komplex. Ein 
+        verzweifelter Rush ist hiermit nicht mehr möglich. Die Zahl im Feld symbolisiert die 
+        Anzahl von Aliens, die in die entsprechende Richtung aufgeteilt werden. Vermeintliche
+        Abkürzungen werden mit sehr sehr hohen Splits bestraft.
+        */
+
         this.probs[16][3] = [0,0,0,0];
         this.probs[17][3] = [0,0,0,0];
         this.probs[17][4] = [0,0,0,0];
