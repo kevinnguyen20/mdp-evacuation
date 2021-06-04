@@ -92,6 +92,7 @@ export class level3 extends Phaser.Scene {
     create(): void {
         this.gameFinished = false;
         this.input.keyboard.enabled = true;
+        this.score = 0;
         this.map = this.make.tilemap({
             key: 'map3',
             tileWidth: 32,
