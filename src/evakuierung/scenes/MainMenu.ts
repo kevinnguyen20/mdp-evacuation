@@ -60,7 +60,7 @@ export class MainMenu extends Phaser.Scene{
             this.scene.transition({
                 target: "level1",
                 duration: 10
-            })
+            });
         });
         playButton.on('pointerover', function(){playButton.setScale(0.85, 0.85)});
         playButton.on('pointerout', function(){ playButton.setScale(1, 1)});

@@ -35,7 +35,10 @@ export class LevelMenu extends Phaser.Scene{
 
         level1button.on("pointerdown",()=>{
             console.log("pressed level 1 button");
-            this.scene.start('level1');
+            this.scene.transition({
+                target: "level1",
+                duration: 10
+            });
         });
 
         level1button.on('pointerover', function(pointer){
@@ -54,7 +57,10 @@ export class LevelMenu extends Phaser.Scene{
 
         level2button.on("pointerdown",()=>{
             console.log("pressed level 2 button");
-            this.scene.start('level2');
+            this.scene.transition({
+                target: "level2",
+                duration: 10
+            });
         });
 
         level2button.on('pointerover', function(pointer){
@@ -73,7 +79,10 @@ export class LevelMenu extends Phaser.Scene{
 
         level3button.on("pointerdown",()=>{
             console.log("pressed level 3 button");
-            this.scene.start('level3');
+            this.scene.transition({
+                target: "level3",
+                duration: 10
+            });
         });
 
         level3button.on('pointerover', function(pointer){
