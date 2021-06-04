@@ -141,7 +141,7 @@ export class level3 extends Phaser.Scene {
         this.survivorScoreText = this.add.text(
             this.mapPosX + 70, 
             this.mapPosY - 20,  
-            '' + this.winCond + ' aliens must reach the goal! ' 
+            '' + this.winCond + ' aliens (including queen) must reach the goal! ' 
         );
         
         this.preMovePos = [400,48];
