@@ -1,7 +1,7 @@
 export class level1prob {
-    private probs: [number][number];
+    private probs: number[][][];
 
-    getProbs(): [number][number] {
+    getProbs(): number[][][] {
         // [Westen, Norden, Osten, Süden]
 
         /* Erfolgspfad
