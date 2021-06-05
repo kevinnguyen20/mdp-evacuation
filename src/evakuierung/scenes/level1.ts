@@ -13,7 +13,7 @@ export class level1 extends Phaser.Scene {
     private queenPos:number[];
     // ??????????????????????????????????
 
-    private figureInitCount = 8;
+    private figureInitCount = 14;
     private figureList: Figure[];
     private tilesList: TilePiece[]; 
     private gameFinished = false;
@@ -119,9 +119,11 @@ export class level1 extends Phaser.Scene {
         this.goalTile = LevelFunctions.getGoalTile(this.tilesList);
 
         // set the probabilities per Tile according to the map
+        /*
         this.tilesList.forEach((tile) => {
             tile.setTileProbability(this.layerProbability);
         });
+        */
 
         // sets the Startposition automatically by reading the Map
         const startingPosition: [number, number] = LevelFunctions.getStartPostition(this.layerGround);
