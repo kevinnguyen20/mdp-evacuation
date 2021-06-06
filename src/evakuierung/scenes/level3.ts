@@ -2,7 +2,7 @@ import { TileParser } from "../util/tileParser";
 import { TilePiece } from "../util/tilePiece";
 import { Figure } from "../util/figure"
 import { LevelFunctions } from "../util/levelFunctions";
-import { Game, Tilemaps } from "phaser";
+import { AnimatedTile } from "../util/animatedTile";
 
 export class level3 extends Phaser.Scene {
     private score = 0;
@@ -31,6 +31,8 @@ export class level3 extends Phaser.Scene {
     private layerPerspective: Phaser.Tilemaps.TilemapLayer; 
     private fieldColor: Phaser.GameObjects.Image = null;
     private goalTile: TilePiece;
+
+    private animatedTiles : AnimatedTile[];
 
     private mapPosX;
     private mapPosY;
@@ -66,6 +68,7 @@ export class level3 extends Phaser.Scene {
     init(): void {
         this.data.set('playerScore', 0);
         this.data.set('playerWinningScore', 8);
+        this.animatedTiles = [];
     }
 
     /*********************************************
@@ -114,6 +117,9 @@ export class level3 extends Phaser.Scene {
 
         this.tilesList = TileParser.tileTupleAPI(this.layerGround, this.layerAction);
         this.goalTile = LevelFunctions.getGoalTile(this.tilesList);
+
+        // -------- animation -------------
+        LevelFunctions.activateAnimations(tileset, this.map, this.animatedTiles);
 
 
         // set the probabilities per Tile according to the map
@@ -312,7 +318,7 @@ export class level3 extends Phaser.Scene {
             const depth = 1;
             if(element.isQueen){
                 ///////// log Tile at queens position //////////
-                console.log(this.tilesList.find((tile) => (tile.tileCoordinates[0] === element.x && tile.tileCoordinates[1] === element.y)).toString());
+                // console.log(this.tilesList.find((tile) => (tile.tileCoordinates[0] === element.x && tile.tileCoordinates[1] === element.y)).toString());
                 ////////////////////////////////////////////////
                 if(tilePr.index == 153){
                     this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'green').setDepth(depth);
@@ -350,5 +356,6 @@ export class level3 extends Phaser.Scene {
 
     update(): void {
         console.log();
+        this.animatedTiles.forEach(tile => tile.update(14));
     }
 }

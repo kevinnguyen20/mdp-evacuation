@@ -2,7 +2,7 @@ import { TileParser } from "../util/tileParser";
 import { TilePiece } from "../util/tilePiece";
 import { Figure } from "../util/figure"
 import { LevelFunctions } from "../util/levelFunctions";
-import { Game, Tilemaps } from "phaser";
+import { AnimatedTile } from "../util/animatedTile";
 
 export class level1 extends Phaser.Scene {
     private score = 0;
@@ -31,6 +31,8 @@ export class level1 extends Phaser.Scene {
     private layerPerspective: Phaser.Tilemaps.TilemapLayer;
     private fieldColor: Phaser.GameObjects.Image = null;
     private goalTile: TilePiece;
+
+    private animatedTiles : AnimatedTile[];
 
     private mapPosX;
     private mapPosY;
@@ -68,6 +70,7 @@ export class level1 extends Phaser.Scene {
     init(): void {
         this.data.set('playerScore', 0);
         this.data.set('playerWinningScore', 8);
+        this.animatedTiles = [];
     }
 
     /*********************************************
@@ -114,16 +117,13 @@ export class level1 extends Phaser.Scene {
         this.layerDesign = setupLayer[3];
         this.layerPerspective = setupLayer[4];
 
-
         this.tilesList = TileParser.tileTupleAPI(this.layerGround, this.layerAction);
         this.goalTile = LevelFunctions.getGoalTile(this.tilesList);
 
-        // set the probabilities per Tile according to the map
-        /*
-        this.tilesList.forEach((tile) => {
-            tile.setTileProbability(this.layerProbability);
-        });
-        */
+        // -------- animation -------------
+        LevelFunctions.activateAnimations(tileset, this.map, this.animatedTiles);
+
+
 
         // sets the Startposition automatically by reading the Map
         const startingPosition: [number, number] = LevelFunctions.getStartPostition(this.layerGround);
@@ -317,7 +317,7 @@ export class level1 extends Phaser.Scene {
             const depth = 1;
             if(element.isQueen){
                 ///////// log Tile at queens position //////////
-                console.log(this.tilesList.find((tile) => (tile.tileCoordinates[0] === element.x && tile.tileCoordinates[1] === element.y)).toString());
+                // console.log(this.tilesList.find((tile) => (tile.tileCoordinates[0] === element.x && tile.tileCoordinates[1] === element.y)).toString());
                 ////////////////////////////////////////////////
                 if(tilePr.index == 153){
                     this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'green').setDepth(depth);
@@ -354,5 +354,6 @@ export class level1 extends Phaser.Scene {
 
     update(): void {
         console.log();
+        this.animatedTiles.forEach(tile => tile.update(14));
     }
 }
