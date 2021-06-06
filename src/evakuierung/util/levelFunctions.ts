@@ -18,7 +18,7 @@ export class LevelFunctions {
 
         playerList.push(new Figure(spawnPoint[0], spawnPoint[1], true)); //creates queen
 
-        for (let i=0; i<figure-1; i++)
+        for (let i = 0; i < figure - 1; i++)
             playerList.push(new Figure(spawnPoint[0], spawnPoint[1], false)); //creates subjects
 
         return playerList;
@@ -35,7 +35,7 @@ export class LevelFunctions {
         let Y = 0;
 
         layerGround.forEachTile((tile) => {
-            if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.START_ID) {
+            if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.START_ID) {
                 X = tile.pixelX;
                 Y = tile.pixelY;
             }
@@ -46,10 +46,10 @@ export class LevelFunctions {
      * @param tileList our tileList consisting of our API
      * @returns the goal Tile
      */
-    public static getGoalTile(tileList: TilePiece[]): TilePiece{
+    public static getGoalTile(tileList: TilePiece[]): TilePiece {
         let goal = null;
         tileList.forEach((tile) => {
-            if (tile.tileType[2] === true){
+            if (tile.tileType[2] === true) {
                 goal = tile;
             }
         })
@@ -63,10 +63,10 @@ export class LevelFunctions {
      * @param scene the scene (level) you're currently in
      * @param nextLevel the level you're transitioning to
      */
-    public static winConditionReachedCheck(gameFinished: boolean, survivorScoreText: Phaser.GameObjects.Text, survivorScore: number, condition: number, scene: Phaser.Scene, nextLevel: number){
-        if (gameFinished){
-            if (survivorScore >= condition){
-                survivorScoreText.setText("Congrats level passed with "+survivorScore+" aliens!")
+    public static winConditionReachedCheck(gameFinished: boolean, survivorScoreText: Phaser.GameObjects.Text, survivorScore: number, condition: number, scene: Phaser.Scene, nextLevel: number) {
+        if (gameFinished) {
+            if (survivorScore >= condition) {
+                survivorScoreText.setText("Congrats level passed with " + survivorScore + " aliens!")
                 const nextLevelButton = scene.add.image(scene.sys.game.config.width as number / 2, scene.sys.game.config.height as number / 2, 'nextLevelButton');
                 nextLevelButton.depth = 100;    // brings the button to the front
                 nextLevelButton.setInteractive();
@@ -76,11 +76,11 @@ export class LevelFunctions {
                         duration: 10
                     })
                 });
-                nextLevelButton.on('pointerover', function(){nextLevelButton.setScale(0.85, 0.85)});
-                nextLevelButton.on('pointerout', function(){nextLevelButton.setScale(1, 1)});
+                nextLevelButton.on('pointerover', function () { nextLevelButton.setScale(0.85, 0.85) });
+                nextLevelButton.on('pointerout', function () { nextLevelButton.setScale(1, 1) });
             }
             else {
-                survivorScoreText.setText("Not enough aliens have reached the goal! "+survivorScore+ " < "+condition+ "\nRestart and keep on trying!");
+                survivorScoreText.setText("Not enough aliens have reached the goal! " + survivorScore + " < " + condition + "\nRestart and keep on trying!");
             }
         }
     }
@@ -91,7 +91,7 @@ export class LevelFunctions {
      * @param scene the scene (level) you're currently in
      */
     public static addReturnButton(scene: Phaser.Scene) {
-        const returnMainMenuButton = scene.add.image(scene.sys.game.config.width as number * 1/50 + 610, scene.sys.game.config.height as number * 3.5/20 + 415, 'returnMainMenuButton');
+        const returnMainMenuButton = scene.add.image(scene.sys.game.config.width as number * 1 / 50 + 610, scene.sys.game.config.height as number * 3.5 / 20 + 415, 'returnMainMenuButton');
         returnMainMenuButton.setInteractive();
         returnMainMenuButton.on('pointerup', () => {
             scene.scene.transition({
@@ -100,8 +100,8 @@ export class LevelFunctions {
                 duration: 10
             })
         });
-        returnMainMenuButton.on('pointerover', function(){returnMainMenuButton.setScale(0.85, 0.85)});
-        returnMainMenuButton.on('pointerout', function(){returnMainMenuButton.setScale(1, 1)});
+        returnMainMenuButton.on('pointerover', function () { returnMainMenuButton.setScale(0.85, 0.85) });
+        returnMainMenuButton.on('pointerout', function () { returnMainMenuButton.setScale(1, 1) });
     }
 
     /**
@@ -110,18 +110,18 @@ export class LevelFunctions {
      * @param figureList our figureList
      * @param goalTile ourGoalTile
      */
-    public static chainCharacters (figureList: Figure[], goalTile: TilePiece){
+    public static chainCharacters(figureList: Figure[], goalTile: TilePiece) {
         const arr = [];
         let x = 0;
         figureList.forEach((element) => {
-            if (element.x === goalTile.tileCoordinates[0] && element.y === goalTile.tileCoordinates[1]){
+            if (element.x === goalTile.tileCoordinates[0] && element.y === goalTile.tileCoordinates[1]) {
                 arr.push(x);
             }
             x++;
         })
         let tmp = 0;
         arr.forEach((element) => {
-            figureList.splice(element-tmp, 1);
+            figureList.splice(element - tmp, 1);
             tmp++;
         })
     }
@@ -135,15 +135,15 @@ export class LevelFunctions {
      */
 
     public static generateDirection(tile: TilePiece): number {
-        const random: number = Math.random()*100;
-        if(random < tile.directionProbabilities[0])
+        const random: number = Math.random() * 100;
+        if (random < tile.directionProbabilities[0])
             return 0;   // up
 
-        else if(random < tile.directionProbabilities[0] + tile.directionProbabilities[1])
+        else if (random < tile.directionProbabilities[0] + tile.directionProbabilities[1])
             return 1;   // right
 
-        else if(random < tile.directionProbabilities[0] + tile.directionProbabilities[1] 
-                        + tile.directionProbabilities[2]) 
+        else if (random < tile.directionProbabilities[0] + tile.directionProbabilities[1]
+            + tile.directionProbabilities[2])
             return 2;   // down
 
         else
@@ -154,9 +154,9 @@ export class LevelFunctions {
      * Decides if a player should follow the queen
      * @returns True if the player shold go with the queen or else false
      */
-    public static followQueen(tile: TilePiece):boolean {
-        const randomNum: number = Math.random()*100;
-        if (randomNum < tile.directionProbabilities[4]){
+    public static followQueen(tile: TilePiece): boolean {
+        const randomNum: number = Math.random() * 100;
+        if (randomNum < tile.directionProbabilities[4]) {
             return true;
         }
         else return false;
@@ -185,19 +185,19 @@ export class LevelFunctions {
      * 
      * @param tileList 
      */
-    public static updatePlayerCountText (tileList: TilePiece[]) : void {
+    public static updatePlayerCountText(tileList: TilePiece[]): void {
         tileList.forEach((element) => {
             if (element.text.visible === true) {
-                if(element.playersOnTop === 0){
-                    element.text.setText(''+element.playersOnTop);
+                if (element.playersOnTop === 0) {
+                    element.text.setText('' + element.playersOnTop);
                     element.text.setVisible(false);
                 }
-                else{
-                    element.text.setText(''+element.playersOnTop);
-                }        
+                else {
+                    element.text.setText('' + element.playersOnTop);
+                }
             }
             else if (element.text.visible === false && element.playersOnTop > 0) {
-                element.text.setText(''+element.playersOnTop);
+                element.text.setText('' + element.playersOnTop);
                 element.text.setVisible(true);
             }
         })
@@ -210,9 +210,9 @@ export class LevelFunctions {
      * @param tilesList 
      * @param add set to this.add
      */
-    public static createPlayerCountText(tilesList: TilePiece[], add: Phaser.GameObjects.GameObjectFactory) : void{
+    public static createPlayerCountText(tilesList: TilePiece[], add: Phaser.GameObjects.GameObjectFactory): void {
         tilesList.forEach((element) => {
-            element.text = add.text (element.tileCoordinates[0]+38, element.tileCoordinates[1]+104, ''+element.playersOnTop, {color: '#ffffff'} ).setDepth(5);
+            element.text = add.text(element.tileCoordinates[0] + 38, element.tileCoordinates[1] + 104, '' + element.playersOnTop, { color: '#ffffff' }).setDepth(5);
             if (element.playersOnTop === 0)
                 element.text.setVisible(false);
         });
@@ -232,9 +232,9 @@ export class LevelFunctions {
      * @param layerPerspective 
      * @returns returns layers in the input order
      */
-    public static setupLayer(tileset: Tilemaps.Tileset, x: number, y: number, map: Tilemaps.Tilemap, 
-        layerGround: Tilemaps.TilemapLayer, layerProbability: Tilemaps.TilemapLayer,layerAction: Tilemaps.TilemapLayer,layerDesign: Tilemaps.TilemapLayer, layerPerspective: Tilemaps.TilemapLayer,): 
-        [Tilemaps.TilemapLayer, Tilemaps.TilemapLayer, Tilemaps.TilemapLayer, Tilemaps.TilemapLayer, Tilemaps.TilemapLayer]{
+    public static setupLayer(tileset: Tilemaps.Tileset, x: number, y: number, map: Tilemaps.Tilemap,
+        layerGround: Tilemaps.TilemapLayer, layerProbability: Tilemaps.TilemapLayer, layerAction: Tilemaps.TilemapLayer, layerDesign: Tilemaps.TilemapLayer, layerPerspective: Tilemaps.TilemapLayer,):
+        [Tilemaps.TilemapLayer, Tilemaps.TilemapLayer, Tilemaps.TilemapLayer, Tilemaps.TilemapLayer, Tilemaps.TilemapLayer] {
         layerGround = map.createLayer(
             'Ground',       // layerID
             tileset,        // tileset
@@ -283,24 +283,24 @@ export class LevelFunctions {
     }
 
 
-    public static activateAnimations(tileset: Tilemaps.Tileset, map: Tilemaps.Tilemap, animatedTiles: AnimatedTile[]){
+    public static activateAnimations(tileset: Tilemaps.Tileset, map: Tilemaps.Tilemap, animatedTiles: AnimatedTile[]) {
         const tileData = tileset.tileData as TilesetTileData;
-        for (let tileid in tileData) {
+        for (const tileid in tileData) {
             map.layers.forEach(layer => {
-            if (layer.tilemapLayer.type === "StaticTilemapLayer") return;
-            layer.data.forEach(tileRow => {
-                tileRow.forEach(tile => {
-                if (tile.index - tileset.firstgid === parseInt(tileid, 10)) {
-                    animatedTiles.push(
-                    new AnimatedTile(
-                        tile,
-                        tileData[tileid].animation,
-                        tileset.firstgid
-                    )
-                    );
-                }
+                if (layer.tilemapLayer.type === "StaticTilemapLayer") return;
+                layer.data.forEach(tileRow => {
+                    tileRow.forEach(tile => {
+                        if (tile.index - tileset.firstgid === parseInt(tileid, 10)) {
+                            animatedTiles.push(
+                                new AnimatedTile(
+                                    tile,
+                                    tileData[tileid].animation,
+                                    tileset.firstgid
+                                )
+                            );
+                        }
+                    });
                 });
-            });
             });
         }
     }
