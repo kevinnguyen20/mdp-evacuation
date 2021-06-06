@@ -122,6 +122,7 @@ export class level1 extends Phaser.Scene {
 
         // -------- animation -------------
         LevelFunctions.activateAnimations(tileset, this.map, this.animatedTiles);
+        console.log(this.animatedTiles);
 
 
 
@@ -344,7 +345,8 @@ export class level1 extends Phaser.Scene {
             }
             
             if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
-                layerAction.removeTileAt(tileAction.x, tileAction.y);
+                layerAction.removeTileAt(tileAction.x, tileAction.y, false, false);
+                //layerAction.putTileAt(0, tileAction.x, tileAction.y, false);
                 this.score += 1;
                 this.scoreText.setText('Coins collected: ' + this.score);
             }
