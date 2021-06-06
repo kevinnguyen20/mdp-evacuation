@@ -1,7 +1,9 @@
 import { Tilemaps } from "phaser";
+import { TilesetTileData } from "./animatedTile";
 import { Figure } from "./figure";
 import { TileParser } from "./tileParser";
 import { TilePiece } from "./tilePiece";
+import { AnimatedTile } from "../util/animatedTile";
 
 export class LevelFunctions {
 
@@ -278,6 +280,29 @@ export class LevelFunctions {
 
         return [layerGround, layerProbability, layerAction, layerDesign, layerPerspective];
 
+    }
+
+
+    public static activateAnimations(tileset: Tilemaps.Tileset, map: Tilemaps.Tilemap, animatedTiles: AnimatedTile[]){
+        const tileData = tileset.tileData as TilesetTileData;
+        for (let tileid in tileData) {
+            map.layers.forEach(layer => {
+            if (layer.tilemapLayer.type === "StaticTilemapLayer") return;
+            layer.data.forEach(tileRow => {
+                tileRow.forEach(tile => {
+                if (tile.index - tileset.firstgid === parseInt(tileid, 10)) {
+                    animatedTiles.push(
+                    new AnimatedTile(
+                        tile,
+                        tileData[tileid].animation,
+                        tileset.firstgid
+                    )
+                    );
+                }
+                });
+            });
+            });
+        }
     }
 
 }
