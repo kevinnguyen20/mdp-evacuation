@@ -40,7 +40,7 @@ export class TileParser {
      * Use only the Action-Layer Tiles as Input
      */
     public static tileIDToAPIID_scifiLVL_Action(tileID: number): number {
-        if(tileID === 155) return TileParser.COIN_ID;
+        if(tileID === 155 || tileID === 156|| tileID === 157|| tileID === 158|| tileID === 159|| tileID === 160) return TileParser.COIN_ID;
         if(tileID === 93) return TileParser.PORTAL_BLUE_ID;
         if(tileID === 94) return TileParser.PORTAL_ORANGE_ID;
         return -1;

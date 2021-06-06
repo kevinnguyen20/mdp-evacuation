@@ -345,7 +345,7 @@ export class level2 extends Phaser.Scene {
             }
             
             if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
-                layerAction.putTileAt(0, tileAction.x, tileAction.y);
+                layerAction.removeTileAt(tileAction.x, tileAction.y);
                 this.score += 1;
                 this.scoreText.setText('Coins collected: ' + this.score);
             }
