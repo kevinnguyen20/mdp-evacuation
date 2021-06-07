@@ -1,5 +1,6 @@
 // Class for each tile. There will be 13 * 7 tiles in total with each of them having
 import { Figure } from "./figure"
+import { Level1prob } from "./level1prob";
 import { TileParser } from "./tileParser";
 
 export class TilePiece {
@@ -35,11 +36,11 @@ export class TilePiece {
      * 
      * @param layerProbability input the Probability-Layer from the Level
      */
-    public setTileProbability(layerProbability: Phaser.Tilemaps.TilemapLayer): void {
+    public setTileProbability(layerProbability: Phaser.Tilemaps.TilemapLayer): void { //TODO Repair function
         const x = this.tileCoordinates[0] / Figure.STEP_SIZE;
         const y = this.tileCoordinates[1] / Figure.STEP_SIZE;
 
-        //console.log("x: " +x+ " y: " +y+ ", index:"+ layerProbability.layer.data[y][x].index);
+       
         
         if (x !== null && y !== null ) { //no walkable Tile is on the Edge
 
@@ -52,12 +53,16 @@ export class TilePiece {
             } else { //walkable
                 
                 this.toString;
-                //console.log(layerProbability.layer.data[y][x].index);
+                let tile_up = null;
+                let tile_right = null;
+                let tile_down = null;
+                let tile_left = null;
 
-                const tile_up = layerProbability.layer.data[y - 1][x].index;
-                const tile_right = layerProbability.layer.data[y][x + 1].index;
-                const tile_down = layerProbability.layer.data[y + 1][x].index;
-                const tile_left = layerProbability.layer.data[y][x - 1].index;
+                
+                tile_up = layerProbability.layer.data[y - 1][x].index;
+                tile_right = layerProbability.layer.data[y][x + 1].index;
+                tile_down = layerProbability.layer.data[y + 1][x].index;
+                tile_left = layerProbability.layer.data[y][x - 1].index;
 
                 this.directionProbabilities[0] = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_up);    // up neighbour tile
                 this.directionProbabilities[1] = TileParser.tileIDToAPIID_scifiLVL_Probability(tile_right); // right neighbour tile
