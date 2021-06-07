@@ -12,7 +12,9 @@ export class Level1prob {
         Anzahl von Aliens, die in die entsprechende Richtung aufgeteilt werden. Vermeintliche
         Abkürzungen werden mit sehr sehr hohen Splits bestraft.
         */
-        let probs: number[][][] = null;
+
+        //WE WILL PROBABLY DON'T NEED IT ANYMORE
+        const probs: number[][][] = null;
 
         probs[16][3] = [0,0,0,0];
         probs[17][3] = [0,0,0,0];
