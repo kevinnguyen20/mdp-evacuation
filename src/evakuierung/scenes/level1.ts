@@ -8,12 +8,16 @@ import { level1prob } from "../util/level1prob";
 
 
 type Layers = {
-    map: Phaser.Tilemaps.Tilemap;
     layerGround: Phaser.Tilemaps.TilemapLayer;
     layerProbability: Phaser.Tilemaps.TilemapLayer;
     layerAction: Phaser.Tilemaps.TilemapLayer;
     layerDesign: Phaser.Tilemaps.TilemapLayer;
     layerPerspective: Phaser.Tilemaps.TilemapLayer;
+};
+
+type OurMap = {
+    map: Phaser.Tilemaps.Tilemap;
+    layers: Layers;
 };
 
 type Figures = {
@@ -33,7 +37,7 @@ type MapPosition = {
     mapPosY: number;
 };
 
-type Game = {
+type OurGame = {
     score: number;
     scoreText: Phaser.GameObjects.Text;
     queenPos: number[];
@@ -41,43 +45,14 @@ type Game = {
     preMovePos: number[];
     survivorScoreText: Phaser.GameObjects.Text;
     winCond: number;
-}
+};
 
 export class level1 extends Phaser.Scene {
-    private score = 0;
-    private scoreText: Phaser.GameObjects.Text = null;
-
-    // ??????????????????????????????????
-    //  do we still need this
-    private queenPos:number[];
-    // ??????????????????????????????????
-
-    private figureInitCount = 14;
-    private figureList: Figure[];
-    private tilesList: TilePiece[]; 
-    private gameFinished = false;
-    private preMovePos = [];
-    private survivorScore = 0;
-    private survivorScoreText = Phaser.GameObjects.Text = null;
-    private winCond = 6;
-
-    private map: Phaser.Tilemaps.Tilemap;
-
-    private layerGround: Phaser.Tilemaps.TilemapLayer;
-    private layerProbability: Phaser.Tilemaps.TilemapLayer;
-    private layerAction: Phaser.Tilemaps.TilemapLayer;
-    private layerDesign: Phaser.Tilemaps.TilemapLayer;
-    private layerPerspective: Phaser.Tilemaps.TilemapLayer;
-    private fieldColor: Phaser.GameObjects.Image = null;
-    private goalTile: TilePiece;
-
-    private animatedTiles : AnimatedTile[];
-
-    private mapPosX;
-    private mapPosY;
-
-    private probs: level1prob;
-
+    private ourGame: OurGame;
+    private mapPosition: MapPosition;
+    private tiles: Tiles;
+    private figures: Figures;
+    private ourMap: OurMap;
 
     constructor() {
         super({
@@ -111,22 +86,7 @@ export class level1 extends Phaser.Scene {
     init(): void {
         this.data.set('playerScore', 0);
         this.data.set('playerWinningScore', 8);
-        this.animatedTiles = [];
     }
-
-    /*********************************************
-
-    0 _______________________ x
-    |
-    |
-    |
-    |
-    |
-    |
-    |
-    y 
-
-    **********************************************/
 
     /**
      * -----------DIRECTIONS-----------
@@ -136,81 +96,95 @@ export class level1 extends Phaser.Scene {
      */
 
     create(): void {
-        this.gameFinished = false;
         this.input.keyboard.enabled = true;
-        this.score = 0;
-        this.map = this.make.tilemap({
+        this.cameras.main.setZoom(1.2,1.2);
+
+        this.mapPosition = {
+            mapPosX: this.sys.game.config.width as number * 1/50,
+            mapPosY: this.sys.game.config.height as number * 3.5/20
+        };
+        
+        this.ourMap.map = this.make.tilemap({
             key: 'map',
             tileWidth: 32,
             tileHeight: 32
         });
+        const tileset = this.ourMap.map.addTilesetImage('scifi', 'tileset-scifi');
+        LevelFunctions.setupLayer(tileset, this.mapPosition, this.ourMap);
 
-        this.cameras.main.setZoom(1.2,1.2);
-        this.mapPosX = this.sys.game.config.width as number * 1/50;
-        this.mapPosY = this.sys.game.config.height as number * 3.5/20;
-
-        const tileset = this.map.addTilesetImage('scifi', 'tileset-scifi');
+        this.ourGame = {
+            score: 0,
+            scoreText: null,
+            queenPos: [],
+            gameFinished: false,
+            preMovePos: [],
+            survivorScoreText: null,
+            winCond: 6
+        };
         
-        const setupLayer = LevelFunctions.setupLayer(tileset, this.mapPosX, this.mapPosY, this.map, this.layerGround, this.layerProbability, this.layerAction, this.layerDesign, this.layerPerspective);
-        this.layerGround = setupLayer[0];
-        this.layerProbability = setupLayer[1];
-        this.layerAction = setupLayer[2];
-        this.layerDesign = setupLayer[3];
-        this.layerPerspective = setupLayer[4];
+        const t1 = TileParser.tileTupleAPI(this.ourMap.layers.layerGround, this.ourMap.layers.layerAction);
+        const t2 = LevelFunctions.getGoalTile(t1);
+        this.tiles = {
+            tilesList: t1,
+            fieldColor: null,
+            goalTile: t2,
+            animatedTiles: []
+        };
 
-        this.tilesList = TileParser.tileTupleAPI(this.layerGround, this.layerAction);
-        this.goalTile = LevelFunctions.getGoalTile(this.tilesList);
+        this.figures = {
+            figureInitCount: 14,
+            figureList: []
+        };
 
         // -------- animation -------------
-        LevelFunctions.activateAnimations(tileset, this.map, this.animatedTiles);
-        console.log(this.animatedTiles);
-
+        LevelFunctions.activateAnimations(tileset, this.ourMap.map, this.tiles.animatedTiles);
 
 
         // sets the Startposition automatically by reading the Map
-        const startingPosition: [number, number] = LevelFunctions.getStartPostition(this.layerGround);
+        const startingPosition: [number, number] = LevelFunctions.getStartPostition(this.ourMap.layers.layerGround);
 
-        this.figureList = LevelFunctions.initFigureList(this.figureInitCount, startingPosition);
-        this.queenPos = [startingPosition[0] / 32, startingPosition[1] /32];
-        this.figureList.forEach((figure) => {
-            this.tilesList[figure.x/32 + figure.y/32 * this.layerAction.layer.width].playersOnTop++;
-            figure.image = this.add.image(this.mapPosX + figure.x + Figure.STEP_SIZE / 2, this.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(4);
+        this.figures.figureList = LevelFunctions.initFigureList(this.figures.figureInitCount, startingPosition);
+        this.ourGame.queenPos = [startingPosition[0]/32, startingPosition[1]/32];
+        this.figures.figureList.forEach((figure) => {
+            this.tiles.tilesList[figure.x/32 + figure.y/32 * this.ourMap.layers.layerAction.layer.width].playersOnTop++;
+            figure.image = this.add.image(this.mapPosition.mapPosX + figure.x + Figure.STEP_SIZE / 2, 
+                this.mapPosition.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(4);
         });
 
-        this.scoreText = this.add.text(
-            this.mapPosX + 70, 
-            this.mapPosY - 40,  
-            'Coins collected: ' + this.score
+        this.ourGame.scoreText = this.add.text(
+            this.mapPosition.mapPosX + 70, 
+            this.mapPosition.mapPosY - 40,  
+            'Coins collected: ' + this.ourGame.score
         );
         
-        this.survivorScoreText = this.add.text(
-            this.mapPosX + 70, 
-            this.mapPosY - 20,  
-            '' + this.winCond + ' aliens (including queen) must reach the goal! ' 
+        this.ourGame.survivorScoreText = this.add.text(
+            this.mapPosition.mapPosX + 70, 
+            this.mapPosition.mapPosY - 20,  
+            '' + this.ourGame.winCond + ' aliens (including queen) must reach the goal! ' 
         );
         
-        this.preMovePos = [400,48];
+        this.ourGame.preMovePos = [400,48];
         
-        const restartButton = this.add.image(this.mapPosX + 610, this.mapPosY - 27, 'restartButton');
+        const restartButton = this.add.image(this.mapPosition.mapPosX + 610, this.mapPosition.mapPosY - 27, 'restartButton');
         restartButton.setInteractive();
         restartButton.on('pointerup', () => {
             this.input.keyboard.enabled = true;
-            this.gameFinished = false;
-            this.score = 0;
+            this.ourGame.gameFinished = false;
+            this.ourGame.score = 0;
             this.scene.restart();
         });
         restartButton.on('pointerover', function(){restartButton.setScale(0.85, 0.85)});
         restartButton.on('pointerout', function(){restartButton.setScale(1, 1)});
 
         LevelFunctions.addReturnButton(this);
-        LevelFunctions.createPlayerCountText(this.tilesList, this.add);
+        LevelFunctions.createPlayerCountText(this.tiles.tilesList, this.add);
         
         this.input.keyboard.on('keydown-A', () =>{
-            if(LevelFunctions.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])) {
-                if(!this.gameFinished) {
+            if(LevelFunctions.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.ourMap.layers.layerGround, this.figures.figureList[0])) {
+                if(!this.ourGame.gameFinished) {
 
-                    this.queenPos[0] -= 1;
-                    this.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
+                    this.ourGame.queenPos[0] -= 1;
+                    this.figures.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]);
                     
                     this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
                         this.layerGround, this.layerAction, this.map);
@@ -321,7 +295,7 @@ export class level1 extends Phaser.Scene {
      * @param map the map we're operating on
      */
 
-    private movePlayer(xory: boolean, pos: number, layerGround: Phaser.Tilemaps.TilemapLayer, layerAction: Phaser.Tilemaps.TilemapLayer, map:Phaser.Tilemaps.Tilemap, element: Figure): Figure {        
+    private movePlayer(xory: boolean, pos: number, mapAndLayers: OurMap, element: Figure): Figure {        
         let tile:Phaser.Tilemaps.Tile = null;
         let tileAction:Phaser.Tilemaps.Tile = null;
         let tilePr:Phaser.Tilemaps.Tile = null;
@@ -329,21 +303,21 @@ export class level1 extends Phaser.Scene {
 
         // Determine if which axis we're moving on
         if (xory === false){
-            tile = layerGround.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
-            tileAction = layerAction.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
-            tilePr = this.layerProbability.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
+            tile = mapAndLayers.layers.layerGround.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
+            tileAction = mapAndLayers.layers.layerAction.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
+            tilePr = this.ourMap.layers.layerProbability.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
         } else {
-            tile = layerGround.getTileAtWorldXY(element.image.x, element.image.y+pos, true); 
-            tileAction = layerAction.getTileAtWorldXY(element.image.x, element.image.y+pos, true);
-            tilePr = this.layerProbability.getTileAtWorldXY(element.image.x, element.image.y+pos, true);
+            tile = mapAndLayers.layers.layerGround.getTileAtWorldXY(element.image.x, element.image.y+pos, true); 
+            tileAction = mapAndLayers.layers.layerAction.getTileAtWorldXY(element.image.x, element.image.y+pos, true);
+            tilePr = this.ourMap.layers.layerProbability.getTileAtWorldXY(element.image.x, element.image.y+pos, true);
         }
         // eslint-disable-next-line no-empty
         if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
         else {   
-            this.tilesList[(element.x + element.y * layerGround.layer.width)/32].playersOnTop--; 
+            this.tiles.tilesList[(element.x + element.y * mapAndLayers.layers.layerGround.layer.width)/32].playersOnTop--; 
 
-            if(element.isQueen && this.fieldColor != null){
-                this.fieldColor.destroy();
+            if(element.isQueen && this.tiles.fieldColor != null){
+                this.tiles.fieldColor.destroy();
             }
             
             if(xory === false){                 
@@ -353,7 +327,7 @@ export class level1 extends Phaser.Scene {
                 element.updateCoordinates(0, pos);
             }
 
-            this.tilesList[(element.x + element.y * layerGround.layer.width)/32].playersOnTop++;
+            this.tiles.tilesList[(element.x + element.y * mapAndLayers.layers.layerGround.layer.width)/32].playersOnTop++;
 
 
             const depth = 1;
@@ -396,7 +370,6 @@ export class level1 extends Phaser.Scene {
     }
 
     update(): void {
-        console.log();
-        this.animatedTiles.forEach(tile => tile.update(14));
+        this.tiles.animatedTiles.forEach(tile => tile.update(14));
     }
 }
