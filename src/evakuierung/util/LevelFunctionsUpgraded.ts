@@ -23,7 +23,29 @@ type MapPosition = {
     mapPosY: number;
 };
 
-export class LevelFunctions {
+type Figures = {
+    figureInitCount: number;
+    figureList: Figure[];
+};
+
+type Tiles = {
+    tilesList: TilePiece[];
+    fieldColor: Phaser.GameObjects.Image;
+    goalTile: TilePiece;
+    animatedTiles: AnimatedTile[];
+};
+
+type OurGame = {
+    score: number;
+    scoreText: Phaser.GameObjects.Text;
+    queenPos: number[];
+    gameFinished: boolean;
+    preMovePos: number[];
+    survivorScoreText: Phaser.GameObjects.Text;
+    winCond: number;
+};
+
+export class LevelFunctionsUpgraded {
 
     /**
      * @param figure number of Players in the level
@@ -81,7 +103,12 @@ export class LevelFunctions {
      * @param scene the scene (level) you're currently in
      * @param nextLevel the level you're transitioning to
      */
-    public static winConditionReachedCheck(gameFinished: boolean, survivorScoreText: Phaser.GameObjects.Text, survivorScore: number, condition: number, scene: Phaser.Scene, nextLevel: number) {
+    public static winConditionReachedCheck(ourGame: OurGame, tiles: Tiles, scene: Phaser.Scene, nextLevel: number): void {
+        const gameFinished = ourGame.gameFinished;
+        const condition = ourGame.winCond;
+        const survivorScoreText = ourGame.survivorScoreText;
+        const survivorScore = tiles.goalTile.playersOnTop;
+        
         if (gameFinished) {
             if (survivorScore >= condition) {
                 survivorScoreText.setText("Congrats level passed with " + survivorScore + " aliens!")
@@ -128,56 +155,23 @@ export class LevelFunctions {
      * @param figureList our figureList
      * @param goalTile ourGoalTile
      */
-    public static chainCharacters(figureList: Figure[], goalTile: TilePiece): void {
+    public static chainCharacters(fig: Figures, tiles: Tiles): void {
+        const figList = fig.figureList;
+        const goal = tiles.goalTile;
+
         const arr = [];
         let x = 0;
-        figureList.forEach((element) => {
-            if (element.x === goalTile.tileCoordinates[0] && element.y === goalTile.tileCoordinates[1]) {
+        figList.forEach((element) => {
+            if (element.x === goal.tileCoordinates[0] && element.y === goal.tileCoordinates[1]) {
                 arr.push(x);
             }
             x++;
         })
         let tmp = 0;
         arr.forEach((element) => {
-            figureList.splice(element - tmp, 1);
+            figList.splice(element - tmp, 1);
             tmp++;
         })
-    }
-    // Please don't use the term "split". Instead, use followQueen or disobeyQueen :)
-    // kevinnguyen changed this method radically (runtime optimized)
-    /**
-     * Determines the direction (if we disobey the queen) given the probabilities for each direction
-     * 
-     * @param tile the tile we're currently on 
-     * @returns the direction - 0 (up), 1 (right), 2 (down), 3 (left)
-     */
-
-    public static generateDirection(tile: TilePiece): number { //TODO Repair function
-        const random: number = Math.random() * 100;
-        if (random < tile.directionProbabilities[0])
-            return 0;   // up
-
-        else if (random < tile.directionProbabilities[0] + tile.directionProbabilities[1])
-            return 1;   // right
-
-        else if (random < tile.directionProbabilities[0] + tile.directionProbabilities[1]
-            + tile.directionProbabilities[2])
-            return 2;   // down
-
-        else
-            return 3;   // left
-    }
-
-    /**
-     * Decides if a player should follow the queen
-     * @returns True if the player shold go with the queen or else false
-     */
-    public static followQueen(tile: TilePiece): boolean { //TODO Probably we won't need this anymore
-        const randomNum: number = Math.random() * 100;
-        if (randomNum < tile.directionProbabilities[4]) {
-            return true;
-        }
-        else return false;
     }
 
     /**
@@ -187,8 +181,10 @@ export class LevelFunctions {
      * @returns valid/invalid move
      */
 
-    public static queenValidMoveCheck(xory: boolean, pos: number, layer: Phaser.Tilemaps.TilemapLayer, queen: Figure): boolean {
+    public static queenValidMoveCheck(xory: boolean, pos: number, map: OurMap, queen: Figure): boolean {
         let tile: Phaser.Tilemaps.Tile = null;
+        const layer = map.layers.layerGround;
+
         tile = xory ? tile = layer.getTileAtWorldXY(queen.image.x, queen.image.y + pos, true) :
             tile = layer.getTileAtWorldXY(queen.image.x + pos, queen.image.y, true);
 

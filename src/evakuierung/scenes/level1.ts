@@ -1,10 +1,9 @@
 import { TileParser } from "../util/tileParser";
 import { TilePiece } from "../util/tilePiece";
 import { Figure } from "../util/figure"
-import { LevelFunctions } from "../util/levelFunctions";
 import { AnimatedTile } from "../util/animatedTile";
 
-import { level1prob } from "../util/level1prob";
+import { LevelFunctionsUpgraded } from "../util/LevelFunctionsUpgraded";
 
 
 type Layers = {
@@ -88,13 +87,6 @@ export class level1 extends Phaser.Scene {
         this.data.set('playerWinningScore', 8);
     }
 
-    /**
-     * -----------DIRECTIONS-----------
-     * 
-     *               W(0)
-     *          A(3) S(2) D(1)
-     */
-
     create(): void {
         this.input.keyboard.enabled = true;
         this.cameras.main.setZoom(1.2,1.2);
@@ -110,20 +102,34 @@ export class level1 extends Phaser.Scene {
             tileHeight: 32
         });
         const tileset = this.ourMap.map.addTilesetImage('scifi', 'tileset-scifi');
-        LevelFunctions.setupLayer(tileset, this.mapPosition, this.ourMap);
+        LevelFunctionsUpgraded.setupLayer(tileset, this.mapPosition, this.ourMap);
 
+        const startingPosition: [number, number] = LevelFunctionsUpgraded.getStartPostition(this.ourMap.layers.layerGround);
+        this.figures.figureList.forEach((figure) => {
+            this.tiles.tilesList[figure.x/32 + figure.y/32 * this.ourMap.layers.layerAction.layer.width].playersOnTop++;
+            figure.image = this.add.image(this.mapPosition.mapPosX + figure.x + Figure.STEP_SIZE / 2, 
+                this.mapPosition.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(4);
+        });
         this.ourGame = {
             score: 0,
-            scoreText: null,
-            queenPos: [],
+            scoreText: this.add.text(
+                this.mapPosition.mapPosX + 70, 
+                this.mapPosition.mapPosY - 40,  
+                'Coins collected: ' + this.ourGame.score
+            ),
+            queenPos: [startingPosition[0]/32, startingPosition[1]/32],
             gameFinished: false,
-            preMovePos: [],
-            survivorScoreText: null,
+            preMovePos: [400,48],
+            survivorScoreText: this.add.text(
+                this.mapPosition.mapPosX + 70, 
+                this.mapPosition.mapPosY - 20,  
+                '' + this.ourGame.winCond + ' aliens (including queen) must reach the goal! ' 
+            ),
             winCond: 6
         };
         
         const t1 = TileParser.tileTupleAPI(this.ourMap.layers.layerGround, this.ourMap.layers.layerAction);
-        const t2 = LevelFunctions.getGoalTile(t1);
+        const t2 = LevelFunctionsUpgraded.getGoalTile(t1);
         this.tiles = {
             tilesList: t1,
             fieldColor: null,
@@ -133,37 +139,11 @@ export class level1 extends Phaser.Scene {
 
         this.figures = {
             figureInitCount: 14,
-            figureList: []
+            figureList: LevelFunctionsUpgraded.initFigureList(this.figures.figureInitCount, startingPosition)
         };
 
         // -------- animation -------------
-        LevelFunctions.activateAnimations(tileset, this.ourMap.map, this.tiles.animatedTiles);
-
-
-        // sets the Startposition automatically by reading the Map
-        const startingPosition: [number, number] = LevelFunctions.getStartPostition(this.ourMap.layers.layerGround);
-
-        this.figures.figureList = LevelFunctions.initFigureList(this.figures.figureInitCount, startingPosition);
-        this.ourGame.queenPos = [startingPosition[0]/32, startingPosition[1]/32];
-        this.figures.figureList.forEach((figure) => {
-            this.tiles.tilesList[figure.x/32 + figure.y/32 * this.ourMap.layers.layerAction.layer.width].playersOnTop++;
-            figure.image = this.add.image(this.mapPosition.mapPosX + figure.x + Figure.STEP_SIZE / 2, 
-                this.mapPosition.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(4);
-        });
-
-        this.ourGame.scoreText = this.add.text(
-            this.mapPosition.mapPosX + 70, 
-            this.mapPosition.mapPosY - 40,  
-            'Coins collected: ' + this.ourGame.score
-        );
-        
-        this.ourGame.survivorScoreText = this.add.text(
-            this.mapPosition.mapPosX + 70, 
-            this.mapPosition.mapPosY - 20,  
-            '' + this.ourGame.winCond + ' aliens (including queen) must reach the goal! ' 
-        );
-        
-        this.ourGame.preMovePos = [400,48];
+        LevelFunctionsUpgraded.activateAnimations(tileset, this.ourMap.map, this.tiles.animatedTiles);
         
         const restartButton = this.add.image(this.mapPosition.mapPosX + 610, this.mapPosition.mapPosY - 27, 'restartButton');
         restartButton.setInteractive();
@@ -176,46 +156,43 @@ export class level1 extends Phaser.Scene {
         restartButton.on('pointerover', function(){restartButton.setScale(0.85, 0.85)});
         restartButton.on('pointerout', function(){restartButton.setScale(1, 1)});
 
-        LevelFunctions.addReturnButton(this);
-        LevelFunctions.createPlayerCountText(this.tiles.tilesList, this.add);
+        LevelFunctionsUpgraded.addReturnButton(this);
+        LevelFunctionsUpgraded.createPlayerCountText(this.tiles.tilesList, this.add);
         
         this.input.keyboard.on('keydown-A', () =>{
-            if(LevelFunctions.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.ourMap.layers.layerGround, this.figures.figureList[0])) {
+            if(LevelFunctionsUpgraded.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])) {
                 if(!this.ourGame.gameFinished) {
 
                     this.ourGame.queenPos[0] -= 1;
                     this.figures.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]);
                     
-                    this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
-                        this.layerGround, this.layerAction, this.map);
-                    LevelFunctions.updatePlayerCountText(this.tilesList);  
-                    this.preMovePos[0] -= Figure.STEP_SIZE;    
-                    LevelFunctions.chainCharacters(this.figureList, this.goalTile);
-                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this, 2);              
+                    this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, this.figures, this.tiles, this.ourMap);
+                    LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);  
+                    this.ourGame.preMovePos[0] -= Figure.STEP_SIZE;    
+                    LevelFunctionsUpgraded.chainCharacters(this.figures, this.tiles);
+                    LevelFunctionsUpgraded.winConditionReachedCheck(this.ourGame, this.tiles, this, 2);      
                 }
             }
         });
 
         this.input.keyboard.on('keydown-D', () =>{
-            if (LevelFunctions.queenValidMoveCheck(false, Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
-                if(!this.gameFinished) {
+            if (LevelFunctionsUpgraded.queenValidMoveCheck(false, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
+                if(!this.ourGame.gameFinished) {
 
-                    this.queenPos[0] += 1;
-                    this.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
+                    this.ourGame.queenPos[0] += 1;
+                    this.figures.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]);
 
-                    this.moveInGeneratedDirection(false, Figure.STEP_SIZE, this.figureList, this.tilesList, 
-                        this.layerGround, this.layerAction, this.map);
-                    LevelFunctions.updatePlayerCountText(this.tilesList);
-
-                    this.preMovePos[0] += Figure.STEP_SIZE;
-                    LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
-                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this, 2); 
+                    this.moveInGeneratedDirection(false, Figure.STEP_SIZE, this.figures, this.tiles, this.ourMap);
+                    LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);
+                    this.ourGame.preMovePos[0] += Figure.STEP_SIZE;
+                    LevelFunctionsUpgraded.chainCharacters(this.figures, this.tiles);                
+                    LevelFunctionsUpgraded.winConditionReachedCheck(this.ourGame, this.tiles, this, 2); 
                 }
             }
         });
 
         this.input.keyboard.on('keydown-S', () =>{
-            if (LevelFunctions.queenValidMoveCheck(true, Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
+            if (LevelFunctionsUpgraded.queenValidMoveCheck(true, Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
                 if(!this.gameFinished) {
 
                     this.queenPos[1] += 1;
@@ -223,18 +200,18 @@ export class level1 extends Phaser.Scene {
 
                     this.moveInGeneratedDirection(true, Figure.STEP_SIZE, this.figureList, this.tilesList, 
                         this.layerGround, this.layerAction, this.map);
-                    LevelFunctions.updatePlayerCountText(this.tilesList);    
+                    LevelFunctionsUpgraded.updatePlayerCountText(this.tilesList);    
 
                     this.preMovePos[1] += Figure.STEP_SIZE;
-                    LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
-                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this, 2);              
+                    LevelFunctionsUpgraded.chainCharacters(this.figureList, this.goalTile);                
+                    LevelFunctionsUpgraded.winConditionReachedCheck(this.ourGame, this.tiles, this, 2);              
 
                 } 
             }
         });
 
         this.input.keyboard.on('keydown-W', () =>{
-            if (LevelFunctions.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
+            if (LevelFunctionsUpgraded.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
                 if(!this.gameFinished) {
 
                     this.queenPos[1] -= 1;
@@ -242,11 +219,11 @@ export class level1 extends Phaser.Scene {
 
                     this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
                         this.layerGround, this.layerAction, this.map);
-                    LevelFunctions.updatePlayerCountText(this.tilesList);    
+                    LevelFunctionsUpgraded.updatePlayerCountText(this.tilesList);    
                     
                     this.preMovePos[1] -= Figure.STEP_SIZE;
-                    LevelFunctions.chainCharacters(this.figureList, this.goalTile);                
-                    LevelFunctions.winConditionReachedCheck(this.gameFinished, this.survivorScoreText, this.goalTile.playersOnTop, this.winCond, this, 2);
+                    LevelFunctionsUpgraded.chainCharacters(this.figureList, this.goalTile);                
+                    LevelFunctionsUpgraded.winConditionReachedCheck(this.ourGame, this.tiles, this, 2);
                 }
             }
         });
@@ -258,30 +235,10 @@ export class level1 extends Phaser.Scene {
      * @param xory true when moving on the y axis (up/down), false if moving on the x axis (left/right)
      * @param pos always has the value +32 or -32, because the tiles are 32x32
      */
-    public moveInGeneratedDirection(xory: boolean, pos: number, figureList: Figure[], tilesList: TilePiece[],
-        layerGround: Phaser.Tilemaps.TilemapLayer, layerAction: Phaser.Tilemaps.TilemapLayer, map: Phaser.Tilemaps.Tilemap): void {
-        figureList.forEach( (element) =>{
+    public moveInGeneratedDirection(xory: boolean, pos: number, fig: Figures, tiles: Tiles, map: OurMap): void {
+        fig.figureList.forEach( (element) =>{
             if(element.isQueen == false){
-                if(LevelFunctions.followQueen(tilesList[(element.x + element.y * layerGround.layer.width)/32])){
-                    element = this.movePlayer(xory, pos, layerGround, layerAction, map, element);
-                }
-                else{
-                    const direction: number = LevelFunctions.generateDirection(tilesList[(element.x + element.y * layerGround.layer.width)/32]);
-                    switch(direction){
-                        case 0: 
-                            element = this.movePlayer(true, -Figure.STEP_SIZE, layerGround, layerAction, map, element);
-                            break;
-                        case 1: 
-                            element = this.movePlayer(false, Figure.STEP_SIZE, layerGround, layerAction, map, element);
-                            break;
-                        case 2: 
-                            element = this.movePlayer(true, Figure.STEP_SIZE, layerGround, layerAction, map, element);
-                            break;
-                        case 3: 
-                            element = this.movePlayer(false, -Figure.STEP_SIZE, layerGround, layerAction, map, element);
-                            break;
-                    }
-                }
+                element = this.movePlayer(xory, pos, map, element);
             }
         });
     }
@@ -336,34 +293,31 @@ export class level1 extends Phaser.Scene {
                 // console.log(this.tilesList.find((tile) => (tile.tileCoordinates[0] === element.x && tile.tileCoordinates[1] === element.y)).toString());
                 ////////////////////////////////////////////////
                 if(tilePr.index == 153){
-                    this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'green').setDepth(depth);
+                    this.tiles.fieldColor = this.add.image(this.mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2,'green').setDepth(depth);
                 }
                 else if(tilePr.index == 165){
-                    this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'orange').setDepth(depth);
+                    this.tiles.fieldColor = this.add.image(this.mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2,'orange').setDepth(depth);
                 }
                 else if(tilePr.index == 164){
-                    this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'yellow').setDepth(depth);
+                    this.tiles.fieldColor = this.add.image(this.mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2,'yellow').setDepth(depth);
                 }
                 else if(tilePr.index == 166){
-                    this.fieldColor = this.add.image(this.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosY + element.y + Figure.STEP_SIZE / 2,'red').setDepth(depth);
+                    this.tiles.fieldColor = this.add.image(this.mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2,'red').setDepth(depth);
                 }
             }
 
-            if(!this.gameFinished) {
-                if(TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID) {
-                    if (element.isQueen) {
-                        this.scoreText.setText('Your final score: ' + this.score + "!");
-                        //this.input.keyboard.enabled = false;
-                        this.gameFinished = true;
-                    }
-                }
+            if(!this.ourGame.gameFinished
+                && TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID
+                && element.isQueen) {
+
+                this.ourGame.scoreText.setText('Your final score: ' + this.ourGame.score + "!");
+                this.ourGame.gameFinished = true;
             }
             
             if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
-                layerAction.removeTileAt(tileAction.x, tileAction.y, false, false);
-                //layerAction.putTileAt(0, tileAction.x, tileAction.y, false);
-                this.score += 1;
-                this.scoreText.setText('Coins collected: ' + this.score);
+                this.ourMap.layers.layerAction.removeTileAt(tileAction.x, tileAction.y, false, false);
+                this.ourGame.score += 1;
+                this.ourGame.scoreText.setText('Coins collected: ' + this.ourGame.score);
             }
         }
         return element;
