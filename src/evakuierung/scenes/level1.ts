@@ -4,6 +4,7 @@ import { Figure } from "../util/figure"
 import { AnimatedTile } from "../util/animatedTile";
 
 import { LevelFunctionsUpgraded } from "../util/LevelFunctionsUpgraded";
+import { RestartButton } from "../util/RestartButton";
 
 
 type Layers = {
@@ -94,6 +95,7 @@ export class level1 extends Phaser.Scene {
         this.input.keyboard.enabled = true;
         this.cameras.main.setZoom(1.2,1.2);
 
+        // MAP
         this.mapPosition = {
             mapPosX: this.sys.game.config.width as number * 1/50,
             mapPosY: this.sys.game.config.height as number * 3.5/20
@@ -105,12 +107,12 @@ export class level1 extends Phaser.Scene {
             tileHeight: 32
         });
         const tileset = tmpMap.addTilesetImage('scifi', 'tileset-scifi');
-        const tmpLayers = LevelFunctionsUpgraded.setupLayer(tileset, this.mapPosition, tmpMap);
         this.ourMap = {
             map: tmpMap,
-            layers: tmpLayers
+            layers: LevelFunctionsUpgraded.setupLayer(tileset, this.mapPosition, tmpMap)
         };
 
+        // TILES
         const t1 = TileParser.tileTupleAPI(this.ourMap.layers.layerGround, this.ourMap.layers.layerAction);
         const t2 = LevelFunctionsUpgraded.getGoalTile(t1);
         this.tiles = {
@@ -119,7 +121,9 @@ export class level1 extends Phaser.Scene {
             goalTile: t2,
             animatedTiles: []
         };
+        LevelFunctionsUpgraded.activateAnimations(tileset, this.ourMap.map, this.tiles.animatedTiles);
 
+        // FIGURES
         const startingPosition: [number, number] = LevelFunctionsUpgraded.getStartPostition(this.ourMap.layers.layerGround);
         this.figures = {
             figureInitCount: 14,
@@ -131,6 +135,7 @@ export class level1 extends Phaser.Scene {
                 this.mapPosition.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(4);
         });
 
+        // GAME
         this.ourGame = {
             score: this.score,
             scoreText: this.add.text(
@@ -149,20 +154,8 @@ export class level1 extends Phaser.Scene {
             winCond: this.winCondition
         };
 
-        // -------- animation -------------
-        LevelFunctionsUpgraded.activateAnimations(tileset, this.ourMap.map, this.tiles.animatedTiles);
+        new RestartButton(this.mapPosition, this, this.ourGame);
         
-        const restartButton = this.add.image(this.mapPosition.mapPosX + 610, this.mapPosition.mapPosY - 27, 'restartButton');
-        restartButton.setInteractive();
-        restartButton.on('pointerup', () => {
-            this.input.keyboard.enabled = true;
-            this.ourGame.gameFinished = false;
-            this.ourGame.score = 0;
-            this.scene.restart();
-        });
-        restartButton.on('pointerover', function(){restartButton.setScale(0.85, 0.85)});
-        restartButton.on('pointerout', function(){restartButton.setScale(1, 1)});
-
         LevelFunctionsUpgraded.addReturnButton(this);
         LevelFunctionsUpgraded.createPlayerCountText(this.tiles.tilesList, this.add);
         
