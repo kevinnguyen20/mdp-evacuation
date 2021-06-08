@@ -4,6 +4,9 @@ import { Figure } from "../util/figure"
 import { LevelFunctions } from "../util/levelFunctions";
 import { AnimatedTile } from "../util/animatedTile";
 
+import { level1prob } from "../util/level1prob";
+
+
 export class level1 extends Phaser.Scene {
     private score = 0;
     private scoreText: Phaser.GameObjects.Text = null;
@@ -36,6 +39,8 @@ export class level1 extends Phaser.Scene {
 
     private mapPosX;
     private mapPosY;
+
+    private probs: level1prob;
 
 
     constructor() {
