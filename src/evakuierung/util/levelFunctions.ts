@@ -134,7 +134,7 @@ export class LevelFunctions {
      * @returns the direction - 0 (up), 1 (right), 2 (down), 3 (left)
      */
 
-    public static generateDirection(tile: TilePiece): number {
+    public static generateDirection(tile: TilePiece): number { //TODO Repair function
         const random: number = Math.random() * 100;
         if (random < tile.directionProbabilities[0])
             return 0;   // up
@@ -154,7 +154,7 @@ export class LevelFunctions {
      * Decides if a player should follow the queen
      * @returns True if the player shold go with the queen or else false
      */
-    public static followQueen(tile: TilePiece): boolean {
+    public static followQueen(tile: TilePiece): boolean { //TODO Probably we won't need this anymore
         const randomNum: number = Math.random() * 100;
         if (randomNum < tile.directionProbabilities[4]) {
             return true;
