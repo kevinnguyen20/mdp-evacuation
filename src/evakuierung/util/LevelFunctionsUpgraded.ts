@@ -252,49 +252,53 @@ export class LevelFunctions {
      */
     public static setupLayer(tileset: Tilemaps.Tileset, coordinates: MapPosition, ourMap: OurMap): void{
         const mapAndLayers = ourMap;
+        const tmpMap = mapAndLayers.map;
+        const layers = mapAndLayers.layers;
+        const x = coordinates.mapPosX;
+        const y = coordinates.mapPosY;
         
-        mapAndLayers.layers.layerGround = mapAndLayers.map.createLayer(
-            'Ground',       // layerID
-            tileset,        // tileset
-            coordinates.mapPosX,        // x
-            coordinates.mapPosY         // y
+        mapAndLayers.layers.layerGround = tmpMap.createLayer(
+            'Ground',
+            tileset,
+            x,
+            y
         );
 
-        mapAndLayers.layers.layerProbability = mapAndLayers.map.createLayer(
-            'Probability',  // layerID
-            tileset,        // tileset
-            coordinates.mapPosX,        // x
-            coordinates.mapPosY         // y
+        mapAndLayers.layers.layerProbability = tmpMap.createLayer(
+            'Probability',
+            tileset,
+            x,
+            y
 
         );
         mapAndLayers.layers.layerProbability.setVisible(false);    // set true if you want to see the probabilities
 
-        mapAndLayers.layers.layerAction = mapAndLayers.map.createLayer(
-            'Action',       // layerID
-            tileset,        // tileset
-            coordinates.mapPosX,        // x
-            coordinates.mapPosY         // y
+        mapAndLayers.layers.layerAction = tmpMap.createLayer(
+            'Action',
+            tileset,
+            x,
+            y
         );
 
-        mapAndLayers.layers.layerDesign = mapAndLayers.map.createLayer(
-            'Design',       // layerID
-            tileset,        // tileset
-            coordinates.mapPosX,        // x
-            coordinates.mapPosY         // y
+        mapAndLayers.layers.layerDesign = tmpMap.createLayer(
+            'Design',
+            tileset,
+            x,
+            y
         );
 
-        mapAndLayers.layers.layerPerspective = mapAndLayers.map.createLayer(
-            'Perspective',  // layerID
-            tileset,        // tileset
-            coordinates.mapPosX,        // x
-            coordinates.mapPosY         // y
+        mapAndLayers.layers.layerPerspective = tmpMap.createLayer(
+            'Perspective',
+            tileset,
+            x,
+            y
         );
 
-        mapAndLayers.layers.layerGround.setDepth(0);
-        mapAndLayers.layers.layerProbability.setDepth(1);
-        mapAndLayers.layers.layerAction.setDepth(2);
-        mapAndLayers.layers.layerDesign.setDepth(3);
-        mapAndLayers.layers.layerPerspective.setDepth(20);
+        layers.layerGround.setDepth(0);
+        layers.layerProbability.setDepth(1);
+        layers.layerAction.setDepth(2);
+        layers.layerDesign.setDepth(3);
+        layers.layerPerspective.setDepth(20);
     }
 
 
