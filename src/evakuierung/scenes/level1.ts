@@ -5,6 +5,7 @@ import { AnimatedTile } from "../util/animatedTile";
 
 import { LevelFunctionsUpgraded } from "../util/LevelFunctionsUpgraded";
 import { RestartButton } from "../util/RestartButton";
+import { OurMovement } from "../util/OurMovement";
 
 
 type Layers = {
@@ -154,171 +155,37 @@ export class level1 extends Phaser.Scene {
             winCond: this.winCondition
         };
 
-        new RestartButton(this.mapPosition, this, this.ourGame);
-        
+        // RESTART BUTTON
+        const restartButton = this.add.image(this.mapPosition.mapPosX+610, this.mapPosition.mapPosY-27, 'restartButton');
+        RestartButton.init(restartButton, this.mapPosition, this, this.ourGame);
+
+        // MOVEMENT
         LevelFunctionsUpgraded.addReturnButton(this);
         LevelFunctionsUpgraded.createPlayerCountText(this.tiles.tilesList, this.add);
         
         this.input.keyboard.on('keydown-A', () =>{
-            if(LevelFunctionsUpgraded.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])) {
-                if(!this.ourGame.gameFinished) {
-
-                    this.ourGame.queenPos[0] -= 1;
-                    this.figures.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]);
-                    
-                    this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, this.figures, this.tiles, this.ourMap);
-                    LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);  
-                    this.ourGame.preMovePos[0] -= Figure.STEP_SIZE;    
-                    LevelFunctionsUpgraded.chainCharacters(this.figures, this.tiles);
-                    LevelFunctionsUpgraded.winConditionReachedCheck(this.ourGame, this.tiles, this, 2);      
-                }
-            }
+            if(LevelFunctionsUpgraded.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]))
+                if(!this.ourGame.gameFinished)
+                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'left', this.mapPosition);
         });
 
         this.input.keyboard.on('keydown-D', () =>{
-            if (LevelFunctionsUpgraded.queenValidMoveCheck(false, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
-                if(!this.ourGame.gameFinished) {
-
-                    this.ourGame.queenPos[0] += 1;
-                    this.figures.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]);
-
-                    this.moveInGeneratedDirection(false, Figure.STEP_SIZE, this.figures, this.tiles, this.ourMap);
-                    LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);
-                    this.ourGame.preMovePos[0] += Figure.STEP_SIZE;
-                    LevelFunctionsUpgraded.chainCharacters(this.figures, this.tiles);                
-                    LevelFunctionsUpgraded.winConditionReachedCheck(this.ourGame, this.tiles, this, 2); 
-                }
-            }
+            if (LevelFunctionsUpgraded.queenValidMoveCheck(false, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]))
+                if(!this.ourGame.gameFinished)
+                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'right', this.mapPosition);
         });
 
         this.input.keyboard.on('keydown-S', () =>{
-            if (LevelFunctionsUpgraded.queenValidMoveCheck(true, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
-                if(!this.ourGame.gameFinished) {
-
-                    this.ourGame.queenPos[1] += 1;
-                    this.figures.figureList[0] = this.movePlayer(true, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]);
-
-                    this.moveInGeneratedDirection(true, Figure.STEP_SIZE, this.figures, this.tiles, this.ourMap);
-                    LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);    
-
-                    this.ourGame.preMovePos[1] += Figure.STEP_SIZE;
-                    LevelFunctionsUpgraded.chainCharacters(this.figures, this.tiles);                
-                    LevelFunctionsUpgraded.winConditionReachedCheck(this.ourGame, this.tiles, this, 2);              
-
-                } 
-            }
+            if (LevelFunctionsUpgraded.queenValidMoveCheck(true, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]))
+                if(!this.ourGame.gameFinished)
+                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'down', this.mapPosition);
         });
 
         this.input.keyboard.on('keydown-W', () =>{
-            if (LevelFunctionsUpgraded.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
-                if(!this.ourGame.gameFinished) {
-
-                    this.ourGame.queenPos[1] -= 1;
-                    this.figures.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]);
-
-                    this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, this.figures, this.tiles, this.ourMap);
-                    LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);    
-                    
-                    this.ourGame.preMovePos[1] -= Figure.STEP_SIZE;
-                    LevelFunctionsUpgraded.chainCharacters(this.figures, this.tiles);                
-                    LevelFunctionsUpgraded.winConditionReachedCheck(this.ourGame, this.tiles, this, 2);
-                }
-            }
+            if (LevelFunctionsUpgraded.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]))
+                if(!this.ourGame.gameFinished)
+                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'up', this.mapPosition);
         });
-    }
-
-    /**
-     * Moves non-queen players in queen's or a random directions
-     * 
-     * @param xory true when moving on the y axis (up/down), false if moving on the x axis (left/right)
-     * @param pos always has the value +32 or -32, because the tiles are 32x32
-     */
-    public moveInGeneratedDirection(xory: boolean, pos: number, fig: Figures, tiles: Tiles, map: OurMap): void {
-        fig.figureList.forEach( (element) =>{
-            if(element.isQueen == false){
-                element = this.movePlayer(xory, pos, map, element);
-            }
-        });
-    }
-
-    /**
-     * Moves a figure in a given direction (including the queen!)
-     * 
-     * @param xory true when moving on the y axis (up/down), false if moving on the x axis (left/right)
-     * @param pos always has the value +32 or -32, because the tiles are 32x32
-     * @param layer the layer we're operating on
-     * @param map the map we're operating on
-     */
-
-    private movePlayer(xory: boolean, pos: number, mapAndLayers: OurMap, element: Figure): Figure {        
-        let tile:Phaser.Tilemaps.Tile = null;
-        let tileAction:Phaser.Tilemaps.Tile = null;
-        let tilePr:Phaser.Tilemaps.Tile = null;
-            
-
-        // Determine if which axis we're moving on
-        if (xory === false){
-            tile = mapAndLayers.layers.layerGround.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
-            tileAction = mapAndLayers.layers.layerAction.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
-            tilePr = this.ourMap.layers.layerProbability.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
-        } else {
-            tile = mapAndLayers.layers.layerGround.getTileAtWorldXY(element.image.x, element.image.y+pos, true); 
-            tileAction = mapAndLayers.layers.layerAction.getTileAtWorldXY(element.image.x, element.image.y+pos, true);
-            tilePr = this.ourMap.layers.layerProbability.getTileAtWorldXY(element.image.x, element.image.y+pos, true);
-        }
-        // eslint-disable-next-line no-empty
-        if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
-        else {   
-            this.tiles.tilesList[(element.x + element.y * mapAndLayers.layers.layerGround.layer.width)/32].playersOnTop--; 
-
-            if(element.isQueen && this.tiles.fieldColor != null){
-                this.tiles.fieldColor.destroy();
-            }
-            
-            if(xory === false){                 
-                element.updateCoordinates(pos, 0);   
-            } 
-            else {
-                element.updateCoordinates(0, pos);
-            }
-
-            this.tiles.tilesList[(element.x + element.y * mapAndLayers.layers.layerGround.layer.width)/32].playersOnTop++;
-
-
-            const depth = 1;
-            if(element.isQueen){
-                ///////// log Tile at queens position //////////
-                // console.log(this.tilesList.find((tile) => (tile.tileCoordinates[0] === element.x && tile.tileCoordinates[1] === element.y)).toString());
-                ////////////////////////////////////////////////
-                if(tilePr.index == 153){
-                    this.tiles.fieldColor = this.add.image(this.mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2,'green').setDepth(depth);
-                }
-                else if(tilePr.index == 165){
-                    this.tiles.fieldColor = this.add.image(this.mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2,'orange').setDepth(depth);
-                }
-                else if(tilePr.index == 164){
-                    this.tiles.fieldColor = this.add.image(this.mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2,'yellow').setDepth(depth);
-                }
-                else if(tilePr.index == 166){
-                    this.tiles.fieldColor = this.add.image(this.mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2, this.mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2,'red').setDepth(depth);
-                }
-            }
-
-            if(!this.ourGame.gameFinished
-                && TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID
-                && element.isQueen) {
-
-                this.ourGame.scoreText.setText('Your final score: ' + this.ourGame.score + "!");
-                this.ourGame.gameFinished = true;
-            }
-            
-            if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
-                this.ourMap.layers.layerAction.removeTileAt(tileAction.x, tileAction.y, false, false);
-                this.ourGame.score += 1;
-                this.ourGame.scoreText.setText('Coins collected: ' + this.ourGame.score);
-            }
-        }
-        return element;
     }
 
     update(): void {

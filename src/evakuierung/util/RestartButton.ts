@@ -21,23 +21,21 @@ type OurGame = {
 };
 
 export class RestartButton {
-    private restartButton: Phaser.GameObjects.Image;
 
-    constructor(mapPosition: MapPosition, scene: Phaser.Scene, ourGame: OurGame) {
-        this.restartButton = scene.add.image(mapPosition.mapPosX+610, mapPosition.mapPosY-27, 'restartButton');
-        this.restartButton.setInteractive();
-        this.restartButton.on('pointerup', () => {
+    public static init(restartButton: Phaser.GameObjects.Image, mapPosition: MapPosition, scene: Phaser.Scene, ourGame: OurGame): void {
+        restartButton.setInteractive();
+        restartButton.on('pointerup', () => {
             scene.input.keyboard.enabled = true;
             ourGame.gameFinished = false;
             ourGame.score = 0;
             scene.scene.restart();
         });
 
-        this.restartButton.on('pointerover', function() {
-            this.restartButton.setScale(0.85, 0.85)
+        restartButton.on('pointerover', function(){
+            restartButton.setScale(0.85, 0.85)
         });
-        this.restartButton.on('pointerout', function() {
-            this.restartButton.setScale(1, 1)
+        restartButton.on('pointerout', function(){
+            restartButton.setScale(1, 1)
         });
     }
 }
