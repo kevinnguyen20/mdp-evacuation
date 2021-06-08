@@ -243,7 +243,7 @@ export class LevelFunctions {
         );
 
         layerProbability = map.createLayer(   // there is no need to read this layer ever, only create it
-            'Probability',  // layerID
+            'Split',  // layerID
             tileset,        // tileset
             x,        // x
             y,        // y
