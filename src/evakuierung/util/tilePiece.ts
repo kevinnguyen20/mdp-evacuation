@@ -1,6 +1,5 @@
 // Class for each tile. There will be 13 * 7 tiles in total with each of them having
 import { Figure } from "./figure"
-import { Level1prob } from "./level1prob";
 import { TileParser } from "./tileParser";
 
 export class TilePiece {
