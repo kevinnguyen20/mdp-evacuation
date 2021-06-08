@@ -7,6 +7,42 @@ import { AnimatedTile } from "../util/animatedTile";
 import { level1prob } from "../util/level1prob";
 
 
+type Layers = {
+    map: Phaser.Tilemaps.Tilemap;
+    layerGround: Phaser.Tilemaps.TilemapLayer;
+    layerProbability: Phaser.Tilemaps.TilemapLayer;
+    layerAction: Phaser.Tilemaps.TilemapLayer;
+    layerDesign: Phaser.Tilemaps.TilemapLayer;
+    layerPerspective: Phaser.Tilemaps.TilemapLayer;
+};
+
+type Figures = {
+    figureInitCount: number;
+    figureList: Figure[];
+};
+
+type Tiles = {
+    tilesList: TilePiece[];
+    fieldColor: Phaser.GameObjects.Image;
+    goalTile: TilePiece;
+    animatedTiles: AnimatedTile[];
+};
+
+type MapPosition = {
+    mapPosX: number;
+    mapPosY: number;
+};
+
+type Game = {
+    score: number;
+    scoreText: Phaser.GameObjects.Text;
+    queenPos: number[];
+    gameFinished: boolean;
+    preMovePos: number[];
+    survivorScoreText: Phaser.GameObjects.Text;
+    winCond: number;
+}
+
 export class level1 extends Phaser.Scene {
     private score = 0;
     private scoreText: Phaser.GameObjects.Text = null;
