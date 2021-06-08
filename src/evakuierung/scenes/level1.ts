@@ -53,6 +53,9 @@ export class level1 extends Phaser.Scene {
     private figures: Figures;
     private ourMap: OurMap;
 
+    private score = 0;
+    private winCondition = 6;
+
     constructor() {
         super({
             key: "level1"
@@ -96,38 +99,18 @@ export class level1 extends Phaser.Scene {
             mapPosY: this.sys.game.config.height as number * 3.5/20
         };
         
-        this.ourMap.map = this.make.tilemap({
+        const tmpMap = this.make.tilemap({
             key: 'map',
             tileWidth: 32,
             tileHeight: 32
         });
-        const tileset = this.ourMap.map.addTilesetImage('scifi', 'tileset-scifi');
-        LevelFunctionsUpgraded.setupLayer(tileset, this.mapPosition, this.ourMap);
-
-        const startingPosition: [number, number] = LevelFunctionsUpgraded.getStartPostition(this.ourMap.layers.layerGround);
-        this.figures.figureList.forEach((figure) => {
-            this.tiles.tilesList[figure.x/32 + figure.y/32 * this.ourMap.layers.layerAction.layer.width].playersOnTop++;
-            figure.image = this.add.image(this.mapPosition.mapPosX + figure.x + Figure.STEP_SIZE / 2, 
-                this.mapPosition.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(4);
-        });
-        this.ourGame = {
-            score: 0,
-            scoreText: this.add.text(
-                this.mapPosition.mapPosX + 70, 
-                this.mapPosition.mapPosY - 40,  
-                'Coins collected: ' + this.ourGame.score
-            ),
-            queenPos: [startingPosition[0]/32, startingPosition[1]/32],
-            gameFinished: false,
-            preMovePos: [400,48],
-            survivorScoreText: this.add.text(
-                this.mapPosition.mapPosX + 70, 
-                this.mapPosition.mapPosY - 20,  
-                '' + this.ourGame.winCond + ' aliens (including queen) must reach the goal! ' 
-            ),
-            winCond: 6
+        const tileset = tmpMap.addTilesetImage('scifi', 'tileset-scifi');
+        const tmpLayers = LevelFunctionsUpgraded.setupLayer(tileset, this.mapPosition, tmpMap);
+        this.ourMap = {
+            map: tmpMap,
+            layers: tmpLayers
         };
-        
+
         const t1 = TileParser.tileTupleAPI(this.ourMap.layers.layerGround, this.ourMap.layers.layerAction);
         const t2 = LevelFunctionsUpgraded.getGoalTile(t1);
         this.tiles = {
@@ -137,9 +120,33 @@ export class level1 extends Phaser.Scene {
             animatedTiles: []
         };
 
+        const startingPosition: [number, number] = LevelFunctionsUpgraded.getStartPostition(this.ourMap.layers.layerGround);
         this.figures = {
             figureInitCount: 14,
-            figureList: LevelFunctionsUpgraded.initFigureList(this.figures.figureInitCount, startingPosition)
+            figureList: LevelFunctionsUpgraded.initFigureList(14, startingPosition)
+        };
+        this.figures.figureList.forEach((figure) => {
+            this.tiles.tilesList[figure.x/32 + figure.y/32 * this.ourMap.layers.layerAction.layer.width].playersOnTop++;
+            figure.image = this.add.image(this.mapPosition.mapPosX + figure.x + Figure.STEP_SIZE / 2, 
+                this.mapPosition.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(4);
+        });
+
+        this.ourGame = {
+            score: this.score,
+            scoreText: this.add.text(
+                this.mapPosition.mapPosX + 70, 
+                this.mapPosition.mapPosY - 40,  
+                'Coins collected: ' + this.score
+            ),
+            queenPos: [startingPosition[0]/32, startingPosition[1]/32],
+            gameFinished: false,
+            preMovePos: [400,48],
+            survivorScoreText: this.add.text(
+                this.mapPosition.mapPosX + 70, 
+                this.mapPosition.mapPosY - 20,  
+                '' + this.winCondition + ' aliens (including queen) must reach the goal! ' 
+            ),
+            winCond: this.winCondition
         };
 
         // -------- animation -------------

@@ -108,7 +108,7 @@ export class LevelFunctionsUpgraded {
         const condition = ourGame.winCond;
         const survivorScoreText = ourGame.survivorScoreText;
         const survivorScore = tiles.goalTile.playersOnTop;
-        
+
         if (gameFinished) {
             if (survivorScore >= condition) {
                 survivorScoreText.setText("Congrats level passed with " + survivorScore + " aliens!")
@@ -246,55 +246,62 @@ export class LevelFunctionsUpgraded {
      * @param layerPerspective 
      * @returns returns layers in the input order
      */
-    public static setupLayer(tileset: Tilemaps.Tileset, coordinates: MapPosition, ourMap: OurMap): void{
-        const mapAndLayers = ourMap;
-        const tmpMap = mapAndLayers.map;
-        const layers = mapAndLayers.layers;
+    public static setupLayer(tileset: Tilemaps.Tileset, coordinates: MapPosition, tmpMap: Phaser.Tilemaps.Tilemap): Layers{
         const x = coordinates.mapPosX;
         const y = coordinates.mapPosY;
         
-        mapAndLayers.layers.layerGround = tmpMap.createLayer(
+        const tmplayerGround = tmpMap.createLayer(
             'Ground',
             tileset,
             x,
             y
         );
 
-        mapAndLayers.layers.layerProbability = tmpMap.createLayer(
-            'Probability',
+        const tmplayerProbability = tmpMap.createLayer(
+            'Split',
             tileset,
             x,
             y
 
         );
-        mapAndLayers.layers.layerProbability.setVisible(false);    // set true if you want to see the probabilities
+        tmplayerProbability.setVisible(false);    // set true if you want to see the probabilities
 
-        mapAndLayers.layers.layerAction = tmpMap.createLayer(
+        const tmplayerAction = tmpMap.createLayer(
             'Action',
             tileset,
             x,
             y
         );
 
-        mapAndLayers.layers.layerDesign = tmpMap.createLayer(
+        const tmplayerDesign = tmpMap.createLayer(
             'Design',
             tileset,
             x,
             y
         );
 
-        mapAndLayers.layers.layerPerspective = tmpMap.createLayer(
+        const tmplayerPerspective = tmpMap.createLayer(
             'Perspective',
             tileset,
             x,
             y
         );
 
-        layers.layerGround.setDepth(0);
-        layers.layerProbability.setDepth(1);
-        layers.layerAction.setDepth(2);
-        layers.layerDesign.setDepth(3);
-        layers.layerPerspective.setDepth(20);
+        tmplayerGround.setDepth(0);
+        tmplayerProbability.setDepth(1);
+        tmplayerAction.setDepth(2);
+        tmplayerDesign.setDepth(3);
+        tmplayerPerspective.setDepth(20);
+
+        const layers: Layers = {
+            layerGround: tmplayerGround,
+            layerProbability: tmplayerProbability,
+            layerDesign: tmplayerDesign,
+            layerAction: tmplayerAction,
+            layerPerspective: tmplayerPerspective
+        }
+
+        return layers;
     }
 
 
