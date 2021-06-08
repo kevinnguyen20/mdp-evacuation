@@ -192,18 +192,17 @@ export class level1 extends Phaser.Scene {
         });
 
         this.input.keyboard.on('keydown-S', () =>{
-            if (LevelFunctionsUpgraded.queenValidMoveCheck(true, Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
-                if(!this.gameFinished) {
+            if (LevelFunctionsUpgraded.queenValidMoveCheck(true, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
+                if(!this.ourGame.gameFinished) {
 
-                    this.queenPos[1] += 1;
-                    this.figureList[0] = this.movePlayer(true, Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
+                    this.ourGame.queenPos[1] += 1;
+                    this.figures.figureList[0] = this.movePlayer(true, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]);
 
-                    this.moveInGeneratedDirection(true, Figure.STEP_SIZE, this.figureList, this.tilesList, 
-                        this.layerGround, this.layerAction, this.map);
-                    LevelFunctionsUpgraded.updatePlayerCountText(this.tilesList);    
+                    this.moveInGeneratedDirection(true, Figure.STEP_SIZE, this.figures, this.tiles, this.ourMap);
+                    LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);    
 
-                    this.preMovePos[1] += Figure.STEP_SIZE;
-                    LevelFunctionsUpgraded.chainCharacters(this.figureList, this.goalTile);                
+                    this.ourGame.preMovePos[1] += Figure.STEP_SIZE;
+                    LevelFunctionsUpgraded.chainCharacters(this.figures, this.tiles);                
                     LevelFunctionsUpgraded.winConditionReachedCheck(this.ourGame, this.tiles, this, 2);              
 
                 } 
@@ -211,18 +210,17 @@ export class level1 extends Phaser.Scene {
         });
 
         this.input.keyboard.on('keydown-W', () =>{
-            if (LevelFunctionsUpgraded.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.layerGround, this.figureList[0])){
-                if(!this.gameFinished) {
+            if (LevelFunctionsUpgraded.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
+                if(!this.ourGame.gameFinished) {
 
-                    this.queenPos[1] -= 1;
-                    this.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, this.layerGround, this.layerAction, this.map, this.figureList[0]);
+                    this.ourGame.queenPos[1] -= 1;
+                    this.figures.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]);
 
-                    this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, this.figureList, this.tilesList, 
-                        this.layerGround, this.layerAction, this.map);
-                    LevelFunctionsUpgraded.updatePlayerCountText(this.tilesList);    
+                    this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, this.figures, this.tiles, this.ourMap);
+                    LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);    
                     
-                    this.preMovePos[1] -= Figure.STEP_SIZE;
-                    LevelFunctionsUpgraded.chainCharacters(this.figureList, this.goalTile);                
+                    this.ourGame.preMovePos[1] -= Figure.STEP_SIZE;
+                    LevelFunctionsUpgraded.chainCharacters(this.figures, this.tiles);                
                     LevelFunctionsUpgraded.winConditionReachedCheck(this.ourGame, this.tiles, this, 2);
                 }
             }
