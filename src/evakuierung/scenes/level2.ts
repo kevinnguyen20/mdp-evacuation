@@ -62,6 +62,8 @@ export class level2 extends Phaser.Scene {
             tileWidth: 32,
             tileHeight: 32
         });
+
+        // tileset IS NULL!!! AND I DON'T KNOW WHY
         const tileset = tmpMap.addTilesetImage('scifi', 'tileset-scifi');
         this.ourMap = {
             map: tmpMap,

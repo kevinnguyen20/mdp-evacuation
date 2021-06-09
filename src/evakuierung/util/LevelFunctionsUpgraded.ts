@@ -275,15 +275,23 @@ export class LevelFunctionsUpgraded {
         tmplayerDesign.setDepth(3);
         tmplayerPerspective.setDepth(20);
 
-        const layers: Layers = {
+        // eslint-disable-next-line prefer-const
+        /*
+        let layers: Layers = {
             layerGround: tmplayerGround,
             layerProbability: tmplayerProbability,
             layerDesign: tmplayerDesign,
             layerAction: tmplayerAction,
             layerPerspective: tmplayerPerspective
-        }
+        }*/
 
-        return layers;
+        return {
+            layerGround: tmplayerGround,
+            layerProbability: tmplayerProbability,
+            layerDesign: tmplayerDesign,
+            layerAction: tmplayerAction,
+            layerPerspective: tmplayerPerspective
+        };
     }
 
 
