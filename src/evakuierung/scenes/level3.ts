@@ -62,7 +62,7 @@ export class level3 extends Phaser.Scene {
         };
         
         const tmpMap = this.make.tilemap({
-            key: 'map',
+            key: 'map3',
             tileWidth: 32,
             tileHeight: 32
         });
