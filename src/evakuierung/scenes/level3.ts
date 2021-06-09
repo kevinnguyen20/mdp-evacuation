@@ -7,7 +7,6 @@ import { Figures, LevelFunctionsUpgraded, MapPosition, OurGame, OurMap, Tiles } 
 import { RestartButton } from "../util/RestartButton";
 import { OurMovement } from "../util/OurMovement";
 
-
 export class level3 extends Phaser.Scene {
     private ourGame: OurGame;
     private mapPosition: MapPosition;
