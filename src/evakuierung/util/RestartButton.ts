@@ -3,22 +3,7 @@ import { TilePiece } from "../util/tilePiece";
 import { Figure } from "../util/figure"
 import { AnimatedTile } from "../util/animatedTile";
 
-import { LevelFunctionsUpgraded } from "../util/LevelFunctionsUpgraded";
-
-type MapPosition = {
-    mapPosX: number;
-    mapPosY: number;
-};
-
-type OurGame = {
-    score: number;
-    scoreText: Phaser.GameObjects.Text;
-    queenPos: number[];
-    gameFinished: boolean;
-    preMovePos: number[];
-    survivorScoreText: Phaser.GameObjects.Text;
-    winCond: number;
-};
+import { LevelFunctionsUpgraded, MapPosition, OurGame } from "../util/LevelFunctionsUpgraded";
 
 export class RestartButton {
 

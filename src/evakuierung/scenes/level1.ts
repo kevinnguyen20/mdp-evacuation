@@ -3,50 +3,10 @@ import { TilePiece } from "../util/tilePiece";
 import { Figure } from "../util/figure"
 import { AnimatedTile } from "../util/animatedTile";
 
-import { LevelFunctionsUpgraded } from "../util/LevelFunctionsUpgraded";
+import { Figures, LevelFunctionsUpgraded, MapPosition, OurGame, OurMap, Tiles } from "../util/LevelFunctionsUpgraded";
 import { RestartButton } from "../util/RestartButton";
 import { OurMovement } from "../util/OurMovement";
 
-
-type Layers = {
-    layerGround: Phaser.Tilemaps.TilemapLayer;
-    layerProbability: Phaser.Tilemaps.TilemapLayer;
-    layerAction: Phaser.Tilemaps.TilemapLayer;
-    layerDesign: Phaser.Tilemaps.TilemapLayer;
-    layerPerspective: Phaser.Tilemaps.TilemapLayer;
-};
-
-type OurMap = {
-    map: Phaser.Tilemaps.Tilemap;
-    layers: Layers;
-};
-
-type Figures = {
-    figureInitCount: number;
-    figureList: Figure[];
-};
-
-type Tiles = {
-    tilesList: TilePiece[];
-    fieldColor: Phaser.GameObjects.Image;
-    goalTile: TilePiece;
-    animatedTiles: AnimatedTile[];
-};
-
-type MapPosition = {
-    mapPosX: number;
-    mapPosY: number;
-};
-
-type OurGame = {
-    score: number;
-    scoreText: Phaser.GameObjects.Text;
-    queenPos: number[];
-    gameFinished: boolean;
-    preMovePos: number[];
-    survivorScoreText: Phaser.GameObjects.Text;
-    winCond: number;
-};
 
 export class level1 extends Phaser.Scene {
     private ourGame: OurGame;
@@ -108,6 +68,7 @@ export class level1 extends Phaser.Scene {
             tileHeight: 32
         });
         const tileset = tmpMap.addTilesetImage('scifi', 'tileset-scifi');
+        console.log(tileset);
         this.ourMap = {
             map: tmpMap,
             layers: LevelFunctionsUpgraded.setupLayer(tileset, this.mapPosition, tmpMap)
@@ -166,25 +127,25 @@ export class level1 extends Phaser.Scene {
         this.input.keyboard.on('keydown-A', () =>{
             if(LevelFunctionsUpgraded.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]))
                 if(!this.ourGame.gameFinished)
-                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'left', this.mapPosition);
+                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'left', this.mapPosition, 2);
         });
 
         this.input.keyboard.on('keydown-D', () =>{
             if (LevelFunctionsUpgraded.queenValidMoveCheck(false, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]))
                 if(!this.ourGame.gameFinished)
-                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'right', this.mapPosition);
+                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'right', this.mapPosition, 2);
         });
 
         this.input.keyboard.on('keydown-S', () =>{
             if (LevelFunctionsUpgraded.queenValidMoveCheck(true, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]))
                 if(!this.ourGame.gameFinished)
-                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'down', this.mapPosition);
+                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'down', this.mapPosition, 2);
         });
 
         this.input.keyboard.on('keydown-W', () =>{
             if (LevelFunctionsUpgraded.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]))
                 if(!this.ourGame.gameFinished)
-                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'up', this.mapPosition);
+                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'up', this.mapPosition, 2);
         });
     }
 
