@@ -66,8 +66,8 @@ export class level3 extends Phaser.Scene {
             tileWidth: 32,
             tileHeight: 32
         });
+        
         const tileset = tmpMap.addTilesetImage('scifi', 'tileset-scifi');
-        console.log(tileset);
         this.ourMap = {
             map: tmpMap,
             layers: LevelFunctionsUpgraded.setupLayer(tileset, this.mapPosition, tmpMap)

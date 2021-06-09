@@ -1,7 +1,6 @@
 import { TileParser } from "../util/tileParser";
 import { TilePiece } from "../util/tilePiece";
 import { Figure } from "../util/figure"
-import { LevelFunctions } from "../util/levelFunctions";
 import { AnimatedTile } from "../util/animatedTile";
 
 import { Figures, LevelFunctionsUpgraded, MapPosition, OurGame, OurMap, Tiles } from "../util/LevelFunctionsUpgraded";
@@ -48,9 +47,14 @@ export class level2 extends Phaser.Scene {
     }
 
     init(): void {
+        this.data.set('playerScore', 0);
+        this.data.set('playerWinningScore', 8);
+    }
+
+    create(): void {
         this.input.keyboard.enabled = true;
         this.cameras.main.setZoom(1.2,1.2);
-
+        
         // MAP
         this.mapPosition = {
             mapPosX: this.sys.game.config.width as number * 1/50,
@@ -63,7 +67,6 @@ export class level2 extends Phaser.Scene {
             tileHeight: 32
         });
 
-        // tileset IS NULL!!! AND I DON'T KNOW WHY
         const tileset = tmpMap.addTilesetImage('scifi', 'tileset-scifi');
         this.ourMap = {
             map: tmpMap,
@@ -116,9 +119,6 @@ export class level2 extends Phaser.Scene {
         const restartButton = this.add.image(this.mapPosition.mapPosX+610, this.mapPosition.mapPosY-27, 'restartButton');
         RestartButton.init(restartButton, this.mapPosition, this, this.ourGame);
         
-        LevelFunctions.addReturnButton(this); // Need to be integrate into upgraded version
-        LevelFunctionsUpgraded.createPlayerCountText(this.tiles.tilesList, this.add);
-
         // MOVEMENT
         LevelFunctionsUpgraded.addReturnButton(this);
         LevelFunctionsUpgraded.createPlayerCountText(this.tiles.tilesList, this.add);
