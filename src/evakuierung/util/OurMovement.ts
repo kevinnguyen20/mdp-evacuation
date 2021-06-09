@@ -3,48 +3,8 @@ import { TilePiece } from "../util/tilePiece";
 import { Figure } from "../util/figure"
 import { AnimatedTile } from "../util/animatedTile";
 
-import { LevelFunctionsUpgraded } from "../util/LevelFunctionsUpgraded";
+import { Figures, LevelFunctionsUpgraded, MapPosition, OurGame, OurMap, Tiles } from "../util/LevelFunctionsUpgraded";
 import { RestartButton } from "../util/RestartButton";
-
-type Layers = {
-    layerGround: Phaser.Tilemaps.TilemapLayer;
-    layerProbability: Phaser.Tilemaps.TilemapLayer;
-    layerAction: Phaser.Tilemaps.TilemapLayer;
-    layerDesign: Phaser.Tilemaps.TilemapLayer;
-    layerPerspective: Phaser.Tilemaps.TilemapLayer;
-};
-
-type OurMap = {
-    map: Phaser.Tilemaps.Tilemap;
-    layers: Layers;
-};
-
-type Figures = {
-    figureInitCount: number;
-    figureList: Figure[];
-};
-
-type Tiles = {
-    tilesList: TilePiece[];
-    fieldColor: Phaser.GameObjects.Image;
-    goalTile: TilePiece;
-    animatedTiles: AnimatedTile[];
-};
-
-type MapPosition = {
-    mapPosX: number;
-    mapPosY: number;
-};
-
-type OurGame = {
-    score: number;
-    scoreText: Phaser.GameObjects.Text;
-    queenPos: number[];
-    gameFinished: boolean;
-    preMovePos: number[];
-    survivorScoreText: Phaser.GameObjects.Text;
-    winCond: number;
-};
 
 export class OurMovement {
     public static doMove(ourGame: OurGame, 
@@ -52,7 +12,8 @@ export class OurMovement {
         tiles: Tiles, ourMap: OurMap, 
         scene: Phaser.Scene,
         direction: string,
-        mapPosition: MapPosition): void {
+        mapPosition: MapPosition,
+        nextLevel: number): void {
 
         if(direction === 'left') {
             ourGame.queenPos[0] -= 1;
@@ -62,7 +23,7 @@ export class OurMovement {
             LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);  
             ourGame.preMovePos[0] -= Figure.STEP_SIZE;    
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);
-            LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, 2);
+            LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel);
         }
         else if(direction === 'right') {
             ourGame.queenPos[0] += 1;
@@ -72,7 +33,7 @@ export class OurMovement {
             LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);
             ourGame.preMovePos[0] += Figure.STEP_SIZE;
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);                
-            LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, 2);
+            LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel);
         }
         else if(direction === 'down') {
             ourGame.queenPos[1] += 1;
@@ -83,7 +44,7 @@ export class OurMovement {
 
             ourGame.preMovePos[1] += Figure.STEP_SIZE;
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);                
-            LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, 2);
+            LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel);
         }
         else if(direction === 'up') {
             ourGame.queenPos[1] -= 1;
@@ -94,7 +55,7 @@ export class OurMovement {
             
             ourGame.preMovePos[1] -= Figure.STEP_SIZE;
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);                
-            LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, 2);
+            LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel);
         }
     }
 

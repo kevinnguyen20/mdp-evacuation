@@ -5,7 +5,7 @@ import { TileParser } from "./tileParser";
 import { TilePiece } from "./tilePiece";
 import { AnimatedTile } from "../util/animatedTile";
 
-type Layers = {
+export type Layers = {
     layerGround: Phaser.Tilemaps.TilemapLayer;
     layerProbability: Phaser.Tilemaps.TilemapLayer;
     layerAction: Phaser.Tilemaps.TilemapLayer;
@@ -13,29 +13,29 @@ type Layers = {
     layerPerspective: Phaser.Tilemaps.TilemapLayer;
 };
 
-type OurMap = {
+export type OurMap = {
     map: Phaser.Tilemaps.Tilemap;
     layers: Layers;
 };
 
-type MapPosition = {
+export type MapPosition = {
     mapPosX: number;
     mapPosY: number;
 };
 
-type Figures = {
+export type Figures = {
     figureInitCount: number;
     figureList: Figure[];
 };
 
-type Tiles = {
+export type Tiles = {
     tilesList: TilePiece[];
     fieldColor: Phaser.GameObjects.Image;
     goalTile: TilePiece;
     animatedTiles: AnimatedTile[];
 };
 
-type OurGame = {
+export type OurGame = {
     score: number;
     scoreText: Phaser.GameObjects.Text;
     queenPos: number[];
@@ -52,7 +52,6 @@ export class LevelFunctionsUpgraded {
      * @param spawnPoint level coordinates of the spawnPoint, spawnPoint[0] = x, spawnPoint[1] = y
      * @returns list which contains each playerFigure
      */
-
     public static initFigureList(figure: number, spawnPoint: number[]): Figure[] {
         const playerList: Figure[] = [];
 
@@ -69,7 +68,6 @@ export class LevelFunctionsUpgraded {
      * @param layerGround inout the Ground-Layer
      * @returns Tupel [X, Y] and null if not Start was found
      */
-
     public static getStartPostition(layerGround: Phaser.Tilemaps.TilemapLayer): [number, number] {
         let X = 0;
         let Y = 0;
@@ -89,9 +87,8 @@ export class LevelFunctionsUpgraded {
     public static getGoalTile(tileList: TilePiece[]): TilePiece {
         let goal = null;
         tileList.forEach((tile) => {
-            if (tile.tileType[2] === true) {
+            if (tile.tileType[2] === true)
                 goal = tile;
-            }
         })
         return goal;
     }
@@ -180,7 +177,6 @@ export class LevelFunctionsUpgraded {
      * @param layer the layer we're operating on
      * @returns valid/invalid move
      */
-
     public static queenValidMoveCheck(xory: boolean, pos: number, map: OurMap, queen: Figure): boolean {
         let tile: Phaser.Tilemaps.Tile = null;
         const layer = map.layers.layerGround;
@@ -232,20 +228,6 @@ export class LevelFunctionsUpgraded {
         });
     }
 
-
-    /**
-     * load the Layers according to the structure in Tiled
-     * @param tileset 
-     * @param x layer Postition X
-     * @param y layer Position Y
-     * @param map the map we create the layers on
-     * @param layerGround 
-     * @param layerProbability 
-     * @param layerAction 
-     * @param layerDesign 
-     * @param layerPerspective 
-     * @returns returns layers in the input order
-     */
     public static setupLayer(tileset: Tilemaps.Tileset, coordinates: MapPosition, tmpMap: Phaser.Tilemaps.Tilemap): Layers{
         const x = coordinates.mapPosX;
         const y = coordinates.mapPosY;
