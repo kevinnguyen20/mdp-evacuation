@@ -105,7 +105,7 @@ export class OurMovement {
         if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
         else {   
             tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playersOnTopCounter--;
-            let index: number = tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.indexOf(element);
+            const index: number = tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.indexOf(element);
             tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.splice(index,1);
 
             if(element.isQueen && tiles.queenFieldIndicator != null){
@@ -157,21 +157,21 @@ export class OurMovement {
 
         tiles.tilesList.forEach(tile => {
             if(tile.splitField){
-                let playersToMove = Math.floor(tile.splitPercentage * tile.playersOnTopCounter);
+                const playersToMove = Math.floor(tile.splitPercentage * tile.playersOnTopCounter);
 
                 for (let i = 0; i < playersToMove; i++) {
-                   if(tile.splitDirection == 0){ //up
+                    if(tile.splitDirection == 0){ //up
                         this.movePlayer(true, -Figure.STEP_SIZE, ourMap, tile.playerOnTopList.pop(), tiles, scene, ourGame, mapPosition);
-                   }
-                   else if(tile.splitDirection == 1){ //right
+                    }
+                    else if(tile.splitDirection == 1){ //right
                         this.movePlayer(false, Figure.STEP_SIZE, ourMap, tile.playerOnTopList.pop(), tiles, scene, ourGame, mapPosition);
-                   }
-                   else if(tile.splitDirection == 2){ //down
+                    }
+                    else if(tile.splitDirection == 2){ //down
                         this.movePlayer(true, Figure.STEP_SIZE, ourMap, tile.playerOnTopList.pop(), tiles, scene, ourGame, mapPosition);
-                   }
-                   else{ //left
+                    }
+                    else{ //left
                         this.movePlayer(false, -Figure.STEP_SIZE, ourMap, tile.playerOnTopList.pop(), tiles, scene, ourGame, mapPosition);
-                   }
+                    }
                 }
             }
         });
