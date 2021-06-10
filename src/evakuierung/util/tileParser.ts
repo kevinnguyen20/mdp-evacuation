@@ -14,6 +14,8 @@ export class TileParser {
     public static readonly PORTAL_ORANGE_ID = 14;
     // ----- Probability -----
     public static readonly PROBABILITY: number[] = [0,15,30,55] //TODO Repair the array
+    public static readonly DIRECTION: number[] = [0,1,2,3] 
+
 
     
     
@@ -57,13 +59,20 @@ export class TileParser {
         if(tileID === 166) return TileParser.PROBABILITY[3]; //red
         return 0;
     }
+    public static tileIDToAPIID_scifiLVL_Direction(tileID:number): number {
+        if(tileID === 151) return TileParser.DIRECTION[0]; //hellblau
+        if(tileID === 153) return TileParser.DIRECTION[1]; //gruen
+        if(tileID === 150) return TileParser.DIRECTION[2]; //weiS
+        if(tileID === 166) return TileParser.DIRECTION[3]; //rot
+    }
+
 
     /**
      * @param layerGround groundLayer des Levels, um herauszufinden welcher Tile eine Wand, Ziel und Start ist 
      * @returns tileTuple, access the tiles in the tileTuple with coordinates, e.g. tileTuple[x+y*tilemapwidth], 
      *          wobei das erste Tile oben links ist, x=0 und y=0 ist oben links
      */
-    public static tileTupleAPI (layerGround: Phaser.Tilemaps.TilemapLayer, layerAction: Phaser.Tilemaps.TilemapLayer) : TilePiece[] {
+    public static tileTupleAPI (layerGround: Phaser.Tilemaps.TilemapLayer, layerAction: Phaser.Tilemaps.TilemapLayer, layerSplit: Phaser.Tilemaps.TilemapLayer, layerDirection: Phaser.Tilemaps.TilemapLayer) : TilePiece[] {
         const tileTuple: TilePiece[] = [];
        
         layerGround.forEachTile((tile) => {
@@ -71,21 +80,18 @@ export class TileParser {
             if(index === this.WALL_ID)
                 tileTuple.push(new TilePiece(
                     [tile.pixelX, tile.pixelY], 
-                    [0, 0, 0, 0, 100], // up, right, down, left, followQueen
                     [true, false, false]
                 ));
 
             else if (index === this.STOP_ID)
                 tileTuple.push(new TilePiece(
                     [tile.pixelX, tile.pixelY], 
-                    [0, 0, 0, 0, 100], // up, right, down, left, followQueen
                     [false, false, true]
                 ));
 
             else {
                 tileTuple.push(new TilePiece( //its a normal field
                     [tile.pixelX, tile.pixelY], 
-                    [0, 0, 0, 0, 100], // up, right, down, left, followQueen
                     [false, false, false]
                 ));
             }
@@ -97,6 +103,20 @@ export class TileParser {
                 x.tileType[1] = true;
             }
         });
+        layerSplit.forEachTile((tile) => {
+            const index: number = tile.index;
+            if (index === 164){
+                tileTuple[tile.x+(tile.y*layerAction.layer.width)].splitField = true;
+                tileTuple[tile.x+(tile.y*layerAction.layer.width)].splitPercentage = .5;
+            }
+        })
+        layerDirection.forEachTile((tile)=> {
+            const index: number = tile.index;
+            tileTuple[tile.x+(tile.y*layerAction.layer.width)].splitDirection = this.tileIDToAPIID_scifiLVL_Direction(index);
+        })
+        
+
+
 
         return tileTuple;      
     }
