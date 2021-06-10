@@ -41,7 +41,6 @@ export type OurGame = {
     scoreText: Phaser.GameObjects.Text;
     queenPos: number[];
     gameFinished: boolean;
-    preMovePos: number[];
     survivorScoreText: Phaser.GameObjects.Text;
     winCond: number;
 };

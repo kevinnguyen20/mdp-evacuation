@@ -108,7 +108,6 @@ export class level1 extends Phaser.Scene {
             ),
             queenPos: [startingPosition[0]/32, startingPosition[1]/32],
             gameFinished: false,
-            preMovePos: [400,48],
             survivorScoreText: this.add.text(
                 this.mapPosition.mapPosX + 70, 
                 this.mapPosition.mapPosY - 20,  
