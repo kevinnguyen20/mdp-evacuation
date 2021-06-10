@@ -1,7 +1,7 @@
 import { Figure } from "./figure";
 import { TileParser } from "./tileParser";
 import { TilePiece } from "./tilePiece";
-import { LevelFunctions } from "./levelFunctions";
+//import { LevelFunctions } from "./levelFunctions";
 
 type Coordinates = {
     x: number;
@@ -186,7 +186,7 @@ export class DebugClass {
             }
             else
                 console.error("tilePiece.tileCoordinates has wrong size");
-
+            /*
             if(tilePiece.directionProbabilities.length === 4) {
                 if(this.checkNumber(tilePiece.directionProbabilities[0]))
                     dTilePiece.probabilites.up = tilePiece.directionProbabilities[0];
@@ -199,10 +199,10 @@ export class DebugClass {
 
                 if(this.checkNumber(tilePiece.directionProbabilities[3]))
                     dTilePiece.probabilites.left = tilePiece.directionProbabilities[3];
-            }
+            } 
             else
                 console.error("tilePiece.directionProbabilities has wrong size");
-
+            */
             if(tilePiece.tileType.length === 3) {
                 if(this.checkBoolean(tilePiece.tileType[0]))
                     dTilePiece.tileType.wall = tilePiece.tileType[0];
@@ -230,5 +230,6 @@ export class DebugClass {
             console.log(`Goal:                  ${dTilePiece.tileType.goal}`);
             console.log(`Objekte auf dem Feld:  ${dTilePiece.playersOnTop}`);
         }
+        
     }
 }
