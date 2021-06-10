@@ -13,18 +13,14 @@ export class TilePiece{
 
     // this is where the players on top of a tile are stored, 
     // it should be a list of objects, when the piglet class is created
-    public playersOnTop = 0;
+    public playersOnTopCounter = 0;
+    public playerOnTopList: Figure[] = [];
 
     constructor(coordinates: number[], tileType: boolean[]) {
         this.tileCoordinates = coordinates;
         this.tileType = tileType;
         this.splitField = false;
         this.splitPercentage = 0;
-    }
-
-    // can be accessed with dot notation
-    public get getPlayersOnTop(): number {
-        return this.playersOnTop;
     }
 
     /*(public toString = (): string => {

@@ -20,8 +20,9 @@ export class OurMovement {
             figures.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, ourMap, figures.figureList[0], tiles, scene, ourGame, mapPosition);
             
             this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
-            LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);  
-            ourGame.preMovePos[0] -= Figure.STEP_SIZE;    
+            this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition); // freshly added
+            LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);
+  
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);
             LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel);
         }
@@ -30,8 +31,9 @@ export class OurMovement {
             figures.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, ourMap, figures.figureList[0], tiles, scene, ourGame, mapPosition);
 
             this.moveInGeneratedDirection(false, Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
+            this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition); // freshly added
             LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);
-            ourGame.preMovePos[0] += Figure.STEP_SIZE;
+
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);                
             LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel);
         }
@@ -40,9 +42,9 @@ export class OurMovement {
             figures.figureList[0] = this.movePlayer(true, Figure.STEP_SIZE, ourMap, figures.figureList[0], tiles, scene, ourGame, mapPosition);
 
             this.moveInGeneratedDirection(true, Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
+            this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition); // freshly added
             LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);    
 
-            ourGame.preMovePos[1] += Figure.STEP_SIZE;
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);                
             LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel);
         }
@@ -51,9 +53,9 @@ export class OurMovement {
             figures.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, ourMap, figures.figureList[0], tiles, scene, ourGame, mapPosition);
 
             this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
+            this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition); // freshly added
             LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);    
             
-            ourGame.preMovePos[1] -= Figure.STEP_SIZE;
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);                
             LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel);
         }
@@ -102,10 +104,12 @@ export class OurMovement {
         // eslint-disable-next-line no-empty
         if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
         else {   
-            tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playersOnTop--; 
+            tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playersOnTopCounter--;
+            const index: number = tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.indexOf(element);
+            tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.splice(index,1);
 
-            if(element.isQueen && tiles.fieldColor != null){
-                tiles.fieldColor.destroy();
+            if(element.isQueen && tiles.queenFieldIndicator != null){
+                tiles.queenFieldIndicator.destroy();
             }
             
             if(xory === false){                 
@@ -115,7 +119,8 @@ export class OurMovement {
                 element.updateCoordinates(0, pos);
             }
 
-            tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playersOnTop++;
+            tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playersOnTopCounter++;
+            tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.push(element);
 
 
             const depth = 1;
@@ -123,18 +128,7 @@ export class OurMovement {
                 ///////// log Tile at queens position //////////
                 // console.log(this.tilesList.find((tile) => (tile.tileCoordinates[0] === element.x && tile.tileCoordinates[1] === element.y)).toString());
                 ////////////////////////////////////////////////
-                if(tilePr.index == 153){
-                    tiles.fieldColor = scene.add.image(mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2, mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2,'green').setDepth(depth);
-                }
-                else if(tilePr.index == 165){
-                    tiles.fieldColor = scene.add.image(mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2, mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2,'orange').setDepth(depth);
-                }
-                else if(tilePr.index == 164){
-                    tiles.fieldColor = scene.add.image(mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2, mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2,'yellow').setDepth(depth);
-                }
-                else if(tilePr.index == 166){
-                    tiles.fieldColor = scene.add.image(mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2, mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2,'red').setDepth(depth);
-                }
+                tiles.queenFieldIndicator = scene.add.image(mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2, mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2,'red').setDepth(depth);
             }
 
             if(!ourGame.gameFinished
@@ -152,5 +146,35 @@ export class OurMovement {
             }
         }
         return element;
+    }
+
+    public static onSplitField(
+        tiles: Tiles, 
+        ourMap : OurMap, 
+        scene: Phaser.Scene, 
+        ourGame: OurGame, 
+        mapPosition: MapPosition) : void{
+
+        tiles.tilesList.forEach(tile => {
+            if(tile.splitField){
+                const playersToMove = Math.floor(tile.splitPercentage * tile.playersOnTopCounter);
+
+                for (let i = 0; i < playersToMove; i++) {
+                    if(tile.splitDirection == 0){ //up
+                        this.movePlayer(true, -Figure.STEP_SIZE, ourMap, tile.playerOnTopList.pop(), tiles, scene, ourGame, mapPosition);
+                    }
+                    else if(tile.splitDirection == 1){ //right
+                        this.movePlayer(false, Figure.STEP_SIZE, ourMap, tile.playerOnTopList.pop(), tiles, scene, ourGame, mapPosition);
+                    }
+                    else if(tile.splitDirection == 2){ //down
+                        this.movePlayer(true, Figure.STEP_SIZE, ourMap, tile.playerOnTopList.pop(), tiles, scene, ourGame, mapPosition);
+                    }
+                    else{ //left
+                        this.movePlayer(false, -Figure.STEP_SIZE, ourMap, tile.playerOnTopList.pop(), tiles, scene, ourGame, mapPosition);
+                    }
+                }
+            }
+        });
+        
     }
 }

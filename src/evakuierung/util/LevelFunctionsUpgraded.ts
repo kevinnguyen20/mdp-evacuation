@@ -31,7 +31,7 @@ export type Figures = {
 
 export type Tiles = {
     tilesList: TilePiece[];
-    fieldColor: Phaser.GameObjects.Image;
+    queenFieldIndicator: Phaser.GameObjects.Image;
     goalTile: TilePiece;
     animatedTiles: AnimatedTile[];
 };
@@ -41,7 +41,6 @@ export type OurGame = {
     scoreText: Phaser.GameObjects.Text;
     queenPos: number[];
     gameFinished: boolean;
-    preMovePos: number[];
     survivorScoreText: Phaser.GameObjects.Text;
     winCond: number;
 };
@@ -105,7 +104,7 @@ export class LevelFunctionsUpgraded {
         const gameFinished = ourGame.gameFinished;
         const condition = ourGame.winCond;
         const survivorScoreText = ourGame.survivorScoreText;
-        const survivorScore = tiles.goalTile.playersOnTop;
+        const survivorScore = tiles.goalTile.playersOnTopCounter;
 
         if (gameFinished) {
             if (survivorScore >= condition) {
@@ -199,16 +198,16 @@ export class LevelFunctionsUpgraded {
     public static updatePlayerCountText(tileList: TilePiece[]): void {
         tileList.forEach((element) => {
             if (element.text.visible === true) {
-                if (element.playersOnTop === 0) {
-                    element.text.setText('' + element.playersOnTop);
+                if (element.playersOnTopCounter === 0) {
+                    element.text.setText('' + element.playersOnTopCounter);
                     element.text.setVisible(false);
                 }
                 else {
-                    element.text.setText('' + element.playersOnTop);
+                    element.text.setText('' + element.playersOnTopCounter);
                 }
             }
-            else if (element.text.visible === false && element.playersOnTop > 0) {
-                element.text.setText('' + element.playersOnTop);
+            else if (element.text.visible === false && element.playersOnTopCounter > 0) {
+                element.text.setText('' + element.playersOnTopCounter);
                 element.text.setVisible(true);
             }
         })
@@ -223,8 +222,8 @@ export class LevelFunctionsUpgraded {
      */
     public static createPlayerCountText(tilesList: TilePiece[], add: Phaser.GameObjects.GameObjectFactory): void {
         tilesList.forEach((element) => {
-            element.text = add.text(element.tileCoordinates[0] + 38, element.tileCoordinates[1] + 104, '' + element.playersOnTop, { color: '#ffffff' }).setDepth(5);
-            if (element.playersOnTop === 0)
+            element.text = add.text(element.tileCoordinates[0] + 38, element.tileCoordinates[1] + 104, '' + element.playersOnTopCounter, { color: '#ffffff' }).setDepth(5);
+            if (element.playersOnTopCounter === 0)
                 element.text.setVisible(false);
         });
     }
@@ -276,7 +275,7 @@ export class LevelFunctionsUpgraded {
             x,
             y
         )
-        tmplayerDirection.setVisible(true);
+        tmplayerDirection.setVisible(false);
 
         tmplayerGround.setDepth(0);
         tmplayerSplit.setDepth(1);
