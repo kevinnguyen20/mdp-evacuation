@@ -7,10 +7,11 @@ import { AnimatedTile } from "../util/animatedTile";
 
 export type Layers = {
     layerGround: Phaser.Tilemaps.TilemapLayer;
-    layerProbability: Phaser.Tilemaps.TilemapLayer;
+    layerSplit: Phaser.Tilemaps.TilemapLayer;
     layerAction: Phaser.Tilemaps.TilemapLayer;
     layerDesign: Phaser.Tilemaps.TilemapLayer;
     layerPerspective: Phaser.Tilemaps.TilemapLayer;
+    layerDirection: Phaser.Tilemaps.TilemapLayer;
 };
 
 export type OurMap = {
@@ -239,14 +240,14 @@ export class LevelFunctionsUpgraded {
             y
         );
 
-        const tmplayerProbability = tmpMap.createLayer(
+        const tmplayerSplit = tmpMap.createLayer(
             'Split',
             tileset,
             x,
             y
 
         );
-        tmplayerProbability.setVisible(false);    // set true if you want to see the probabilities
+        tmplayerSplit.setVisible(false);    // set true if you want to see the probabilities
 
         const tmplayerAction = tmpMap.createLayer(
             'Action',
@@ -269,8 +270,16 @@ export class LevelFunctionsUpgraded {
             y
         );
 
+        const tmplayerDirection = tmpMap.createLayer(
+            'Direction',
+            tileset,
+            x,
+            y
+        )
+        tmplayerDirection.setVisible(true);
+
         tmplayerGround.setDepth(0);
-        tmplayerProbability.setDepth(1);
+        tmplayerSplit.setDepth(1);
         tmplayerAction.setDepth(2);
         tmplayerDesign.setDepth(3);
         tmplayerPerspective.setDepth(20);
@@ -287,10 +296,11 @@ export class LevelFunctionsUpgraded {
 
         return {
             layerGround: tmplayerGround,
-            layerProbability: tmplayerProbability,
+            layerSplit: tmplayerSplit,
             layerDesign: tmplayerDesign,
             layerAction: tmplayerAction,
-            layerPerspective: tmplayerPerspective
+            layerPerspective: tmplayerPerspective,
+            layerDirection: tmplayerDirection
         };
     }
 
