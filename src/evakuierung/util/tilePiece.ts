@@ -2,20 +2,24 @@
 import { Figure } from "./figure"
 import { TileParser } from "./tileParser";
 
-export class TilePiece {
+export class TilePiece{
     public tileCoordinates: number[] = []; // x, y in Pixel
-    public directionProbabilities: number[] = []; // up, right, down, left, followQueen
     public tileType: boolean[] = []; // wall action goal
+    public splitField: boolean; 
+    public splitDirection: number; // 0 Norden, 1 Osten, 2 Sueden, 3 Westen
+    public splitPercentage: number;
     public text;
+    public directionProbabilities;
 
     // this is where the players on top of a tile are stored, 
     // it should be a list of objects, when the piglet class is created
     public playersOnTop = 0;
 
-    constructor(coordinates: number[], directionProbabilities: number[], tileType: boolean[]) {
+    constructor(coordinates: number[], tileType: boolean[]) {
         this.tileCoordinates = coordinates;
-        this.directionProbabilities = directionProbabilities;
         this.tileType = tileType;
+        this.splitField = false;
+        this.splitPercentage = 0;
     }
 
     // can be accessed with dot notation
@@ -23,18 +27,18 @@ export class TilePiece {
         return this.playersOnTop;
     }
 
-    public toString = (): string => {
+    /*(public toString = (): string => {
         return `Tile pos (${this.tileCoordinates[0]/Figure.STEP_SIZE}, ${this.tileCoordinates[1]/Figure.STEP_SIZE}), prob.: [${this.directionProbabilities[0]}, ${this.directionProbabilities[1]}, ${this.directionProbabilities[2]}, ${this.directionProbabilities[3]}, ${this.directionProbabilities[4]}]`;
     }
 
-    /**
+    
      * Sets the TileProbabilities for the given TilePiece
      * If it has no Probability or Something went wrong -> -1
      * 
      * !!!!!! not yet tested
      * 
      * @param layerProbability input the Probability-Layer from the Level
-     */
+     *
     public setTileProbability(layerProbability: Phaser.Tilemaps.TilemapLayer): void { //TODO Repair function
         const x = this.tileCoordinates[0] / Figure.STEP_SIZE;
         const y = this.tileCoordinates[1] / Figure.STEP_SIZE;
@@ -74,5 +78,5 @@ export class TilePiece {
         }
         
     }
-
+*/
 }
