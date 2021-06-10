@@ -79,7 +79,7 @@ export class level1 extends Phaser.Scene {
         const t2 = LevelFunctionsUpgraded.getGoalTile(t1);
         this.tiles = {
             tilesList: t1,
-            fieldColor: null,
+            queenFieldIndicator: null,
             goalTile: t2,
             animatedTiles: []
         };
@@ -92,9 +92,10 @@ export class level1 extends Phaser.Scene {
             figureList: LevelFunctionsUpgraded.initFigureList(14, startingPosition)
         };
         this.figures.figureList.forEach((figure) => {
-            this.tiles.tilesList[figure.x/32 + figure.y/32 * this.ourMap.layers.layerAction.layer.width].playersOnTop++;
+            this.tiles.tilesList[figure.x/32 + figure.y/32 * this.ourMap.layers.layerAction.layer.width].playersOnTopCounter++;
             figure.image = this.add.image(this.mapPosition.mapPosX + figure.x + Figure.STEP_SIZE / 2, 
                 this.mapPosition.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(4);
+                this.tiles.tilesList[figure.x/32 + figure.y/32 * this.ourMap.layers.layerAction.layer.width].playerOnTopList.push(figure);
         });
 
         // GAME

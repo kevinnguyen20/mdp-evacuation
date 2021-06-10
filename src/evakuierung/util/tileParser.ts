@@ -50,20 +50,13 @@ export class TileParser {
 
 
     /**
-     * Use only the Probability-Layer Tiles as Input
+     * Use only the Split-Layer Tiles as Input
      */
-    public static tileIDToAPIID_scifiLVL_Probability(tileID: number): number { //TODO Repair function
-        if(tileID === 153) return TileParser.PROBABILITY[0]; //green
-        if(tileID === 164) return TileParser.PROBABILITY[1]; //yellow
-        if(tileID === 165) return TileParser.PROBABILITY[2]; //orange
-        if(tileID === 166) return TileParser.PROBABILITY[3]; //red
-        return 0;
-    }
     public static tileIDToAPIID_scifiLVL_Direction(tileID:number): number {
-        if(tileID === 151) return TileParser.DIRECTION[0]; //hellblau
-        if(tileID === 153) return TileParser.DIRECTION[1]; //gruen
-        if(tileID === 150) return TileParser.DIRECTION[2]; //weiS
-        if(tileID === 166) return TileParser.DIRECTION[3]; //rot
+        if(tileID === 151) return TileParser.DIRECTION[0]; //hellblau oben
+        if(tileID === 153) return TileParser.DIRECTION[1]; //gruen  rechts
+        if(tileID === 150) return TileParser.DIRECTION[2]; //weiS   unten
+        if(tileID === 166) return TileParser.DIRECTION[3]; //rot    links
     }
 
 

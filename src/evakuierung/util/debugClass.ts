@@ -216,8 +216,8 @@ export class DebugClass {
             else
                 console.error("tilePiece.tileType has wrong size");
 
-            if(this.checkNumber(tilePiece.playersOnTop))
-                dTilePiece.playersOnTop = tilePiece.playersOnTop;
+            if(this.checkNumber(tilePiece.playersOnTopCounter))
+                dTilePiece.playersOnTop = tilePiece.playersOnTopCounter;
 
             console.log(`TILEPIECE-----------------------------------------`);
             console.log(`Koordinaten:           [${dTilePiece.coordinates.x}, ${dTilePiece.coordinates.y}]`);
