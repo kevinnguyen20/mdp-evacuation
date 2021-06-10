@@ -93,11 +93,11 @@ export class OurMovement {
         if (xory === false){
             tile = ourMap.layers.layerGround.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
             tileAction = ourMap.layers.layerAction.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
-            tilePr = ourMap.layers.layerProbability.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
+            tilePr = ourMap.layers.layerSplit.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
         } else {
             tile = ourMap.layers.layerGround.getTileAtWorldXY(element.image.x, element.image.y+pos, true); 
             tileAction = ourMap.layers.layerAction.getTileAtWorldXY(element.image.x, element.image.y+pos, true);
-            tilePr = ourMap.layers.layerProbability.getTileAtWorldXY(element.image.x, element.image.y+pos, true);
+            tilePr = ourMap.layers.layerSplit.getTileAtWorldXY(element.image.x, element.image.y+pos, true);
         }
         // eslint-disable-next-line no-empty
         if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
