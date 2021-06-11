@@ -324,4 +324,29 @@ export class LevelFunctionsUpgraded {
         }
     }
 
+    /**
+     * initializes each PlayerSprite in a Position where they are visuably recognizable and countable for the player
+     * @param tileList our Tileslist
+     */
+    public static visualizePlayerCount (tileList: TilePiece[]): void {
+        const x = 6;
+        const y = -10;
+        let row = 0;
+        let rowY = 0
+        tileList.forEach((tile) => {
+            if (tile.playersOnTopCounter > 0){
+                tile.playerOnTopList.forEach((figure) => {
+                    figure.image.scale = 0.4;
+                    figure.image.setX(figure.image.x -12 + x*row);
+                    figure.image.setY(figure.image.y +9 + y * rowY);
+                    row++;
+                    if (row === 5){
+                        row = 0;
+                        rowY++;
+                    }
+                })
+            }
+        })
+    }
+
 }

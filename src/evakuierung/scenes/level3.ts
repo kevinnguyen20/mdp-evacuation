@@ -96,7 +96,7 @@ export class level3 extends Phaser.Scene {
                 this.mapPosition.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(4);
             this.tiles.tilesList[figure.x/32 + figure.y/32 * this.ourMap.layers.layerAction.layer.width].playerOnTopList.push(figure);
         });
-
+        LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList);
         // GAME
         this.ourGame = {
             score: this.score,
