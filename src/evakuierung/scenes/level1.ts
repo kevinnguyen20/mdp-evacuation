@@ -17,6 +17,7 @@ export class level1 extends Phaser.Scene {
 
     private score = 0;
     private winCondition = 6;
+    private figureImages: Phaser.Textures.Texture[] = [];
 
     constructor() {
         super({
@@ -45,6 +46,13 @@ export class level1 extends Phaser.Scene {
         this.load.image('red', './assets/sprites/red.png');
         this.load.image('orange', './assets/sprites/orange.png');
         this.load.image('yellow', './assets/sprites/yellow.png');
+        this.load.image('alienGreen1', 'assets/sprites/alien_green_1.png');
+        this.load.image('alienGreen2', 'assets/sprites/alien_green_2.png');
+        this.load.image('alienGreen3', 'assets/sprites/alien_green_3.png');
+        this.load.image('alienGreen4', 'assets/sprites/alien_green_4.png');
+        this.load.image('alienBlue1', 'assets/sprites/alien_blue_1.png');
+        this.load.image('alienBlue2', 'assets/sprites/alien_blue_2.png');
+        this.load.image('alienPurple', 'assets/sprites/alien_purple.png');
     }
 
     init(): void {
@@ -55,6 +63,14 @@ export class level1 extends Phaser.Scene {
     create(): void {
         this.input.keyboard.enabled = true;
         this.cameras.main.setZoom(1.2,1.2);
+
+        this.figureImages.push(this.textures.get('alienGreen1'));
+        this.figureImages.push(this.textures.get('alienGreen2'));
+        this.figureImages.push(this.textures.get('alienGreen3'));
+        this.figureImages.push(this.textures.get('alienGreen4'));   
+        this.figureImages.push(this.textures.get('alienBlue1'));
+        this.figureImages.push(this.textures.get('alienBlue2'));
+        this.figureImages.push(this.textures.get('alienPurple'));
 
         // MAP
         this.mapPosition = {
@@ -95,9 +111,10 @@ export class level1 extends Phaser.Scene {
             this.tiles.tilesList[figure.x/32 + figure.y/32 * this.ourMap.layers.layerAction.layer.width].playersOnTopCounter++;
             figure.image = this.add.image(this.mapPosition.mapPosX + figure.x + Figure.STEP_SIZE / 2, 
                 this.mapPosition.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(4);
+                figure.image.setVisible(false);
             this.tiles.tilesList[figure.x/32 + figure.y/32 * this.ourMap.layers.layerAction.layer.width].playerOnTopList.push(figure);
         });
-        LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList);
+         LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
 
         // GAME
         this.ourGame = {
@@ -129,24 +146,32 @@ export class level1 extends Phaser.Scene {
             if(LevelFunctionsUpgraded.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]))
                 if(!this.ourGame.gameFinished)
                     OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'left', this.mapPosition, 2);
+                    LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
+
         });
 
         this.input.keyboard.on('keydown-D', () =>{
             if (LevelFunctionsUpgraded.queenValidMoveCheck(false, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]))
                 if(!this.ourGame.gameFinished)
                     OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'right', this.mapPosition, 2);
+                    LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
+
         });
 
         this.input.keyboard.on('keydown-S', () =>{
             if (LevelFunctionsUpgraded.queenValidMoveCheck(true, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]))
                 if(!this.ourGame.gameFinished)
                     OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'down', this.mapPosition, 2);
+                    LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
+
         });
 
         this.input.keyboard.on('keydown-W', () =>{
             if (LevelFunctionsUpgraded.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]))
                 if(!this.ourGame.gameFinished)
                     OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'up', this.mapPosition, 2);
+                    LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
+
         });
     }
 
