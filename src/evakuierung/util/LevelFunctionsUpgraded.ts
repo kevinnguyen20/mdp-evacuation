@@ -332,7 +332,7 @@ export class LevelFunctionsUpgraded {
 
         tileList.forEach((tile) => {
             while (tile.figureImages.length > 0){
-                let image = tile.figureImages.pop();
+                const image = tile.figureImages.pop();
                 image.destroy(true);
             }
             if (tile.playersOnTopCounter> 0){
@@ -348,7 +348,7 @@ export class LevelFunctionsUpgraded {
      * @param scene our levelscene
      */
     public static placeFigureSpritesOnTile (tile:TilePiece, figurenImages: Phaser.Textures.Texture[], scene: Phaser.Scene): void{
-       let anzahlDerFiguren = tile.playersOnTopCounter;
+        let anzahlDerFiguren = tile.playersOnTopCounter;
         while (anzahlDerFiguren > 0) {
             if (anzahlDerFiguren >= 10) {
                 for(; anzahlDerFiguren>=10; anzahlDerFiguren = anzahlDerFiguren -10){
