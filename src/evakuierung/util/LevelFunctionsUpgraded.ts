@@ -328,24 +328,47 @@ export class LevelFunctionsUpgraded {
      * initializes each PlayerSprite in a Position where they are visuably recognizable and countable for the player
      * @param tileList our Tileslist
      */
-    public static visualizePlayerCount (tileList: TilePiece[]): void {
-        const x = 6;
-        const y = -10;
-        let row = 0;
-        let rowY = 0
+    public static visualizePlayerCount (tileList: TilePiece[], figurenImages: Phaser.Textures.Texture[], scene: Phaser.Scene): void {
+
         tileList.forEach((tile) => {
-            if (tile.playersOnTopCounter > 0){
-                tile.playerOnTopList.forEach((figure) => {
-                    figure.image.scale = 0.4;
-                    figure.image.setX(figure.image.x -12 + x*row);
-                    figure.image.setY(figure.image.y +9 + y * rowY);
-                    row++;
-                    if (row === 5){
-                        row = 0;
-                        rowY++;
-                    }
-                })
+            while (tile.figureImages.length > 0){
+                let image = tile.figureImages.pop();
+                image.destroy(true);
             }
+            if (tile.playersOnTopCounter> 0){
+                this.placeFigureSpritesOnTile(tile, figurenImages, scene);
+            }
+        })
+    }
+
+    /**
+     * Places the PlayerSprites according to the nmbr of figures on the tile
+     * @param tile the Tile we place the images on
+     * @param figurenImages all our figure images
+     * @param scene our levelscene
+     */
+    public static placeFigureSpritesOnTile (tile:TilePiece, figurenImages: Phaser.Textures.Texture[], scene: Phaser.Scene): void{
+       let anzahlDerFiguren = tile.playersOnTopCounter;
+        while (anzahlDerFiguren > 0) {
+            if (anzahlDerFiguren >= 10) {
+                for(; anzahlDerFiguren>=10; anzahlDerFiguren = anzahlDerFiguren -10){
+                    tile.figureImages.push(scene.add.image(tile.tileCoordinates[0]+32, tile.tileCoordinates[1]+120, figurenImages[6]));
+                    
+                } 
+            }
+            else if (anzahlDerFiguren >= 5 ){
+                tile.figureImages.push(scene.add.image(tile.tileCoordinates[0]+32, tile.tileCoordinates[1]+120, figurenImages[4]));
+                anzahlDerFiguren = anzahlDerFiguren -5;
+            }
+            else {
+                for(let blueCount = 0; anzahlDerFiguren>0; blueCount++){
+                    tile.figureImages.push(scene.add.image(tile.tileCoordinates[0]+32, tile.tileCoordinates[1]+120, figurenImages[blueCount]));
+                    anzahlDerFiguren--;
+                }
+            }
+        }
+        tile.figureImages.forEach((figures) => {
+            figures.setDepth(4);
         })
     }
 
