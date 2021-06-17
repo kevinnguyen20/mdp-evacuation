@@ -111,10 +111,10 @@ export class level1 extends Phaser.Scene {
             this.tiles.tilesList[figure.x/32 + figure.y/32 * this.ourMap.layers.layerAction.layer.width].playersOnTopCounter++;
             figure.image = this.add.image(this.mapPosition.mapPosX + figure.x + Figure.STEP_SIZE / 2, 
                 this.mapPosition.mapPosY + figure.y + Figure.STEP_SIZE / 2,'queen').setDepth(4);
-                figure.image.setVisible(false);
+            figure.image.setVisible(false);
             this.tiles.tilesList[figure.x/32 + figure.y/32 * this.ourMap.layers.layerAction.layer.width].playerOnTopList.push(figure);
         });
-         LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
+        LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
 
         // GAME
         this.ourGame = {
@@ -144,33 +144,37 @@ export class level1 extends Phaser.Scene {
         
         this.input.keyboard.on('keydown-A', () =>{
             if(LevelFunctionsUpgraded.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]))
-                if(!this.ourGame.gameFinished)
+                if(!this.ourGame.gameFinished){
                     OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'left', this.mapPosition, 2);
                     LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
+                }
 
         });
 
         this.input.keyboard.on('keydown-D', () =>{
             if (LevelFunctionsUpgraded.queenValidMoveCheck(false, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]))
-                if(!this.ourGame.gameFinished)
+                if(!this.ourGame.gameFinished){
                     OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'right', this.mapPosition, 2);
                     LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
+                }
 
         });
 
         this.input.keyboard.on('keydown-S', () =>{
             if (LevelFunctionsUpgraded.queenValidMoveCheck(true, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]))
-                if(!this.ourGame.gameFinished)
+                if(!this.ourGame.gameFinished){
                     OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'down', this.mapPosition, 2);
                     LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
+                }
 
         });
 
         this.input.keyboard.on('keydown-W', () =>{
             if (LevelFunctionsUpgraded.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0]))
-                if(!this.ourGame.gameFinished)
+                if(!this.ourGame.gameFinished){
                     OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'up', this.mapPosition, 2);
                     LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
+                }
 
         });
     }
