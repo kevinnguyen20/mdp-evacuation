@@ -10,6 +10,7 @@ export class TilePiece{
     public splitPercentage: number;
     public text;
     public directionProbabilities;
+    public figureImages: Phaser.GameObjects.Image [] = [];
 
     // this is where the players on top of a tile are stored, 
     // it should be a list of objects, when the piglet class is created
