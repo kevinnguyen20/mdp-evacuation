@@ -23,10 +23,23 @@ export class MainMenu extends Phaser.Scene{
 
         const loadingBar = this.add.graphics({
             fillStyle: {
-                color: 0xffffff // white
+                color: 0x00ff00 // green
             }
         });
         // add lag to show the loading bar
+        for (let i=0;i<500;i++){
+            this.load.image('play_button','./assets/sprites/play.png');
+            this.load.image('alien' + i, './assets/sprites/alien.svg');
+        }
+
+        this.anims.create({
+            key: 'coin',
+            frames: this.anims.generateFrameNames('coinflip', { prefix: 'coinflip', end: 15, zeroPad: 4 }),
+            frameRate: 16,
+            yoyo: true,
+            repeat: -1,
+            repeatDelay: 300
+        });
 
         this.load.on("progress",(percent)=>{
             loadingBar.fillRect(0,this.game.renderer.height / 2, this.game.renderer.width *percent,50);
