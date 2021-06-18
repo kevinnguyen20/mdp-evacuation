@@ -30,11 +30,9 @@ export class LevelMenu extends Phaser.Scene{
 
         level1button.setInteractive();
 
-        level1button.on("pointerover",()=>{console.log("over level1button")});
-        level1button.on("pointerout",()=>{console.log("out level1button")});
 
         level1button.on("pointerdown",()=>{
-            console.log("pressed level 1 button");
+            
             this.scene.transition({
                 target: "level1",
                 duration: 10
@@ -52,11 +50,10 @@ export class LevelMenu extends Phaser.Scene{
 
         level2button.setInteractive();
 
-        level2button.on("pointerover",()=>{console.log("over level1button")});
-        level2button.on("pointerout",()=>{console.log("out level1button")});
+        
 
         level2button.on("pointerdown",()=>{
-            console.log("pressed level 2 button");
+            
             this.scene.transition({
                 target: "level2",
                 duration: 10
@@ -74,11 +71,10 @@ export class LevelMenu extends Phaser.Scene{
 
         level3button.setInteractive();
 
-        level3button.on("pointerover",()=>{console.log("over level1button")});
-        level3button.on("pointerout",()=>{console.log("out level1button")});
+        
 
         level3button.on("pointerdown",()=>{
-            console.log("pressed level 3 button");
+            
             this.scene.transition({
                 target: "level3",
                 duration: 10
@@ -95,9 +91,6 @@ export class LevelMenu extends Phaser.Scene{
         // back button
         
         backButton.setInteractive();
-
-        backButton.on("pointerover",()=>{console.log("over backButton")});
-        backButton.on("pointerout",()=>{console.log("out backButton")});
 
         backButton.on("pointerdown",()=>{
             console.log("pressed backButton");
