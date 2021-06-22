@@ -50,7 +50,7 @@ export class TileParser {
 
 
     /**
-     * Use only the Split-Layer Tiles as Input
+     * Use only the Direction-Layer Tiles as Input
      */
     public static tileIDToAPIID_scifiLVL_Direction(tileID:number): number {
         if(tileID === 151) return TileParser.DIRECTION[0]; //hellblau oben
@@ -98,7 +98,7 @@ export class TileParser {
         });
         layerSplit.forEachTile((tile) => {
             const index: number = tile.index;
-            if (index === 164){
+            if (index === 99){
                 tileTuple[tile.x+(tile.y*layerAction.layer.width)].splitField = true;
                 tileTuple[tile.x+(tile.y*layerAction.layer.width)].splitPercentage = .5;
             }

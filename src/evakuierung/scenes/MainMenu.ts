@@ -21,6 +21,7 @@ export class MainMenu extends Phaser.Scene{
         
         // audio for the start screen could be add here 
 
+        /*
         const loadingBar = this.add.graphics({
             fillStyle: {
                 color: 0x00ff00 // green
@@ -31,6 +32,7 @@ export class MainMenu extends Phaser.Scene{
             this.load.image('play_button','./assets/sprites/play.png');
             this.load.image('alien' + i, './assets/sprites/alien.svg');
         }
+        
 
         this.anims.create({
             key: 'coin',
@@ -41,10 +43,12 @@ export class MainMenu extends Phaser.Scene{
             repeatDelay: 300
         });
 
+        
         this.load.on("progress",(percent)=>{
             loadingBar.fillRect(0,this.game.renderer.height / 2, this.game.renderer.width *percent,50);
             
         });
+        */
     }
 
 

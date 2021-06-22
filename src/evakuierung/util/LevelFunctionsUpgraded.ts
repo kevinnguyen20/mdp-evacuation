@@ -246,7 +246,6 @@ export class LevelFunctionsUpgraded {
             y
 
         );
-        tmplayerSplit.setVisible(false);    // set true if you want to see the probabilities
 
         const tmplayerAction = tmpMap.createLayer(
             'Action',
@@ -278,9 +277,9 @@ export class LevelFunctionsUpgraded {
         tmplayerDirection.setVisible(false);
 
         tmplayerGround.setDepth(0);
-        tmplayerSplit.setDepth(1);
-        tmplayerAction.setDepth(2);
-        tmplayerDesign.setDepth(3);
+        tmplayerSplit.setDepth(3);
+        tmplayerAction.setDepth(1);
+        tmplayerDesign.setDepth(2);
         tmplayerPerspective.setDepth(20);
 
         // eslint-disable-next-line prefer-const
@@ -333,7 +332,7 @@ export class LevelFunctionsUpgraded {
         tileList.forEach((tile) => {
             while (tile.figureImages.length > 0){
                 const image = tile.figureImages.pop();
-                image.destroy(true);
+                image.destroy();
             }
             if (tile.playersOnTopCounter> 0){
                 this.placeFigureSpritesOnTile(tile, figurenImages, scene);
@@ -351,14 +350,14 @@ export class LevelFunctionsUpgraded {
         let anzahlDerFiguren = tile.playersOnTopCounter;
         while (anzahlDerFiguren > 0) {
             if (anzahlDerFiguren >= 10) {
-                for(; anzahlDerFiguren>=10; anzahlDerFiguren = anzahlDerFiguren -10){
+                while(anzahlDerFiguren>=10){
                     tile.figureImages.push(scene.add.image(tile.tileCoordinates[0]+32, tile.tileCoordinates[1]+120, figurenImages[6]));
-                    
+                    anzahlDerFiguren -= 10
                 } 
             }
             else if (anzahlDerFiguren >= 5 ){
                 tile.figureImages.push(scene.add.image(tile.tileCoordinates[0]+32, tile.tileCoordinates[1]+120, figurenImages[4]));
-                anzahlDerFiguren = anzahlDerFiguren -5;
+                anzahlDerFiguren = anzahlDerFiguren - 5;
             }
             else {
                 for(let blueCount = 0; anzahlDerFiguren>0; blueCount++){

@@ -42,10 +42,7 @@ export class level1 extends Phaser.Scene {
         this.load.image('restartButton', './assets/sprites/restartButton.png');
         this.load.image('nextLevelButton', './assets/sprites/nextLevelButton.png');
         this.load.image('returnMainMenuButton', './assets/sprites/returnMainMenu.png');
-        this.load.image('green', './assets/sprites/green.png');
         this.load.image('red', './assets/sprites/red.png');
-        this.load.image('orange', './assets/sprites/orange.png');
-        this.load.image('yellow', './assets/sprites/yellow.png');
         this.load.image('alienGreen1', 'assets/sprites/alien_green_1.png');
         this.load.image('alienGreen2', 'assets/sprites/alien_green_2.png');
         this.load.image('alienGreen3', 'assets/sprites/alien_green_3.png');
@@ -67,10 +64,11 @@ export class level1 extends Phaser.Scene {
         this.figureImages.push(this.textures.get('alienGreen1'));
         this.figureImages.push(this.textures.get('alienGreen2'));
         this.figureImages.push(this.textures.get('alienGreen3'));
-        this.figureImages.push(this.textures.get('alienGreen4'));   
+        this.figureImages.push(this.textures.get('alienGreen4'));
+        this.figureImages.push(this.textures.get('alienPurple'));   
         this.figureImages.push(this.textures.get('alienBlue1'));
         this.figureImages.push(this.textures.get('alienBlue2'));
-        this.figureImages.push(this.textures.get('alienPurple'));
+        
 
         // MAP
         this.mapPosition = {

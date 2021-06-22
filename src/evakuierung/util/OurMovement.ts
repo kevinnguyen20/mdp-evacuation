@@ -161,16 +161,16 @@ export class OurMovement {
 
                 for (let i = 0; i < playersToMove; i++) {
                     if(tile.splitDirection == 0){ //up
-                        this.movePlayer(true, -Figure.STEP_SIZE, ourMap, tile.playerOnTopList.pop(), tiles, scene, ourGame, mapPosition);
+                        this.movePlayer(true, -Figure.STEP_SIZE, ourMap, tile.playerOnTopList[tile.playerOnTopList.length - 1], tiles, scene, ourGame, mapPosition);
                     }
                     else if(tile.splitDirection == 1){ //right
-                        this.movePlayer(false, Figure.STEP_SIZE, ourMap, tile.playerOnTopList.pop(), tiles, scene, ourGame, mapPosition);
+                        this.movePlayer(false, Figure.STEP_SIZE, ourMap, tile.playerOnTopList[tile.playerOnTopList.length - 1], tiles, scene, ourGame, mapPosition);
                     }
                     else if(tile.splitDirection == 2){ //down
-                        this.movePlayer(true, Figure.STEP_SIZE, ourMap, tile.playerOnTopList.pop(), tiles, scene, ourGame, mapPosition);
+                        this.movePlayer(true, Figure.STEP_SIZE, ourMap, tile.playerOnTopList[tile.playerOnTopList.length - 1], tiles, scene, ourGame, mapPosition);
                     }
                     else{ //left
-                        this.movePlayer(false, -Figure.STEP_SIZE, ourMap, tile.playerOnTopList.pop(), tiles, scene, ourGame, mapPosition);
+                        this.movePlayer(false, -Figure.STEP_SIZE, ourMap, tile.playerOnTopList[tile.playerOnTopList.length - 1], tiles, scene, ourGame, mapPosition);
                     }
                 }
             }
