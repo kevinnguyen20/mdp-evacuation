@@ -18,23 +18,8 @@
       },
       {
         "type": "image",
-        "key": "green",
-        "url": "assets/sprites/green.png"
-      },
-      {
-        "type": "image",
-        "key": "yellow",
-        "url": "assets/sprites/yellow.png"
-      },
-      {
-        "type": "image",
         "key": "red",
         "url": "assets/sprites/red.png"
-      },
-      {
-        "type": "image",
-        "key": "orange",
-        "url": "assets/sprites/orange.png"
       }
     ]
   }

@@ -333,7 +333,7 @@ export class LevelFunctionsUpgraded {
         tileList.forEach((tile) => {
             while (tile.figureImages.length > 0){
                 const image = tile.figureImages.pop();
-                image.destroy(true);
+                image.destroy();
             }
             if (tile.playersOnTopCounter> 0){
                 this.placeFigureSpritesOnTile(tile, figurenImages, scene);
