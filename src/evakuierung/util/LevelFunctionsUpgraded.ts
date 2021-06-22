@@ -350,14 +350,14 @@ export class LevelFunctionsUpgraded {
         let anzahlDerFiguren = tile.playersOnTopCounter;
         while (anzahlDerFiguren > 0) {
             if (anzahlDerFiguren >= 10) {
-                for(; anzahlDerFiguren>=10; anzahlDerFiguren = anzahlDerFiguren -10){
+                while(anzahlDerFiguren>=10){
                     tile.figureImages.push(scene.add.image(tile.tileCoordinates[0]+32, tile.tileCoordinates[1]+120, figurenImages[6]));
-                    
+                    anzahlDerFiguren -= 10
                 } 
             }
             else if (anzahlDerFiguren >= 5 ){
                 tile.figureImages.push(scene.add.image(tile.tileCoordinates[0]+32, tile.tileCoordinates[1]+120, figurenImages[4]));
-                anzahlDerFiguren = anzahlDerFiguren -5;
+                anzahlDerFiguren = anzahlDerFiguren - 5;
             }
             else {
                 for(let blueCount = 0; anzahlDerFiguren>0; blueCount++){
