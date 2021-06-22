@@ -64,10 +64,11 @@ export class level1 extends Phaser.Scene {
         this.figureImages.push(this.textures.get('alienGreen1'));
         this.figureImages.push(this.textures.get('alienGreen2'));
         this.figureImages.push(this.textures.get('alienGreen3'));
-        this.figureImages.push(this.textures.get('alienGreen4'));   
+        this.figureImages.push(this.textures.get('alienGreen4'));
+        this.figureImages.push(this.textures.get('alienPurple'));   
         this.figureImages.push(this.textures.get('alienBlue1'));
         this.figureImages.push(this.textures.get('alienBlue2'));
-        this.figureImages.push(this.textures.get('alienPurple'));
+        
 
         // MAP
         this.mapPosition = {
