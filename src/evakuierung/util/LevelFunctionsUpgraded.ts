@@ -246,7 +246,6 @@ export class LevelFunctionsUpgraded {
             y
 
         );
-        tmplayerSplit.setVisible(false);    // set true if you want to see the probabilities
 
         const tmplayerAction = tmpMap.createLayer(
             'Action',
@@ -278,9 +277,9 @@ export class LevelFunctionsUpgraded {
         tmplayerDirection.setVisible(false);
 
         tmplayerGround.setDepth(0);
-        tmplayerSplit.setDepth(1);
-        tmplayerAction.setDepth(2);
-        tmplayerDesign.setDepth(3);
+        tmplayerSplit.setDepth(3);
+        tmplayerAction.setDepth(1);
+        tmplayerDesign.setDepth(2);
         tmplayerPerspective.setDepth(20);
 
         // eslint-disable-next-line prefer-const
