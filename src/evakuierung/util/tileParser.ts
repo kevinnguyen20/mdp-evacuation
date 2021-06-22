@@ -109,8 +109,6 @@ export class TileParser {
         })
         
 
-
-
         return tileTuple;      
     }
 }

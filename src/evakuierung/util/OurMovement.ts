@@ -148,6 +148,14 @@ export class OurMovement {
         return element;
     }
 
+    /**
+     * This function decides in which direction the figure will be moved after stepping on a split field
+     * @param tiles All tiles in the game
+     * @param ourMap The map we use
+     * @param scene The level we are currently on
+     * @param ourGame The game we use
+     * @param mapPosition The position on the map we use
+     */
     public static onSplitField(
         tiles: Tiles, 
         ourMap : OurMap, 
