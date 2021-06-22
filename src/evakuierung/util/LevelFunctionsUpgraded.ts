@@ -39,8 +39,6 @@ export type Tiles = {
 export type OurGame = {
     score: number;
     scoreText: Phaser.GameObjects.Text;
-    movesLeft: number,
-    movesLeftText: Phaser.GameObjects.Text;
     queenPos: number[];
     gameFinished: boolean;
     survivorScoreText: Phaser.GameObjects.Text;
@@ -354,7 +352,7 @@ export class LevelFunctionsUpgraded {
             if (anzahlDerFiguren >= 10) {
                 while(anzahlDerFiguren>=10){
                     tile.figureImages.push(scene.add.image(tile.tileCoordinates[0]+32, tile.tileCoordinates[1]+120, figurenImages[6]));
-                    anzahlDerFiguren -= 10;
+                    anzahlDerFiguren -= 10
                 } 
             }
             else if (anzahlDerFiguren >= 5 ){
@@ -371,20 +369,6 @@ export class LevelFunctionsUpgraded {
         tile.figureImages.forEach((figures) => {
             figures.setDepth(4);
         })
-    }
-
-    public static checkMovesLeft(scene : Phaser.Scene, ourGame: OurGame) : void{
-        if(ourGame.movesLeft == 0){
-            if(!ourGame.gameFinished){
-                scene.input.disable;
-                ourGame.gameFinished = true;
-                ourGame.movesLeftText.setText('Moves left: ' + ourGame.movesLeft);
-                ourGame.survivorScoreText.setText('Oh no, you are out of moves. Try again!')
-            }
-        }
-        else{
-            ourGame.movesLeftText.setText('Moves left: ' + ourGame.movesLeft);
-        }
     }
 
 }

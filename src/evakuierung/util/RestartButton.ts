@@ -13,16 +13,6 @@ export class RestartButton {
             scene.input.keyboard.enabled = true;
             ourGame.gameFinished = false;
             ourGame.score = 0;
-            if(scene.scene.key === 'level1'){
-                ourGame.movesLeft = 40; //this should be changed if it's changed in level1
-            }
-            else if(scene.scene.key === 'level2'){
-                ourGame.movesLeft = 45 //this should be changed if it's changed in level2
-            }
-            else{
-                ourGame.movesLeft = 70; //this should be changed if it's changed in level3
-            }
-            
             scene.scene.restart();
         });
 
