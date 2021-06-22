@@ -9,7 +9,7 @@ export class GuiScene extends Phaser.Scene {
     }
 
     create(): void {
-
+        // I believe we do not need this anymore??
     }
 
 }

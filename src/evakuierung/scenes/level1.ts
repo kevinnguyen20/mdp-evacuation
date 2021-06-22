@@ -18,7 +18,7 @@ export class level1 extends Phaser.Scene {
     private score = 0;
     private winCondition = 8;
     private figureImages: Phaser.Textures.Texture[] = [];
-    private movesLeft = 40; //this should be changed if it's changed in RestartButton.ts
+    private movesLeft = 40; // this should be changed if it's changed in RestartButton.ts
 
 
     constructor() {
