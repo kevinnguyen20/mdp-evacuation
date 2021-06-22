@@ -176,41 +176,6 @@ export class level2 extends Phaser.Scene {
         });
     }
 
-    /**
-     * Moves non-queen players in queen's or a random directions
-     * 
-     * @param xory true when moving on the y axis (up/down), false if moving on the x axis (left/right)
-     * @param pos always has the value +32 or -32, because the tiles are 32x32
-     */
-    /*
-    public moveInGeneratedDirection(xory: boolean, pos: number, figureList: Figure[], tilesList: TilePiece[],
-        layerGround: Phaser.Tilemaps.TilemapLayer, layerAction: Phaser.Tilemaps.TilemapLayer, map: Phaser.Tilemaps.Tilemap): void {
-        figureList.forEach( (element) =>{
-            if(element.isQueen == false){
-                if(LevelFunctions.followQueen(tilesList[(element.x + element.y * layerGround.layer.width)/32])){
-                    element = this.movePlayer(xory, pos, layerGround, layerAction, map, element);
-                }
-                else{
-                    const direction: number = LevelFunctions.generateDirection(tilesList[(element.x + element.y * layerGround.layer.width)/32]);
-                    switch(direction){
-                        case 0: 
-                            element = this.movePlayer(true, -Figure.STEP_SIZE, layerGround, layerAction, map, element);
-                            break;
-                        case 1: 
-                            element = this.movePlayer(false, Figure.STEP_SIZE, layerGround, layerAction, map, element);
-                            break;
-                        case 2: 
-                            element = this.movePlayer(true, Figure.STEP_SIZE, layerGround, layerAction, map, element);
-                            break;
-                        case 3: 
-                            element = this.movePlayer(false, -Figure.STEP_SIZE, layerGround, layerAction, map, element);
-                            break;
-                    }
-                }
-            }
-        });
-    }
-    */
 
     update(): void {
         this.tiles.animatedTiles.forEach(tile => tile.update(14));
