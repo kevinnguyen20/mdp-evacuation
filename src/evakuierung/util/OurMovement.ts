@@ -13,7 +13,7 @@ export class OurMovement {
         scene: Phaser.Scene,
         direction: string,
         mapPosition: MapPosition,
-        nextLevel: number): void {
+        nextLevel: number, diff: number): void {
 
         if(direction === 'left') {
             ourGame.queenPos[0] -= 1;
@@ -24,7 +24,7 @@ export class OurMovement {
             LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);
   
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);
-            LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel);
+            LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel, diff);
         }
         else if(direction === 'right') {
             ourGame.queenPos[0] += 1;
@@ -35,7 +35,7 @@ export class OurMovement {
             LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);
 
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);                
-            LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel);
+            LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel, diff);
         }
         else if(direction === 'down') {
             ourGame.queenPos[1] += 1;
@@ -46,7 +46,7 @@ export class OurMovement {
             LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);    
 
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);                
-            LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel);
+            LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel, diff);
         }
         else if(direction === 'up') {
             ourGame.queenPos[1] -= 1;
@@ -57,7 +57,7 @@ export class OurMovement {
             LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);    
             
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);                
-            LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel);
+            LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel, diff);
         }
     }
 
