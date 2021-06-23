@@ -55,7 +55,7 @@ export class MainMenu extends Phaser.Scene{
         // PLAY BUTTON
         playButton.setInteractive()
         playButton.on("pointerdown",()=>{
-          /*  this.scene.transition({
+        /*  this.scene.transition({
                 target: "level1",
                 duration: 10
             });*/
@@ -71,10 +71,10 @@ export class MainMenu extends Phaser.Scene{
         level1button.on("pointerdown",()=>{
             
             //this.scene.transition({
-           //     target: "level1",
-          //      duration: 10
-          //  });
-          this.scene.start('level1', {diff: diff});
+            //     target: "level1",
+            //      duration: 10
+            //  });
+            this.scene.start('level1', {diff: diff});
         });
 
         level1button.on('pointerover', function(pointer){
@@ -92,7 +92,7 @@ export class MainMenu extends Phaser.Scene{
 
         level2button.on("pointerdown",()=>{
             
-          /*  this.scene.transition({
+            /*  this.scene.transition({
                 target: "level2",
                 duration: 10
             });
@@ -116,7 +116,7 @@ export class MainMenu extends Phaser.Scene{
 
         level3button.on("pointerdown",()=>{
             
-           /* this.scene.transition({
+            /* this.scene.transition({
                 target: "level3",
                 duration: 10,
 
