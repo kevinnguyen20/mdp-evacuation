@@ -419,12 +419,24 @@ export class LevelFunctionsUpgraded {
 
     /**
      * Checks if there are any moves left and if not the games stops. It also refreshes the left moves' counter. 
+     * 
      * @param scene The scene we are working on
      * @param ourGame The game instance we use
      */
     public static checkMovesLeft(scene : Phaser.Scene, ourGame: OurGame) : void{
         if(ourGame.movesLeft == 0){
             if(!ourGame.gameFinished){
+                scene.game.sound.stopAll();
+                const gameOver = scene.sound.add('gameOver');
+                const musicConfig = {
+                    mute: false,
+                    volume: 0.14,
+                    rate: 1,
+                    detune: 0,
+                    loop: false,
+                    delay: 0
+                }
+                gameOver.play(musicConfig);
                 scene.input.disable;
                 ourGame.gameFinished = true;
                 ourGame.movesLeftText.setText('Moves left: ' + ourGame.movesLeft);
