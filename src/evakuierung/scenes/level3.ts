@@ -18,6 +18,7 @@ export class level3 extends Phaser.Scene {
     private winCondition = 8;   
     private figureImages: Phaser.Textures.Texture[] = [];
     private movesLeft = 70; // this should be changed if it's changed in RestartButton.ts
+    private diff = 10; //represents the difficulty set by the Player 10 easy, 20 medium, 30 hard
 
 
     constructor() {
@@ -53,9 +54,10 @@ export class level3 extends Phaser.Scene {
         this.load.image('alienPurple', 'assets/sprites/alien_purple.png');
     }
 
-    init(): void {
+    init(data): void {
         this.data.set('playerScore', 0);
         this.data.set('playerWinningScore', 8);
+        this.diff = data.diff;
     }
 
     create(): void {
@@ -102,8 +104,8 @@ export class level3 extends Phaser.Scene {
         // FIGURES
         const startingPosition: [number, number] = LevelFunctionsUpgraded.getStartPostition(this.ourMap.layers.layerGround);
         this.figures = {
-            figureInitCount: 14,
-            figureList: LevelFunctionsUpgraded.initFigureList(14, startingPosition)
+            figureInitCount: this.diff,
+            figureList: LevelFunctionsUpgraded.initFigureList(this.diff, startingPosition)
         };
         this.figures.figureList.forEach((figure) => {
             this.tiles.tilesList[figure.x/32 + figure.y/32 * this.ourMap.layers.layerAction.layer.width].playersOnTopCounter++;
@@ -148,7 +150,7 @@ export class level3 extends Phaser.Scene {
         this.input.keyboard.on('keydown-A', () =>{
             if(LevelFunctionsUpgraded.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
                 if(!this.ourGame.gameFinished){
-                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'left', this.mapPosition, 1);
+                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'left', this.mapPosition, 1, this.diff);
                     LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
                     this.ourGame.movesLeft--;
                     LevelFunctionsUpgraded.checkMovesLeft(this, this.ourGame);
@@ -159,7 +161,7 @@ export class level3 extends Phaser.Scene {
         this.input.keyboard.on('keydown-D', () =>{
             if (LevelFunctionsUpgraded.queenValidMoveCheck(false, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
                 if(!this.ourGame.gameFinished){
-                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'right', this.mapPosition, 1);
+                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'right', this.mapPosition, 1, this.diff);
                     LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
                     this.ourGame.movesLeft--;
                     LevelFunctionsUpgraded.checkMovesLeft(this, this.ourGame);
@@ -170,7 +172,7 @@ export class level3 extends Phaser.Scene {
         this.input.keyboard.on('keydown-S', () =>{
             if (LevelFunctionsUpgraded.queenValidMoveCheck(true, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
                 if(!this.ourGame.gameFinished){
-                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'down', this.mapPosition, 1);
+                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'down', this.mapPosition, 1, this.diff);
                     LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
                     this.ourGame.movesLeft--;
                     LevelFunctionsUpgraded.checkMovesLeft(this, this.ourGame);
@@ -181,7 +183,7 @@ export class level3 extends Phaser.Scene {
         this.input.keyboard.on('keydown-W', () =>{
             if (LevelFunctionsUpgraded.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
                 if(!this.ourGame.gameFinished){
-                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'up', this.mapPosition, 1);
+                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'up', this.mapPosition, 1,this.diff);
                     LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
                     this.ourGame.movesLeft--;
                     LevelFunctionsUpgraded.checkMovesLeft(this, this.ourGame);
