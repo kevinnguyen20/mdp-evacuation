@@ -10,6 +10,7 @@ export class RestartButton {
     public static init(restartButton: Phaser.GameObjects.Image, mapPosition: MapPosition, scene: Phaser.Scene, ourGame: OurGame): void {
         restartButton.setInteractive();
         restartButton.on('pointerup', () => {
+            scene.game.sound.stopAll();
             scene.input.keyboard.enabled = true;
             ourGame.gameFinished = false;
             ourGame.score = 0;

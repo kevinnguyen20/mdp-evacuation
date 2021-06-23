@@ -53,6 +53,7 @@ export class level2 extends Phaser.Scene {
         this.load.image('alienBlue1', 'assets/sprites/alien_blue_1.png');
         this.load.image('alienBlue2', 'assets/sprites/alien_blue_2.png');
         this.load.image('alienPurple', 'assets/sprites/alien_purple.png');
+        this.load.audio('berghain', './assets/sprites/synthwavehouse.mp3');
     }
 
     init(data): void {
@@ -62,6 +63,7 @@ export class level2 extends Phaser.Scene {
     }
 
     create(): void {
+        this.game.sound.stopAll();
         this.input.keyboard.enabled = true;
         this.cameras.main.setZoom(1.2,1.2);
         
@@ -71,7 +73,10 @@ export class level2 extends Phaser.Scene {
         this.figureImages.push(this.textures.get('alienGreen4')); 
         this.figureImages.push(this.textures.get('alienPurple'));  
         this.figureImages.push(this.textures.get('alienBlue1'));
-        this.figureImages.push(this.textures.get('alienBlue2'));       
+        this.figureImages.push(this.textures.get('alienBlue2'));    
+        
+        // BACKGROUND MUSIC
+        LevelFunctionsUpgraded.addMusic(this);
         
         // MAP
         this.mapPosition = {

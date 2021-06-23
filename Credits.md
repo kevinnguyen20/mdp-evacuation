@@ -11,4 +11,11 @@ Alien sprite: https://iconarchive.com/show/free-space-icons-by-goodstuff-no-nons
 Blue button background: Kenney / www.kenney.nl
 
 Tilset foundation: https://opengameart.org/content/sci-fi-interior-tiles
+
 Tilset additions: @chrii99
+
+Background music: https://opengameart.org/content/synthwave-house-loop by Fupi
+
+Game Over sound: https://opengameart.org/content/game-over-soundold-school by den_yes
+
+Victory sound: https://opengameart.org/content/victory-2 by jkfite01

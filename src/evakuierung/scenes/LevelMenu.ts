@@ -50,10 +50,8 @@ export class LevelMenu extends Phaser.Scene{
 
         level2button.setInteractive();
 
-        
 
-        level2button.on("pointerdown",()=>{
-            
+        level2button.on("pointerdown",()=>{            
             this.scene.transition({
                 target: "level2",
                 duration: 10

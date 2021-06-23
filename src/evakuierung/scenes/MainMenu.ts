@@ -12,7 +12,6 @@ export class MainMenu extends Phaser.Scene{
 
 
     preload(): void{
-        
         this.load.image('play_button','./assets/sprites/play.png');
         this.load.image('alien', './assets/sprites/alien.svg');
         //this.load.image('level_button', './assets/sprites/level_button.png');
@@ -20,12 +19,13 @@ export class MainMenu extends Phaser.Scene{
         this.load.image('level2_button','./assets/sprites/level2_button.png');
         this.load.image('level3_button','./assets/sprites/level3_button.png');
         this.load.image('back_button','./assets/sprites/back_button.png');
-        this.load.image('difficulty', './assets/sprites/difficulty_button.png' );
-        this.load.image('easy', './assets/sprites/easy_button.png' );
-        this.load.image('medium', './assets/sprites/medium_button.png' );
-        this.load.image('hard', './assets/sprites/hard_button.png' );
-        
-      
+        this.load.image('difficulty', './assets/sprites/difficulty_button.png');
+        this.load.image('easy', './assets/sprites/easy_button.png');
+        this.load.image('medium', './assets/sprites/medium_button.png');
+        this.load.image('hard', './assets/sprites/hard_button.png');
+        this.load.audio('berghain', './assets/sprites/synthwavehouse.mp3');
+        this.load.audio('gameOver', './assets/sprites/GameOver.wav');
+        this.load.audio('victory', './assets/sprites/Victory.wav');
     }
 
 
@@ -42,8 +42,16 @@ export class MainMenu extends Phaser.Scene{
         const level3button = this.add.image(600, this.game.renderer.height/2+100,'level3_button').setDepth(1);
         //const backButton = this.add.image(700, this.game.renderer.height-100,'back_button').setDepth(1);
         
-
-       
+        const backgroundMusic = this.sound.add('berghain');
+        const musicConfig = {
+            mute: false,
+            volume: 0.05,
+            rate: 1,
+            detune: 0,
+            loop: true,
+            delay: 0
+        }
+        backgroundMusic.play(musicConfig);
         
         const playButton = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2,'play_button');
       
@@ -60,14 +68,12 @@ export class MainMenu extends Phaser.Scene{
                 duration: 10
             });*/
             this.scene.start('level1', {diff: diff});
-
         });
         playButton.on('pointerover', function(){playButton.setScale(0.85, 0.85)});
         playButton.on('pointerout', function(){ playButton.setScale(1, 1)});
 
         // level 1 button
         level1button.setInteractive();
-
         level1button.on("pointerdown",()=>{
             
             //this.scene.transition({
@@ -75,6 +81,7 @@ export class MainMenu extends Phaser.Scene{
             //      duration: 10
             //  });
             this.scene.start('level1', {diff: diff});
+            backgroundMusic.stop();
         });
 
         level1button.on('pointerover', function(pointer){
@@ -87,9 +94,6 @@ export class MainMenu extends Phaser.Scene{
         // level 2 button
 
         level2button.setInteractive();
-
-        
-
         level2button.on("pointerdown",()=>{
             
             /*  this.scene.transition({
@@ -98,7 +102,7 @@ export class MainMenu extends Phaser.Scene{
             });
             */
             this.scene.start('level2', {diff: diff});
-
+            backgroundMusic.stop();
         });
 
         level2button.on('pointerover', function(pointer){
@@ -109,11 +113,7 @@ export class MainMenu extends Phaser.Scene{
         });
 
         // level 3 button 
-
         level3button.setInteractive();
-
-        
-
         level3button.on("pointerdown",()=>{
             
             /* this.scene.transition({
@@ -122,7 +122,7 @@ export class MainMenu extends Phaser.Scene{
 
             });*/
             this.scene.start('level3', {diff: diff});
-
+            backgroundMusic.stop();
         });
 
         level3button.on('pointerover', function(pointer){
@@ -210,8 +210,5 @@ export class MainMenu extends Phaser.Scene{
             hard.setVisible(false);
             difficultytxt.setText('Current difficulty: hard')
         })
-        
-
-        
     }
 }
