@@ -110,6 +110,17 @@ export class LevelFunctionsUpgraded {
 
         if (gameFinished) {
             if (survivorScore >= condition) {
+                scene.game.sound.stopAll();
+                const victory = scene.sound.add('victory');
+                const musicConfig = {
+                    mute: false,
+                    volume: 0.1,
+                    rate: 1,
+                    detune: 0,
+                    loop: false,
+                    delay: 0
+                }
+                victory.play(musicConfig);
                 survivorScoreText.setText("Congrats level passed with " + survivorScore + " aliens!")
                 const nextLevelButton = scene.add.image(scene.sys.game.config.width as number / 2, scene.sys.game.config.height as number / 2, 'nextLevelButton');
                 nextLevelButton.depth = 100;    // brings the button to the front
@@ -125,6 +136,17 @@ export class LevelFunctionsUpgraded {
                 nextLevelButton.on('pointerout', function () { nextLevelButton.setScale(1, 1) });
             }
             else {
+                scene.game.sound.stopAll();
+                const gameOver = scene.sound.add('gameOver');
+                const musicConfig = {
+                    mute: false,
+                    volume: 0.14,
+                    rate: 1,
+                    detune: 0,
+                    loop: false,
+                    delay: 0
+                }
+                gameOver.play(musicConfig);
                 survivorScoreText.setText("Not enough aliens have reached the goal! " + survivorScore + " < " + condition + "\nRestart and keep on trying!");
             }
         }
@@ -139,6 +161,7 @@ export class LevelFunctionsUpgraded {
         const returnMainMenuButton = scene.add.image(scene.sys.game.config.width as number * 1 / 50 + 610, scene.sys.game.config.height as number * 3.5 / 20 + 415, 'returnMainMenuButton');
         returnMainMenuButton.setInteractive();
         returnMainMenuButton.on('pointerup', () => {
+            scene.game.sound.stopAll();
             scene.scene.transition({
                 target: "MainMenu",
                 allowInput: true,
@@ -147,6 +170,24 @@ export class LevelFunctionsUpgraded {
         });
         returnMainMenuButton.on('pointerover', function () { returnMainMenuButton.setScale(0.85, 0.85) });
         returnMainMenuButton.on('pointerout', function () { returnMainMenuButton.setScale(1, 1) });
+    }
+
+    /**
+     * Adds background music
+     * 
+     * @param scene the scene (level) you're currently in
+     */
+    public static addMusic(scene: Phaser.Scene): void {
+        const backgroundMusic = scene.sound.add('berghain');
+        const musicConfig = {
+            mute: false,
+            volume: 0.05,
+            rate: 1,
+            detune: 0,
+            loop: true,
+            delay: 0
+        }
+        backgroundMusic.play(musicConfig);
     }
 
     /**
