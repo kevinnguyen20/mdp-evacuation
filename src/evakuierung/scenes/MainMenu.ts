@@ -1,5 +1,6 @@
-import { level1 } from "./level1";
-//import { LevelMenu } from "./LevelMenu";
+// just a substitute menu till the main menu is done adn fast transittion of levels 
+
+
 export class MainMenu extends Phaser.Scene{
 
     constructor() {
@@ -11,44 +12,16 @@ export class MainMenu extends Phaser.Scene{
 
 
     preload(): void{
-        //this.load.image('title', './assets/sprites/2_curved.png');
+        
         this.load.image('play_button','./assets/sprites/play.png');
         this.load.image('alien', './assets/sprites/alien.svg');
-        this.load.image('level_button', './assets/sprites/level_button.png');
-        //this.load.image('support_button', './assets/sprites/supportus.png');
-        this.load.image('backgroundimage', './assets/sprites/Zabelin.png' );
-        // ./home/programmer/playingarea/markov-decision-processes-2/src/evakuierung/assets/sprites/Zabelin.png
+        //this.load.image('level_button', './assets/sprites/level_button.png');
+        this.load.image('level1_button','./assets/sprites/level1_button.png');
+        this.load.image('level2_button','./assets/sprites/level2_button.png');
+        this.load.image('level3_button','./assets/sprites/level3_button.png');
+        this.load.image('back_button','./assets/sprites/back_button.png');
         
-        // audio for the start screen could be add here 
-
-        /*
-        const loadingBar = this.add.graphics({
-            fillStyle: {
-                color: 0x00ff00 // green
-            }
-        });
-        // add lag to show the loading bar
-        for (let i=0;i<500;i++){
-            this.load.image('play_button','./assets/sprites/play.png');
-            this.load.image('alien' + i, './assets/sprites/alien.svg');
-        }
-        
-
-        this.anims.create({
-            key: 'coin',
-            frames: this.anims.generateFrameNames('coinflip', { prefix: 'coinflip', end: 15, zeroPad: 4 }),
-            frameRate: 16,
-            yoyo: true,
-            repeat: -1,
-            repeatDelay: 300
-        });
-
-        
-        this.load.on("progress",(percent)=>{
-            loadingBar.fillRect(0,this.game.renderer.height / 2, this.game.renderer.width *percent,50);
-            
-        });
-        */
+      
     }
 
 
@@ -59,13 +32,16 @@ export class MainMenu extends Phaser.Scene{
         text1.setStroke('#fff', 16);
         text1.setShadow(2,2,'#00f',2,true,true);
 
-        this.add .image(this.game.renderer.width/2, this.game.renderer.height/2,'backgroundimage');
-        // this.add.image(this.game.renderer.width/2, this.game.renderer.height*0.20,'title').setDepth(1);
-        // could add some alien images near the logo
-        // could be done better with image editor
-        //this.add.image(30, this.game.renderer.height*0.10,'alien').setDepth(0);
+        const level1button = this.add.image(200, this.game.renderer.height/2+100,'level1_button').setDepth(1);
+        const level2button = this.add.image(400, this.game.renderer.height/2+100,'level2_button').setDepth(1);
+        const level3button = this.add.image(600, this.game.renderer.height/2+100,'level3_button').setDepth(1);
+        //const backButton = this.add.image(700, this.game.renderer.height-100,'back_button').setDepth(1);
+        
+
+       
+        
         const playButton = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2,'play_button');
-        const levelButton = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2 + 100,'level_button');
+      
         
         const hoversprite = this.add.sprite(this.game.renderer.width/2-(200) , this.game.renderer.height/2,'alien');
         hoversprite.setScale(2);
@@ -82,34 +58,68 @@ export class MainMenu extends Phaser.Scene{
         playButton.on('pointerover', function(){playButton.setScale(0.85, 0.85)});
         playButton.on('pointerout', function(){ playButton.setScale(1, 1)});
 
-        // LEVEL MENU BUTTON
-        levelButton.setInteractive();
-        levelButton.on("pointerdown",()=>{
-            this.scene.start('LevelMenu');
+        // level 1 button
+        level1button.setInteractive();
+
+
+        level1button.on("pointerdown",()=>{
+            
+            this.scene.transition({
+                target: "level1",
+                duration: 10
+            });
         });
-        levelButton.on('pointerover', function(){levelButton.setScale(0.85, 0.85)});
-        levelButton.on('pointerout', function(){ levelButton.setScale(1, 1)});
 
-        // support button 
-        /*
-        const supportbutton = this.add.image(600, this.game.renderer.height-100,'support_button');
-        supportbutton.setInteractive();
+        level1button.on('pointerover', function(pointer){
+            level1button.setScale(0.85, 0.85);
+        });
+        level1button.on('pointerout', function(pointer){
+            level1button.setScale(1, 1);
+        });
 
-        supportbutton.on("pointerover",()=>{
-            console.log("over support button ");
+        // level 2 button
+
+        level2button.setInteractive();
+
+        
+
+        level2button.on("pointerdown",()=>{
             
-        })
+            this.scene.transition({
+                target: "level2",
+                duration: 10
+            });
+        });
 
-        supportbutton.on("pointerout",()=>{
-            console.log("out from support button");
-            
-        })
+        level2button.on('pointerover', function(pointer){
+            level2button.setScale(0.85, 0.85);
+        });
+        level2button.on('pointerout', function(pointer){
+            level2button.setScale(1, 1);
+        });
 
-        supportbutton.on("pointerdown",()=>{
-            console.log("pressed support button");
-            this.scene.start('LevelMenu')
+        // level 3 button 
+
+        level3button.setInteractive();
+
+        
+
+        level3button.on("pointerdown",()=>{
             
-        })
-        */
+            this.scene.transition({
+                target: "level3",
+                duration: 10
+            });
+        });
+
+        level3button.on('pointerover', function(pointer){
+            level3button.setScale(0.85, 0.85);
+        });
+        level3button.on('pointerout', function(pointer){
+            level3button.setScale(1, 1);
+        });
+
+
+        
     }
 }
