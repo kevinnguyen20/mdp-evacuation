@@ -102,7 +102,7 @@ export class LevelFunctionsUpgraded {
      * @param scene the scene (level) you're currently in
      * @param nextLevel the level you're transitioning to
      */
-    public static winConditionReachedCheck(ourGame: OurGame, tiles: Tiles, scene: Phaser.Scene, nextLevel: number): void {
+    public static winConditionReachedCheck(ourGame: OurGame, tiles: Tiles, scene: Phaser.Scene, nextLevel: number, diff: number): void {
         const gameFinished = ourGame.gameFinished;
         const condition = ourGame.winCond;
         const survivorScoreText = ourGame.survivorScoreText;
@@ -115,10 +115,11 @@ export class LevelFunctionsUpgraded {
                 nextLevelButton.depth = 100;    // brings the button to the front
                 nextLevelButton.setInteractive();
                 nextLevelButton.on('pointerup', () => {
-                    scene.scene.transition({
+                    /*scene.scene.transition({
                         target: "level" + nextLevel,
                         duration: 10
-                    })
+                    })*/
+                    scene.scene.start("level" +nextLevel, {diff: diff})
                 });
                 nextLevelButton.on('pointerover', function () { nextLevelButton.setScale(0.85, 0.85) });
                 nextLevelButton.on('pointerout', function () { nextLevelButton.setScale(1, 1) });
@@ -352,9 +353,11 @@ export class LevelFunctionsUpgraded {
         let anzahlDerFiguren = tile.playersOnTopCounter;
         while (anzahlDerFiguren > 0) {
             if (anzahlDerFiguren >= 10) {
+                let anzahl = 0;
                 while(anzahlDerFiguren>=10){
-                    tile.figureImages.push(scene.add.image(tile.tileCoordinates[0]+32, tile.tileCoordinates[1]+120, figurenImages[6]));
+                    tile.figureImages.push(scene.add.image(tile.tileCoordinates[0]+34+ (anzahl * - 8), tile.tileCoordinates[1]+120, figurenImages[6]));
                     anzahlDerFiguren -= 10;
+                    anzahl++;
                 } 
             }
             else if (anzahlDerFiguren >= 5 ){
