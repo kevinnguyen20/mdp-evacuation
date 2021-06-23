@@ -114,7 +114,7 @@ export class LevelFunctionsUpgraded {
                 const victory = scene.sound.add('victory');
                 const musicConfig = {
                     mute: false,
-                    volume: 0.03,
+                    volume: 0.07,
                     rate: 1,
                     detune: 0,
                     loop: false,
@@ -140,7 +140,7 @@ export class LevelFunctionsUpgraded {
                 const gameOver = scene.sound.add('gameOver');
                 const musicConfig = {
                     mute: false,
-                    volume: 0.06,
+                    volume: 0.1,
                     rate: 1,
                     detune: 0,
                     loop: false,

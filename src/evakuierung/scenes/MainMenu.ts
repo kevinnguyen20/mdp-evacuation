@@ -45,7 +45,7 @@ export class MainMenu extends Phaser.Scene{
         const backgroundMusic = this.sound.add('berghain');
         const musicConfig = {
             mute: false,
-            volume: 0.05,
+            volume: 0.1,
             rate: 1,
             detune: 0,
             loop: true,
