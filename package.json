@@ -1,6 +1,6 @@
 {
-  "name": "modysy-orbit",
-  "version": "1.0.0",
+  "name": "markov-decision-processes-2",
+  "version": "1.2.0",
   "description": "A game based on Markov Decission Processes (MDP).",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.26.0",
