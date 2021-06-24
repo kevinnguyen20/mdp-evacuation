@@ -21,7 +21,6 @@ export class level1 extends Phaser.Scene {
     private movesLeft = 40; // this should be changed if it's changed in RestartButton.ts
     private diff = 10; //represents the difficulty set by the Player 10 easy, 20 medium, 30 hard
 
-
     constructor() {
         super({
             key: "level1"
