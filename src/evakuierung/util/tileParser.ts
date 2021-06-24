@@ -59,6 +59,13 @@ export class TileParser {
         if(tileID === 166) return TileParser.DIRECTION[3]; //rot    links
     }
 
+    public static tileIDToAPIID_scifiLVL_Split(tileID:number): boolean {
+        if(tileID === 179 || tileID === 180 || tileID === 181 || tileID === 182 || tileID === 99) return true;
+        return false; 
+    }
+
+
+
 
     /**
      * @param layerGround groundLayer des Levels, um herauszufinden welcher Tile eine Wand, Ziel und Start ist 
@@ -98,7 +105,7 @@ export class TileParser {
         });
         layerSplit.forEachTile((tile) => {
             const index: number = tile.index;
-            if (index === 99){
+            if (this.tileIDToAPIID_scifiLVL_Split(index)){
                 tileTuple[tile.x+(tile.y*layerAction.layer.width)].splitField = true;
                 tileTuple[tile.x+(tile.y*layerAction.layer.width)].splitPercentage = .5;
             }
