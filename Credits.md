@@ -19,3 +19,5 @@ Background music: https://opengameart.org/content/synthwave-house-loop by Fupi
 Game Over sound: https://opengameart.org/content/game-over-soundold-school by den_yes
 
 Victory sound: https://opengameart.org/content/victory-2 by jkfite01
+
+Sound on/off button: https://opengameart.org/content/sound-onoff-images by Boogle

@@ -94,6 +94,7 @@ export class LevelFunctionsUpgraded {
         })
         return goal;
     }
+
     /**
      * @param gameFinished bool if game is in a finished state
      * @param survivorScoreText 
@@ -168,12 +169,12 @@ export class LevelFunctionsUpgraded {
                 duration: 10
             })
         });
-        returnMainMenuButton.on('pointerover', function () { returnMainMenuButton.setScale(0.85, 0.85) });
-        returnMainMenuButton.on('pointerout', function () { returnMainMenuButton.setScale(1, 1) });
+        returnMainMenuButton.on('pointerover', function (){returnMainMenuButton.setScale(0.85, 0.85) });
+        returnMainMenuButton.on('pointerout', function (){returnMainMenuButton.setScale(1, 1) });
     }
 
     /**
-     * Adds background music
+     * Adds background music and a sound on/off button to the lower left corner
      * 
      * @param scene the scene (level) you're currently in
      */
@@ -181,13 +182,25 @@ export class LevelFunctionsUpgraded {
         const backgroundMusic = scene.sound.add('berghain');
         const musicConfig = {
             mute: false,
-            volume: 0.05,
+            volume: 0.14,
             rate: 1,
             detune: 0,
             loop: true,
             delay: 0
         }
         backgroundMusic.play(musicConfig);
+        const soundButton = scene.add.image(scene.sys.game.config.width as number * 1 / 50 + 100, scene.sys.game.config.height as number * 3.5 / 20 + 415,'soundOn').setInteractive();
+        soundButton.on('pointerover', function(){soundButton.setScale(0.85, 0.85);});
+        soundButton.on('pointerout', function(){soundButton.setScale(1, 1);});
+        soundButton.on("pointerdown",()=>{
+            if (soundButton.texture.key == 'soundOn') {
+                soundButton.setTexture('soundOff');
+                scene.game.sound.stopAll();
+            } else if (soundButton.texture.key == 'soundOff') {
+                soundButton.setTexture('soundOn');
+                backgroundMusic.play(musicConfig);
+            }
+        });
     }
 
     /**
