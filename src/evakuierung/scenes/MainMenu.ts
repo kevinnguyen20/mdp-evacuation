@@ -114,7 +114,7 @@ export class MainMenu extends Phaser.Scene{
         help.on('pointerover', function(){help.setScale(0.85, 0.85);});
         help.on('pointerout', function(){help.setScale(1, 1);});
         help.on("pointerdown",()=>{
-            this.scene.start('HelpMenu', {diff: diff});
+            this.scene.start('HelpMenu');
             backgroundMusic.stop();
         });
 
