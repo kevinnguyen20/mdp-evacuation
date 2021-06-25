@@ -26,11 +26,7 @@ export class RestartButton {
             scene.scene.restart();
         });
 
-        restartButton.on('pointerover', function(){
-            restartButton.setScale(0.85, 0.85)
-        });
-        restartButton.on('pointerout', function(){
-            restartButton.setScale(1, 1)
-        });
+        restartButton.on('pointerover', function(){restartButton.setScale(0.85, 0.85)});
+        restartButton.on('pointerout', function(){restartButton.setScale(1, 1)});
     }
 }
