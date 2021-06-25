@@ -60,66 +60,41 @@ export class MainMenu extends Phaser.Scene{
         hoversprite.setScale(2);
 
         // PLAY BUTTON
-        
         playButton.setInteractive()
         playButton.on("pointerdown",()=>{
-        /*  this.scene.transition({
-                target: "level1",
-                duration: 10
-            });*/
             this.scene.start('level1', {diff: diff});
         });
         playButton.on('pointerover', function(){playButton.setScale(0.85, 0.85)});
         playButton.on('pointerout', function(){playButton.setScale(1, 1)});
 
-        // level 1 button
+        // LEVEL 1 BUTTON
         level1button.setInteractive();
         level1button.on("pointerdown",()=>{
-            
-            //this.scene.transition({
-            //     target: "level1",
-            //      duration: 10
-            //  });
             this.scene.start('level1', {diff: diff});
             backgroundMusic.stop();
         });
-
         level1button.on('pointerover', function(){level1button.setScale(0.85, 0.85);});
         level1button.on('pointerout', function(){level1button.setScale(1, 1);});
 
-        // level 2 button
-
+        // LEVEL 2 BUTTON
         level2button.setInteractive();
         level2button.on("pointerdown",()=>{
-            
-            /*  this.scene.transition({
-                target: "level2",
-                duration: 10
-            });
-            */
             this.scene.start('level2', {diff: diff});
             backgroundMusic.stop();
         });
-
         level2button.on('pointerover', function(){level2button.setScale(0.85, 0.85);});
         level2button.on('pointerout', function(){level2button.setScale(1, 1);});
 
-        // level 3 button 
+        // LEVEL 3 BUTTON
         level3button.setInteractive();
         level3button.on("pointerdown",()=>{
-            
-            /* this.scene.transition({
-                target: "level3",
-                duration: 10,
-
-            });*/
             this.scene.start('level3', {diff: diff});
             backgroundMusic.stop();
         });
-
         level3button.on('pointerover', function(){level3button.setScale(0.85, 0.85);});
         level3button.on('pointerout', function(){level3button.setScale(1, 1);});
 
+        // SOUND BUTTON
         const soundButton = this.add.image(this.game.renderer.width/2+250, this.game.renderer.height/2+250,'soundOn').setInteractive();
         soundButton.on('pointerover', function(){soundButton.setScale(0.85, 0.85);});
         soundButton.on('pointerout', function(){soundButton.setScale(1, 1);});
@@ -131,6 +106,16 @@ export class MainMenu extends Phaser.Scene{
                 soundButton.setTexture('soundOn');
                 backgroundMusic.play(musicConfig);
             }
+        });
+
+        // HELP BUTTON
+        const help = this.add.text(this.game.renderer.width/2-250, this.game.renderer.height/2+235, 'HELP').setFontSize(30);
+        help.setInteractive();
+        help.on('pointerover', function(){help.setScale(0.85, 0.85);});
+        help.on('pointerout', function(){help.setScale(1, 1);});
+        help.on("pointerdown",()=>{
+            this.scene.start('HelpMenu');
+            backgroundMusic.stop();
         });
 
         const difficulty = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2+250,'difficulty').setDepth(1);
