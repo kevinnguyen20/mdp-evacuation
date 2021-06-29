@@ -132,6 +132,34 @@
                          "tileid":159
                         }],
                  "id":154
+                }, 
+                {
+                 "animation":[
+                        {
+                         "duration":200,
+                         "tileid":168
+                        }, 
+                        {
+                         "duration":200,
+                         "tileid":169
+                        }, 
+                        {
+                         "duration":200,
+                         "tileid":170
+                        }, 
+                        {
+                         "duration":200,
+                         "tileid":171
+                        }, 
+                        {
+                         "duration":200,
+                         "tileid":172
+                        }, 
+                        {
+                         "duration":200,
+                         "tileid":173
+                        }],
+                 "id":168
                 }],
          "tilewidth":32
         }],
