@@ -125,10 +125,14 @@ export class OurMovement {
 
             const depth = 1;
             if(element.isQueen){
-                ///////// log Tile at queens position //////////
-                // console.log(this.tilesList.find((tile) => (tile.tileCoordinates[0] === element.x && tile.tileCoordinates[1] === element.y)).toString());
-                ////////////////////////////////////////////////
                 tiles.queenFieldIndicator = scene.add.image(mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2, mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2,'red').setDepth(depth);
+
+                if(tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].splitField){
+                    ourGame.splitFieldsToVisit--;
+                    if(ourGame.splitFieldsToVisit >= 0){
+                        ourGame.survivorScoreText.setText('Win condition: ' + ourGame.winCond + ' aliens and ' + ourGame.splitFieldsToVisit + ' split fields');
+                    }
+                }
             }
 
             if(!ourGame.gameFinished

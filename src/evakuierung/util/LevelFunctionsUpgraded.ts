@@ -42,6 +42,7 @@ export type OurGame = {
     scoreText: Phaser.GameObjects.Text;
     movesLeft: number,
     movesLeftText: Phaser.GameObjects.Text;
+    splitFieldsToVisit: number,
     queenPos: number[];
     gameFinished: boolean;
     survivorScoreText: Phaser.GameObjects.Text;
@@ -109,9 +110,10 @@ export class LevelFunctionsUpgraded {
         const condition = ourGame.winCond;
         const survivorScoreText = ourGame.survivorScoreText;
         const survivorScore = tiles.goalTile.playersOnTopCounter;
+        const splitFieldsVisited = ourGame.splitFieldsToVisit;
 
         if (gameFinished) {
-            if (survivorScore >= condition) {
+            if (survivorScore >= condition && splitFieldsVisited <= 0) {
                 scene.game.sound.stopAll();
                 const victory = scene.sound.add('victory');
                 const musicConfig = {
@@ -149,7 +151,15 @@ export class LevelFunctionsUpgraded {
                     delay: 0
                 }
                 gameOver.play(musicConfig);
-                survivorScoreText.setText("Not enough aliens have reached the goal! " + survivorScore + " < " + condition + "\nRestart and keep on trying!");
+                if(splitFieldsVisited > 0 && survivorScore < condition){
+                    survivorScoreText.setText("Both win conditions did not pass!");
+                }
+                else if(splitFieldsVisited > 0){
+                    survivorScoreText.setText("Not enough split fields were visited!");   
+                }
+                else{
+                    survivorScoreText.setText("Not enough aliens have reached the goal! " + survivorScore + " < " + condition + "\nRestart and keep on trying!");
+                }
             }
         }
     }

@@ -18,7 +18,8 @@ export class level3 extends Phaser.Scene {
     private winCondition = 8;   
     private figureImages: Phaser.Textures.Texture[] = [];
     private movesLeft = 70; // this should be changed if it's changed in RestartButton.ts
-    private diff = 10; //represents the difficulty set by the Player 10 easy, 20 medium, 30 hard
+    private splitFieldsToVisit = 6; // this should be changed for balancing part
+    private diff = 10; // represents the difficulty set by the Player 10 easy, 20 medium, 30 hard
 
 
     constructor() {
@@ -130,16 +131,17 @@ export class level3 extends Phaser.Scene {
             ),
             movesLeft: this.movesLeft,
             movesLeftText: this.add.text(
-                this.mapPosition.mapPosX + 260, 
+                this.mapPosition.mapPosX + 280, 
                 this.mapPosition.mapPosY - 40,  
                 'Moves left: ' + this.movesLeft
             ),
+            splitFieldsToVisit: this.splitFieldsToVisit,
             queenPos: [startingPosition[0]/32, startingPosition[1]/32],
             gameFinished: false,
             survivorScoreText: this.add.text(
                 this.mapPosition.mapPosX + 70, 
                 this.mapPosition.mapPosY - 20,  
-                '' + this.winCondition + ' aliens (including queen) must reach the goal! ' 
+                'Win condition: ' + this.winCondition + ' aliens and ' + this.splitFieldsToVisit + ' split fields'
             ),
             winCond: this.winCondition
         };
