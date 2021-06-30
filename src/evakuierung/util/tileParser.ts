@@ -59,12 +59,23 @@ export class TileParser {
         if(tileID === 166) return TileParser.DIRECTION[3]; //rot    links
     }
 
+    /**
+     * Split layer parser
+     * @param tileID The id of the respective tile
+     * @returns True if it is part of the split layer
+     */
     public static tileIDToAPIID_scifiLVL_Split(tileID:number): boolean {
         if(tileID === 179 || tileID === 180 || tileID === 181 || tileID === 182 || tileID === 99) return true;
         return false; 
     }
 
-
+    public static tileIDToAPIID_scifiLVL_SplitPercentage(tileID:number): number {
+        if(tileID == 166) return 0.2; //red
+        else if(tileID == 164) return 0.4; //yellow
+        else if(tileID == 150) return 0.5; //white
+        else if(tileID == 153) return 0.8; //green
+        else return 1;
+    }
 
 
     /**
@@ -72,7 +83,7 @@ export class TileParser {
      * @returns tileTuple, access the tiles in the tileTuple with coordinates, e.g. tileTuple[x+y*tilemapwidth], 
      *          wobei das erste Tile oben links ist, x=0 und y=0 ist oben links
      */
-    public static tileTupleAPI (layerGround: Phaser.Tilemaps.TilemapLayer, layerAction: Phaser.Tilemaps.TilemapLayer, layerSplit: Phaser.Tilemaps.TilemapLayer, layerDirection: Phaser.Tilemaps.TilemapLayer) : TilePiece[] {
+    public static tileTupleAPI (layerGround: Phaser.Tilemaps.TilemapLayer, layerAction: Phaser.Tilemaps.TilemapLayer, layerSplit: Phaser.Tilemaps.TilemapLayer, layerDirection: Phaser.Tilemaps.TilemapLayer, layerPercentage: Phaser.Tilemaps.TilemapLayer) : TilePiece[] {
         const tileTuple: TilePiece[] = [];
        
         layerGround.forEachTile((tile) => {
@@ -96,6 +107,7 @@ export class TileParser {
                 ));
             }
         });
+
         layerAction.forEachTile((tile) => { //check if it is an actionField
             const index: number = this.tileIDToAPIID_scifiLVL_Action(tile.index);
             if (index === this.ACTIONFIELD_ID){
@@ -103,17 +115,23 @@ export class TileParser {
                 x.tileType[1] = true;
             }
         });
+
         layerSplit.forEachTile((tile) => {
             const index: number = tile.index;
             if (this.tileIDToAPIID_scifiLVL_Split(index)){
-                tileTuple[tile.x+(tile.y*layerAction.layer.width)].splitField = true;
-                tileTuple[tile.x+(tile.y*layerAction.layer.width)].splitPercentage = .5;
+                tileTuple[tile.x+(tile.y*layerAction.layer.width)].splitField = true;      
             }
-        })
+        });
+
         layerDirection.forEachTile((tile)=> {
             const index: number = tile.index;
             tileTuple[tile.x+(tile.y*layerAction.layer.width)].splitDirection = this.tileIDToAPIID_scifiLVL_Direction(index);
-        })
+        });
+
+        layerPercentage.forEachTile((tile)=>{
+            const index: number = tile.index;
+            tileTuple[tile.x+(tile.y*layerAction.layer.width)].splitPercentage = this.tileIDToAPIID_scifiLVL_SplitPercentage(index);
+        });
         
 
         return tileTuple;      
