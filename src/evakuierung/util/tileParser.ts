@@ -116,19 +116,19 @@ export class TileParser {
             }
         });
 
-        layerSplit.forEachTile((tile) => {
+        layerSplit.forEachTile((tile) => { //check if it is a split field
             const index: number = tile.index;
             if (this.tileIDToAPIID_scifiLVL_Split(index)){
                 tileTuple[tile.x+(tile.y*layerAction.layer.width)].splitField = true;      
             }
         });
 
-        layerDirection.forEachTile((tile)=> {
+        layerDirection.forEachTile((tile)=> { //determines the direction for the split
             const index: number = tile.index;
             tileTuple[tile.x+(tile.y*layerAction.layer.width)].splitDirection = this.tileIDToAPIID_scifiLVL_Direction(index);
         });
 
-        layerPercentage.forEachTile((tile)=>{
+        layerPercentage.forEachTile((tile)=>{ //determines the split percentage
             const index: number = tile.index;
             tileTuple[tile.x+(tile.y*layerAction.layer.width)].splitPercentage = this.tileIDToAPIID_scifiLVL_SplitPercentage(index);
         });
