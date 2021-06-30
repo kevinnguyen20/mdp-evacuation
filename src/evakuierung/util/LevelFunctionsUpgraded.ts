@@ -12,6 +12,7 @@ export type Layers = {
     layerDesign: Phaser.Tilemaps.TilemapLayer;
     layerPerspective: Phaser.Tilemaps.TilemapLayer;
     layerDirection: Phaser.Tilemaps.TilemapLayer;
+    layerPercentage: Phaser.Tilemaps.TilemapLayer;
 };
 
 export type OurMap = {
@@ -332,11 +333,19 @@ export class LevelFunctionsUpgraded {
             y
         )
         tmplayerDirection.setVisible(false);
+        
+        const tmplayerPercentage = tmpMap.createLayer(
+            'splitPercentage',
+            tileset,
+            x,
+            y
+        );
 
         tmplayerGround.setDepth(0);
         tmplayerSplit.setDepth(3);
         tmplayerAction.setDepth(1);
         tmplayerDesign.setDepth(2);
+        tmplayerPercentage.setDepth(4);
         tmplayerPerspective.setDepth(20);
 
         // eslint-disable-next-line prefer-const
@@ -355,7 +364,8 @@ export class LevelFunctionsUpgraded {
             layerDesign: tmplayerDesign,
             layerAction: tmplayerAction,
             layerPerspective: tmplayerPerspective,
-            layerDirection: tmplayerDirection
+            layerDirection: tmplayerDirection,
+            layerPercentage: tmplayerPercentage
         };
     }
 
