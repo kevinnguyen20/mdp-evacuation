@@ -70,7 +70,7 @@ export class TileParser {
     }
 
     public static tileIDToAPIID_scifiLVL_SplitPercentage(tileID:number): number {
-        if(tileID == 166) return 0.2; //red
+        if(tileID == 166) return 0.25; //red
         else if(tileID == 164) return 0.4; //yellow
         else if(tileID == 150) return 0.5; //white
         else if(tileID == 153) return 0.8; //green
