@@ -13,6 +13,7 @@ Das Level ist in 6 Layer unterteilt:
     'grün' (ID =  153, % von Aliens gehen nach rechts), 'rot' (ID = 166, % von Aliens gehen nach links),
     'hell blau' (ID = 151, % von Aliens gehen nach oben). Prozente müssen noch von uns entschieden werden. 
     - splitPercentage: white (ID 149) = 20%, Yellow (ID 163) = 50%, Green (ID 152) = 70%, Red (ID 165) = 100% (Percentages might change through balancing)
+    - Punishment: enthaelt die Tiles auf den der Spieler bestraft werden soll
 
 
 Das Level wurde mit dem Programm Tiled erstellt.
