@@ -21,7 +21,7 @@ export class OurMovement {
             
             this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
             this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition); // freshly added
-            LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);
+            //LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);
   
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);
             LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel, diff);
@@ -32,7 +32,7 @@ export class OurMovement {
 
             this.moveInGeneratedDirection(false, Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
             this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition); // freshly added
-            LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);
+            // LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);
 
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);                
             LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel, diff);
@@ -43,7 +43,7 @@ export class OurMovement {
 
             this.moveInGeneratedDirection(true, Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
             this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition); // freshly added
-            LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);    
+            // LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);    
 
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);                
             LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel, diff);
@@ -54,7 +54,7 @@ export class OurMovement {
 
             this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
             this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition); // freshly added
-            LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);    
+            // LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);    
             
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);                
             LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel, diff);

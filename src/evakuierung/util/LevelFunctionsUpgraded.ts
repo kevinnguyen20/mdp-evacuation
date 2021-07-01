@@ -13,6 +13,7 @@ export type Layers = {
     layerPerspective: Phaser.Tilemaps.TilemapLayer;
     layerDirection: Phaser.Tilemaps.TilemapLayer;
     layerPercentage: Phaser.Tilemaps.TilemapLayer;
+    layerPunishment: Phaser.Tilemaps.TilemapLayer;
 };
 
 export type OurMap = {
@@ -306,6 +307,13 @@ export class LevelFunctionsUpgraded {
             x,
             y
         );
+        
+        const tmpPunishment = tmpMap.createLayer (
+            'Punishment',
+            tileset,
+            x,
+            y
+        )
 
         const tmplayerSplit = tmpMap.createLayer(
             'Split',
@@ -375,7 +383,8 @@ export class LevelFunctionsUpgraded {
             layerAction: tmplayerAction,
             layerPerspective: tmplayerPerspective,
             layerDirection: tmplayerDirection,
-            layerPercentage: tmplayerPercentage
+            layerPercentage: tmplayerPercentage,
+            layerPunishment: tmpPunishment
         };
     }
 
@@ -480,5 +489,52 @@ export class LevelFunctionsUpgraded {
             ourGame.movesLeftText.setText('Moves left: ' + ourGame.movesLeft);
         }
     }
+    /**
+     * Checks if a figure is on a Bestrafungsfeld if so this figure "dies"
+     * @param tileList our tiles
+     * @param fig our figures
+     */
+    public static groupOnBestrafungsFeld (tileList: TilePiece[], fig: Figures) :void {
+        let index = 0;
+        tileList.forEach((tile) => {
+            if (tile.punishment && tile.playerOnTopList.length > 0){
+                tile.playerOnTopList.forEach((figure) => {
+                    index = 0;
+                    fig.figureList.some((figToDel)=> {
+                        if (figure === figToDel) {
+                            fig.figureList.splice(index, 1);
+                        }
+                        index++;
+                    })
+                })
+                tile.playersOnTopCounter = 0;
+            }
+        })
+    }
 
+    public static queenAliveCheck (scene:Phaser.Scene, ourGame: OurGame, fig:Figures): void {
+        let queenAlive = false;
+        fig.figureList.forEach((figure) => {
+            if (figure.isQueen) 
+                queenAlive = true
+        })
+
+        if (!queenAlive) {
+            scene.input.keyboard.enabled = false;
+            const survivorScoreText = ourGame.survivorScoreText;
+            scene.game.sound.stopAll();
+            const gameOver = scene.sound.add('gameOver');
+            const musicConfig = {
+                mute: false,
+                volume: 0.14,
+                rate: 1,
+                detune: 0,
+                loop: false,
+                delay: 0
+            }
+            gameOver.play(musicConfig);
+            survivorScoreText.setText('Your Queen died! Try Again!')
+        }
+        
+    }
 }

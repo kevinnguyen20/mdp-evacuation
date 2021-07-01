@@ -97,7 +97,7 @@ export class level3 extends Phaser.Scene {
         };
 
         // TILES
-        const t1 = TileParser.tileTupleAPI(this.ourMap.layers.layerGround, this.ourMap.layers.layerAction, this.ourMap.layers.layerSplit, this.ourMap.layers.layerDirection, this.ourMap.layers.layerPercentage);
+        const t1 = TileParser.tileTupleAPI(this.ourMap.layers.layerGround, this.ourMap.layers.layerAction, this.ourMap.layers.layerSplit, this.ourMap.layers.layerDirection, this.ourMap.layers.layerPercentage, this.ourMap.layers.layerPunishment);
         const t2 = LevelFunctionsUpgraded.getGoalTile(t1);
         this.tiles = {
             tilesList: t1,
@@ -158,9 +158,12 @@ export class level3 extends Phaser.Scene {
             if(LevelFunctionsUpgraded.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
                 if(!this.ourGame.gameFinished){
                     OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'left', this.mapPosition, 1, this.diff);
+                    LevelFunctionsUpgraded.groupOnBestrafungsFeld(this.tiles.tilesList, this.figures);
+                    LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);
                     LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
                     this.ourGame.movesLeft--;
                     LevelFunctionsUpgraded.checkMovesLeft(this, this.ourGame);
+                    LevelFunctionsUpgraded.queenAliveCheck(this, this.ourGame, this.figures);
                 }
             }
         });
@@ -169,9 +172,12 @@ export class level3 extends Phaser.Scene {
             if (LevelFunctionsUpgraded.queenValidMoveCheck(false, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
                 if(!this.ourGame.gameFinished){
                     OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'right', this.mapPosition, 1, this.diff);
+                    LevelFunctionsUpgraded.groupOnBestrafungsFeld(this.tiles.tilesList, this.figures);
+                    LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);
                     LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
                     this.ourGame.movesLeft--;
                     LevelFunctionsUpgraded.checkMovesLeft(this, this.ourGame);
+                    LevelFunctionsUpgraded.queenAliveCheck(this, this.ourGame, this.figures);
                 }
             }
         });
@@ -180,9 +186,12 @@ export class level3 extends Phaser.Scene {
             if (LevelFunctionsUpgraded.queenValidMoveCheck(true, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
                 if(!this.ourGame.gameFinished){
                     OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'down', this.mapPosition, 1, this.diff);
+                    LevelFunctionsUpgraded.groupOnBestrafungsFeld(this.tiles.tilesList, this.figures);
+                    LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);
                     LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
                     this.ourGame.movesLeft--;
                     LevelFunctionsUpgraded.checkMovesLeft(this, this.ourGame);
+                    LevelFunctionsUpgraded.queenAliveCheck(this, this.ourGame, this.figures);
                 }
             }
         });
@@ -191,9 +200,12 @@ export class level3 extends Phaser.Scene {
             if (LevelFunctionsUpgraded.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
                 if(!this.ourGame.gameFinished){
                     OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'up', this.mapPosition, 1,this.diff);
+                    LevelFunctionsUpgraded.groupOnBestrafungsFeld(this.tiles.tilesList, this.figures);
+                    LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);
                     LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
                     this.ourGame.movesLeft--;
                     LevelFunctionsUpgraded.checkMovesLeft(this, this.ourGame);
+                    LevelFunctionsUpgraded.queenAliveCheck(this, this.ourGame, this.figures);
                 }
             }
         });
