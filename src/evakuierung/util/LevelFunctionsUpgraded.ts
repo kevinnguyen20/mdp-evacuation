@@ -228,7 +228,7 @@ export class LevelFunctionsUpgraded {
         const arr = [];
         let x = 0;
         figList.forEach((element) => {
-            if (element.x === goal.tileCoordinates[0] && element.y === goal.tileCoordinates[1]) {
+            if (element.x === goal.tileCoordinates[0] && element.y === goal.tileCoordinates[1] && !element.isQueen) {
                 arr.push(x);
             }
             x++;
