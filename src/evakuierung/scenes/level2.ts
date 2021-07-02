@@ -214,6 +214,6 @@ export class level2 extends Phaser.Scene {
 
 
     update(): void {
-        this.tiles.animatedTiles.forEach(tile => tile.update(14));
+        this.tiles.animatedTiles.forEach(tile => tile.update(11));
     }
 }

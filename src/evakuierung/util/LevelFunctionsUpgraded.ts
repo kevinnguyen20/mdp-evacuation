@@ -406,6 +406,20 @@ export class LevelFunctionsUpgraded {
                 });
             });
 
+            map.getLayer("Punishment").data.forEach(tileRow => {
+                tileRow.forEach(tile => {
+                    if (tile.index - tileset.firstgid === parseInt(tileid, 10)) {
+                        animatedTiles.push(
+                            new AnimatedTile(
+                                tile,
+                                tileData[tileid].animation,
+                                tileset.firstgid
+                            )
+                        );
+                    }
+                });
+            });
+
         }
     }
 
