@@ -28,6 +28,8 @@ export class MainMenu extends Phaser.Scene{
         this.load.audio('victory', './assets/sprites/Victory.wav');
         this.load.image('soundOn', './assets/sprites/soundOnBlack.png');
         this.load.image('soundOff', './assets/sprites/soundOffBlack.png');
+        this.load.image('theme_button' , './assets/sprites/theme/themeButton.png');
+        
     }
 
 
@@ -178,5 +180,16 @@ export class MainMenu extends Phaser.Scene{
             hard.setVisible(false);
             difficultytxt.setText('Current difficulty: hard')
         });
+
+        // adding theme elements here 
+        const themeButton = this.add.image(100, 50,'theme_button');
+        themeButton.setInteractive();
+        themeButton.on("pointerdown",()=>{
+            this.scene.start('Theme');
+            backgroundMusic.stop();
+        });
+        themeButton.on('pointerover', function(){themeButton.setScale(0.85, 0.85);});
+        themeButton.on('pointerout', function(){themeButton.setScale(1, 1);});
+
     }
 }
