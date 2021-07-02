@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="24" height="12" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="1">
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="24" height="12" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="1">
  <editorsettings>
   <export target="Level_3.tmx" format="tmx"/>
  </editorsettings>
@@ -13,6 +13,16 @@
     <frame tileid="157" duration="200"/>
     <frame tileid="158" duration="200"/>
     <frame tileid="159" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="168">
+   <animation>
+    <frame tileid="168" duration="200"/>
+    <frame tileid="169" duration="200"/>
+    <frame tileid="170" duration="200"/>
+    <frame tileid="171" duration="200"/>
+    <frame tileid="172" duration="200"/>
+    <frame tileid="173" duration="200"/>
    </animation>
   </tile>
  </tileset>
@@ -61,6 +71,22 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,164,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,164,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,164,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="9" name="Punishment" width="24" height="12">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,169,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,169,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
