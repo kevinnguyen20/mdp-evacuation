@@ -12,6 +12,7 @@ export class TilePiece{
     public directionProbabilities;
     public figureImages: Phaser.GameObjects.Image [] = [];
     public punishment; // true, wenn Bestrafungsfeld
+    public fragezeichen; // true, wenn Fragezeichen
 
     // this is where the players on top of a tile are stored, 
     // it should be a list of objects, when the piglet class is created
