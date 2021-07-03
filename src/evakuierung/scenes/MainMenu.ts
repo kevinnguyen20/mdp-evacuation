@@ -34,7 +34,7 @@ export class MainMenu extends Phaser.Scene{
 
 
     create(): void{
-        let diff= 10;
+        let diff= 30;
         const text1 = this.add.text(130, 100,'EVAKUIERUNG', {font : " 74px Arial Black",}).setDepth(1);
         text1.setFill('#00f');
         text1.setColor('#00f')
@@ -155,7 +155,7 @@ export class MainMenu extends Phaser.Scene{
         });
 
         easy.on('pointerup', () => {
-            diff = 10;
+            diff = 30;
             difficulty.setVisible(true);
             easy.setVisible(false);
             medium.setVisible(false);
@@ -173,7 +173,7 @@ export class MainMenu extends Phaser.Scene{
         });
         
         hard.on('pointerup', () => {
-            diff = 30;
+            diff = 10;
             difficulty.setVisible(true);
             easy.setVisible(false);
             medium.setVisible(false);
