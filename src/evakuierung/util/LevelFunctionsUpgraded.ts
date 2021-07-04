@@ -14,6 +14,7 @@ export type Layers = {
     layerDirection: Phaser.Tilemaps.TilemapLayer;
     layerPercentage: Phaser.Tilemaps.TilemapLayer;
     layerPunishment: Phaser.Tilemaps.TilemapLayer;
+    layerFragezeichen: Phaser.Tilemaps.TilemapLayer;
 };
 
 export type OurMap = {
@@ -307,6 +308,13 @@ export class LevelFunctionsUpgraded {
             x,
             y
         );
+
+        const tmplayerFragezeichen = tmpMap.createLayer(
+            'Fragezeichen',
+            tileset,
+            x,
+            y
+        );
         
         const tmpPunishment = tmpMap.createLayer (
             'Punishment',
@@ -314,7 +322,6 @@ export class LevelFunctionsUpgraded {
             x,
             y
         )
-
         const tmplayerSplit = tmpMap.createLayer(
             'Split',
             tileset,
@@ -358,7 +365,7 @@ export class LevelFunctionsUpgraded {
             x,
             y
         );
-
+        tmplayerFragezeichen.setDepth(10);
         tmplayerGround.setDepth(0);
         tmplayerSplit.setDepth(3);
         tmplayerAction.setDepth(1);
@@ -384,7 +391,8 @@ export class LevelFunctionsUpgraded {
             layerPerspective: tmplayerPerspective,
             layerDirection: tmplayerDirection,
             layerPercentage: tmplayerPercentage,
-            layerPunishment: tmpPunishment
+            layerPunishment: tmpPunishment,
+            layerFragezeichen: tmplayerFragezeichen
         };
     }
 

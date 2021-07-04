@@ -87,12 +87,17 @@ export class TileParser {
         else return false;
     }
 
+    public static TileIDToAPIID_scifiLVL_Fragezeichen(tileID:number): boolean {
+        if(tileID == 99) return true;
+        else return false;
+    }
+
     /**
      * @param layerGround groundLayer des Levels, um herauszufinden welcher Tile eine Wand, Ziel und Start ist 
      * @returns tileTuple, access the tiles in the tileTuple with coordinates, e.g. tileTuple[x+y*tilemapwidth], 
      *          wobei das erste Tile oben links ist, x=0 und y=0 ist oben links
      */
-    public static tileTupleAPI (layerGround: Phaser.Tilemaps.TilemapLayer, layerAction: Phaser.Tilemaps.TilemapLayer, layerSplit: Phaser.Tilemaps.TilemapLayer, layerDirection: Phaser.Tilemaps.TilemapLayer, layerPercentage: Phaser.Tilemaps.TilemapLayer, layerPunishment: Phaser.Tilemaps.TilemapLayer) : TilePiece[] {
+    public static tileTupleAPI (layerGround: Phaser.Tilemaps.TilemapLayer, layerAction: Phaser.Tilemaps.TilemapLayer, layerSplit: Phaser.Tilemaps.TilemapLayer, layerDirection: Phaser.Tilemaps.TilemapLayer, layerPercentage: Phaser.Tilemaps.TilemapLayer, layerPunishment: Phaser.Tilemaps.TilemapLayer, layerFragezeichen: Phaser.Tilemaps.TilemapLayer) : TilePiece[] {
         const tileTuple: TilePiece[] = [];
        
         layerGround.forEachTile((tile) => {
@@ -140,12 +145,23 @@ export class TileParser {
         layerPercentage.forEachTile((tile)=>{ //determines the split percentage
             const index: number = tile.index;
             tileTuple[tile.x+(tile.y*layerAction.layer.width)].splitPercentage = this.tileIDToAPIID_scifiLVL_SplitPercentage(index);
+            tile.setSize(18,18,32,32);
+            tile.pixelX = tile.pixelX+7;
+            tile.pixelY = tile.pixelY+7;
         });
         
         layerPunishment.forEachTile((tile) => {
             const index: number = tile.index;
             tileTuple[tile.x+(tile.y*layerAction.layer.width)].punishment = this.TileIDToAPIID_scifiLVL_Punishment(index);
         });
+
+        layerFragezeichen.forEachTile((tile) => {
+            const index: number = tile.index;
+            tileTuple[tile.x+(tile.y*layerAction.layer.width)].fragezeichen = this.TileIDToAPIID_scifiLVL_Fragezeichen(index);
+            tile.setSize(36,36,32,32);
+            tile.pixelX = tile.pixelX -2;
+            tile.pixelY = tile.pixelY -2;
+        })
         
 
         return tileTuple;      

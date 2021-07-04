@@ -98,7 +98,7 @@ export class level2 extends Phaser.Scene {
         };
 
         // TILES
-        const t1 = TileParser.tileTupleAPI(this.ourMap.layers.layerGround, this.ourMap.layers.layerAction, this.ourMap.layers.layerSplit, this.ourMap.layers.layerDirection, this.ourMap.layers.layerPercentage, this.ourMap.layers.layerPunishment);
+        const t1 = TileParser.tileTupleAPI(this.ourMap.layers.layerGround, this.ourMap.layers.layerAction, this.ourMap.layers.layerSplit, this.ourMap.layers.layerDirection, this.ourMap.layers.layerPercentage, this.ourMap.layers.layerPunishment, this.ourMap.layers.layerFragezeichen);
         const t2 = LevelFunctionsUpgraded.getGoalTile(t1);
         this.tiles = {
             tilesList: t1,
