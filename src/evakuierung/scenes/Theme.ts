@@ -38,6 +38,11 @@ export class Theme extends Phaser.Scene{
         this.load.image('soundOn', './assets/sprites/soundOnBlack.png');
         this.load.image('soundOff', './assets/sprites/soundOffBlack.png');
 
+        // for the animation flares
+
+        this.load.image('blueFlare', 'assets/sprites/theme/blue-flare.png');
+        this.load.image('whiteFlare', 'assets/sprites/theme/white-flare.png');
+
 
     }
     create(): void{
@@ -75,6 +80,35 @@ export class Theme extends Phaser.Scene{
             spotlight.setColor(colors[currentColor]);
     
         });
+
+        // flare feature
+        const particles = this.add.particles('whiteFlare');
+
+        const emitter = particles.createEmitter({
+            lifespan: 1000,
+            speed: { min: 100, max: 200 },
+            angle: 240,
+            gravityY: 300,
+            rotate: { start: 0, end: 360 },
+            scale: { start: 0.5, end: 0 },
+            blendMode: 'difference'
+        });
+
+        const flare1 = this.add.image(-400, 80, 'whiteFlare').setBlendMode('difference');
+        const flare2 = this.add.image(-400, 80, 'blueFlare').setBlendMode('difference');
+        
+        emitter.startFollow(flare1);
+
+        this.tweens.add({
+            targets: [ flare1,flare2 ],
+            x: 2000,
+            duration: 6000,
+            ease: 'Power1',
+            repeat: -1
+        });
+
+
+        // difficulty feature
 
 
         let diff = 10;
@@ -212,7 +246,7 @@ export class Theme extends Phaser.Scene{
         });
         backButton.on('pointerover', function(){backButton.setScale(0.85, 0.85);});
         backButton.on('pointerout', function(){backButton.setScale(1, 1);});
-        
+
 
     }
 
