@@ -15,7 +15,10 @@ export class Theme extends Phaser.Scene{
         this.load.image('particle', 'assets/sprites/yellow.png');
         this.load.image('returnMainMenuButton', './assets/sprites/returnMainMenu.png');
         this.load.bitmapFont('ice', ['assets/sprites/theme/iceicebaby.png', 'assets/sprites/theme/iceicebaby_n.png'], 'assets/sprites/theme/iceicebaby.xml');
-
+        this.load.image('alien', './assets/sprites/alien.svg');
+        this.load.image('alienBlue1', 'assets/sprites/alien_blue_1.png');
+        this.load.image('alienBlue2', 'assets/sprites/alien_blue_2.png');
+        this.load.image('alienPurple', 'assets/sprites/alien_purple.png');
         // for the buttons
 
         this.load.image('play_button','./assets/sprites/theme/play_button.png');
@@ -47,10 +50,24 @@ export class Theme extends Phaser.Scene{
     }
     create(): void{
 
+        const hoversprite = this.add.sprite(this.game.renderer.width/2-(220) , this.game.renderer.height/2-200,'alien');
+        hoversprite.setScale(2);
+        hoversprite.setDepth(0.9);
+        hoversprite.setRotation(90);
+
+        const alien2 = this.add.sprite(this.game.renderer.width/2+(30) , this.game.renderer.height/2-260,'alienBlue2');
+        alien2.setScale(2);
+        alien2.setDepth(0.4);
+
+        const alien3 = this.add.sprite(this.game.renderer.width/2+370 , this.game.renderer.height/2-260,'alienPurple');
+        alien3.setScale(3);
+        alien3.setDepth(0.1);
+        alien3.setRotation(5)
+
         // the main heading with new font style
         this.add.sprite(400, 300, 'bg').setPipeline('Light2D').setAlpha(0.8);
 
-        this.add.bitmapText(30, 150, 'ice', 'EVAKUIERUNG', 110).setCenterAlign().setPipeline('Light2D');
+        this.add.bitmapText(this.game.renderer.width/2- 360, this.game.renderer.height/2-250, 'ice', 'EVAKUIERUNG', 110).setCenterAlign().setPipeline('Light2D');
         // enabling the lights for the cursor/ pointer
         this.lights.enable();
         this.lights.setAmbientColor(0x808080);
@@ -94,8 +111,8 @@ export class Theme extends Phaser.Scene{
             blendMode: 'difference'
         });
 
-        const flare1 = this.add.image(-400, 80, 'whiteFlare').setBlendMode('difference');
-        const flare2 = this.add.image(-400, 80, 'blueFlare').setBlendMode('difference');
+        const flare1 = this.add.image(-400,  this.game.renderer.height/2-250, 'whiteFlare').setBlendMode('difference').setDepth(2);
+        const flare2 = this.add.image(-400,  this.game.renderer.height/2-250, 'blueFlare').setBlendMode('difference').setDepth(2);
         
         emitter.startFollow(flare1);
 
@@ -111,10 +128,10 @@ export class Theme extends Phaser.Scene{
         // difficulty feature
 
 
-        let diff = 10;
+        let diff = 30;
 
-        const playButton = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2,'play_button');
-        const levelButton = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2+100,'levels_button').setDepth(1);
+        const playButton = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2 - 90,'play_button');
+        const levelButton = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2-10,'levels_button').setDepth(1);
         
 
         // PLAY BUTTON
@@ -162,7 +179,7 @@ export class Theme extends Phaser.Scene{
         });
 
         // help button
-        const helpButton = this.add.image(this.game.renderer.width/2-250, this.game.renderer.height/2+235,'help_button');
+        const helpButton = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2+70,'help_button');
         helpButton.setInteractive();
         helpButton.on('pointerover', function(){helpButton.setScale(0.85, 0.85);});
         helpButton.on('pointerout', function(){helpButton.setScale(1, 1);});
@@ -239,7 +256,7 @@ export class Theme extends Phaser.Scene{
 
         // back to main menu 
 
-        const backButton = this.add.image(100, 50,'returnMainMenuButton');
+        const backButton = this.add.image(this.game.renderer.width/2-250, this.game.renderer.height/2+250,'returnMainMenuButton');
         backButton.setInteractive();
         backButton.on("pointerdown",()=>{
             this.scene.start('MainMenu');
