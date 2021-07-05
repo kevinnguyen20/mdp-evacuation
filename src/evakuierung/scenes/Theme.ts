@@ -34,7 +34,7 @@ export class Theme extends Phaser.Scene{
 
         // the main heading with new font style
         this.add.sprite(400, 300, 'bg').setPipeline('Light2D').setAlpha(0.8);
-        //this.add.text(250,400,"CLICK ON THE SCREEN").setAlign("center").setScale(2);
+
         this.add.bitmapText(30, 150, 'ice', 'EVAKUIERUNG', 110).setCenterAlign().setPipeline('Light2D');
         // enabling the lights for the cursor/ pointer
         this.lights.enable();
