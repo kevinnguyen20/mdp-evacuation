@@ -16,6 +16,18 @@ export class Theme extends Phaser.Scene{
         this.load.image('returnMainMenuButton', './assets/sprites/returnMainMenu.png');
         this.load.bitmapFont('ice', ['assets/sprites/theme/iceicebaby.png', 'assets/sprites/theme/iceicebaby_n.png'], 'assets/sprites/theme/iceicebaby.xml');
 
+        // for the buttons
+
+        this.load.image('play_button','./assets/sprites/theme/play_button.png');
+        this.load.image('level1_button','./assets/sprites/theme/level1_button.png');
+        this.load.image('level2_button','./assets/sprites/theme/level2_button.png');
+        this.load.image('level3_button','./assets/sprites/theme/level3_button.png');
+        this.load.image('difficulty', './assets/sprites/theme/difficulty_button.png');
+        this.load.image('easy', './assets/sprites/theme/easy_button.png');
+        this.load.image('medium', './assets/sprites/theme/medium_button.png');
+        this.load.image('hard', './assets/sprites/theme/hard_button.png');
+
+
     }
     create(): void{
 
@@ -52,6 +64,9 @@ export class Theme extends Phaser.Scene{
             spotlight.setColor(colors[currentColor]);
     
         });
+
+
+ 
 
 
         // back to main menu 
