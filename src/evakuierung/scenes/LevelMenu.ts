@@ -1,5 +1,4 @@
 
-import { MainMenu } from "./MainMenu";
 
 export class LevelMenu extends Phaser.Scene{
 
@@ -13,11 +12,13 @@ export class LevelMenu extends Phaser.Scene{
 
     preload(): void{
 
-        this.load.image('bg', ['assets/sprites/theme/rock-ore.jpg', 'assets/sprites/theme/rock-ore-n.jpg']);
+        this.load.image('bg1', ['assets/sprites/theme/rock-ore.jpg', 'assets/sprites/theme/rock-ore-n.jpg']);
+
+
         this.load.image('level1_button','./assets/sprites/level1_button.png');
         this.load.image('level2_button','./assets/sprites/level2_button.png');
         this.load.image('level3_button','./assets/sprites/level3_button.png');
-        this.load.image('back_button','./assets/sprites/back_button.png');
+        this.load.image('back_button','./assets/sprites/theme/back_button.png');
         this.load.image('difficulty', './assets/sprites/theme/difficulty_button.png');
         this.load.image('easy', './assets/sprites/theme/easy_button.png');
         this.load.image('medium', './assets/sprites/theme/medium_button.png');
@@ -41,15 +42,15 @@ export class LevelMenu extends Phaser.Scene{
 
     create(): void{
 
-        let diff = 10;
+        let diff = 30;
 
 
-        this.add.sprite(400, 300, 'bg').setPipeline('Light2D').setAlpha(0.8);
+        this.add.sprite(400, 300, 'bg1').setPipeline('Light2D').setAlpha(0.8);
 
         const level1button = this.add.image(200, this.game.renderer.height/2,'level1_button').setDepth(1);
         const level2button = this.add.image(400, this.game.renderer.height/2,'level2_button').setDepth(1);
         const level3button = this.add.image(600, this.game.renderer.height/2,'level3_button').setDepth(1);
-        const backButton = this.add.image(700, this.game.renderer.height-100,'back_button').setDepth(1);
+        const backButton = this.add.image(750, this.game.renderer.height/2+200,'back_button').setDepth(1);
 
 
         const backgroundMusic = this.sound.add('berghain');
@@ -129,7 +130,7 @@ export class LevelMenu extends Phaser.Scene{
         });
 
         easy.on('pointerup', () => {
-            diff = 10;
+            diff = 30;
             difficulty.setVisible(true);
             easy.setVisible(false);
             medium.setVisible(false);
@@ -147,7 +148,7 @@ export class LevelMenu extends Phaser.Scene{
         });
         
         hard.on('pointerup', () => {
-            diff = 30;
+            diff = 10;
             difficulty.setVisible(true);
             easy.setVisible(false);
             medium.setVisible(false);
@@ -186,7 +187,7 @@ export class LevelMenu extends Phaser.Scene{
         });
 
         // help button
-        const helpButton = this.add.image(this.game.renderer.width/2-250, this.game.renderer.height/2+235, 'help_button');
+        const helpButton = this.add.image(this.game.renderer.width/2-200, this.game.renderer.height/2+250, 'help_button');
         helpButton.setInteractive();
         helpButton.on('pointerover', function(){helpButton.setScale(0.85, 0.85);});
         helpButton.on('pointerout', function(){helpButton.setScale(1, 1);});
