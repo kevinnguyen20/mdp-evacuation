@@ -17,7 +17,7 @@ const config: Phaser.Types.Core.GameConfig = {
         height: 600,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [MainMenu, LevelMenu, level1, level2, level3, HelpMenu, Theme],
+    scene: [Theme,MainMenu, LevelMenu, level1, level2, level3, HelpMenu],
     physics: {
         default: 'arcade',
         arcade: {
