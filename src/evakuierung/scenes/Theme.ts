@@ -27,6 +27,16 @@ export class Theme extends Phaser.Scene{
         this.load.image('easy', './assets/sprites/theme/easy_button.png');
         this.load.image('medium', './assets/sprites/theme/medium_button.png');
         this.load.image('hard', './assets/sprites/theme/hard_button.png');
+        this.load.image('help_button', './assets/sprites/theme/help_button.png');
+
+
+        // audio and music
+
+        this.load.audio('berghain', './assets/sprites/synthwavehouse.mp3');
+        this.load.audio('gameOver', './assets/sprites/GameOver.wav');
+        this.load.audio('victory', './assets/sprites/Victory.wav');
+        this.load.image('soundOn', './assets/sprites/soundOnBlack.png');
+        this.load.image('soundOff', './assets/sprites/soundOffBlack.png');
 
 
     }
@@ -85,9 +95,48 @@ export class Theme extends Phaser.Scene{
         levelButton.setInteractive();
         levelButton.on("pointerdown",()=>{
             this.scene.start('LevelMenu', {diff: diff});
+            backgroundMusic.stop();
         });
         levelButton.on('pointerover', function(){levelButton.setScale(0.85, 0.85)});
         levelButton.on('pointerout', function(){ levelButton.setScale(1, 1)});
+
+        // background music
+
+        const backgroundMusic = this.sound.add('berghain');
+        const musicConfig = {
+            mute: false,
+            volume: 0.14,
+            rate: 1,
+            detune: 0,
+            loop: true,
+            delay: 0
+        }
+        backgroundMusic.play(musicConfig);
+
+        // SOUND BUTTON
+        const soundButton = this.add.image(this.game.renderer.width/2+250, this.game.renderer.height/2+250,'soundOn').setInteractive();
+        soundButton.on('pointerover', function(){soundButton.setScale(0.85, 0.85);});
+        soundButton.on('pointerout', function(){soundButton.setScale(1, 1);});
+        soundButton.on("pointerdown",()=>{
+            if (soundButton.texture.key == 'soundOn') {
+                soundButton.setTexture('soundOff');
+                this.game.sound.stopAll();
+            } else if (soundButton.texture.key == 'soundOff') {
+                soundButton.setTexture('soundOn');
+                backgroundMusic.play(musicConfig);
+            }
+        });
+
+        // help button
+        const helpButton = this.add.image(this.game.renderer.width/2-250, this.game.renderer.height/2+235,'help_button');
+        helpButton.setInteractive();
+        helpButton.on('pointerover', function(){helpButton.setScale(0.85, 0.85);});
+        helpButton.on('pointerout', function(){helpButton.setScale(1, 1);});
+        helpButton.on("pointerdown",()=>{
+            this.scene.start('HelpMenu');
+            backgroundMusic.stop();
+        });
+
 
         const difficulty = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2+250,'difficulty').setDepth(1);
         const easy = this.add.image(this.game.renderer.width/2-200, this.game.renderer.height/2+250,'easy').setDepth(1);
