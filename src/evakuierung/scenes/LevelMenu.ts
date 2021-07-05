@@ -42,6 +42,8 @@ export class LevelMenu extends Phaser.Scene{
 
     create(): void{
 
+        this.add.sprite(400, 300, 'bg1').setAlpha(0.8);
+
         let diff = 30;
 
 
@@ -194,6 +196,36 @@ export class LevelMenu extends Phaser.Scene{
         helpButton.on("pointerdown",()=>{
             this.scene.start('HelpMenu');
             backgroundMusic.stop();
+        });
+
+        // enabling the lights for the cursor/ pointer
+        this.lights.enable();
+        this.lights.setAmbientColor(0x808080);
+        // spotlight per click
+        const spotlight = this.lights.addLight(400, 300, 280).setIntensity(3);
+
+        this.input.on('pointermove', function (pointer) {
+
+            spotlight.x = pointer.x;
+            spotlight.y = pointer.y;
+    
+        });
+        const colors = [
+            0xffffff, 0xff0000, 0x00ff00, 0x00ffff, 0xff00ff, 0xffff00
+        ];
+        let currentColor = 0;
+
+        this.input.on('pointerdown', function (pointer) {
+
+            currentColor++;
+    
+            if (currentColor === colors.length)
+            {
+                currentColor = 0;
+            }
+    
+            spotlight.setColor(colors[currentColor]);
+    
         });
 
 
