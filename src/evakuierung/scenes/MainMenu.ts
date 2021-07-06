@@ -159,7 +159,7 @@ export class MainMenu extends Phaser.Scene{
             detune: 0,
             loop: true,
             delay: 0
-        }
+        };
         backgroundMusic.play(musicConfig);
 
         // SOUND BUTTON
@@ -222,7 +222,7 @@ export class MainMenu extends Phaser.Scene{
         });
 
         easy.on('pointerup', () => {
-            diff = 10;
+            diff = 30;
             difficulty.setVisible(true);
             easy.setVisible(false);
             medium.setVisible(false);
@@ -240,7 +240,7 @@ export class MainMenu extends Phaser.Scene{
         });
         
         hard.on('pointerup', () => {
-            diff = 30;
+            diff = 10;
             difficulty.setVisible(true);
             easy.setVisible(false);
             medium.setVisible(false);

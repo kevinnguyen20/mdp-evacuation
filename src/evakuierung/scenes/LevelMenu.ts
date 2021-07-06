@@ -164,6 +164,7 @@ export class LevelMenu extends Phaser.Scene{
 
         backButton.on("pointerdown",()=>{
             console.log("pressed backButton");
+            backgroundMusic.stop();
             this.scene.start('MainMenu');
         });
 
