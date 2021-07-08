@@ -151,7 +151,7 @@ export class OurMovement {
             if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
                 ourMap.layers.layerAction.removeTileAt(tileAction.x, tileAction.y, false, false);
                 ourGame.score += 1;
-                ourGame.scoreText.setText('Coins collected: ' + ourGame.score);
+                ourGame.scoreText.setText('Coins: ' + ourGame.score + '/3');
             }
         }
         return element;

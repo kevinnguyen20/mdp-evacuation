@@ -127,7 +127,7 @@ export class level1 extends Phaser.Scene {
             scoreText: this.add.text(
                 this.mapPosition.mapPosX + 70, 
                 this.mapPosition.mapPosY - 40,  
-                'Coins collected: ' + this.score
+                'Coins: ' + this.score + '/3'
             ),
             movesLeft: this.movesLeft,
             movesLeftText: this.add.text(
