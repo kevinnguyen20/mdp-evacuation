@@ -7,7 +7,6 @@ import { Figures, LevelFunctionsUpgraded, MapPosition, OurGame, OurMap, Tiles } 
 import { RestartButton } from "../util/RestartButton";
 import { OurMovement } from "../util/OurMovement";
 
-
 export class level1 extends Phaser.Scene {
     private ourGame: OurGame;
     private mapPosition: MapPosition;
@@ -21,6 +20,7 @@ export class level1 extends Phaser.Scene {
     private movesLeft = 40; // this should be changed if it's changed in RestartButton.ts
     private splitFieldsToVisit = 2; // this should be changed for balancing part
     private diff = 10; // represents the difficulty set by the Player 10 easy, 20 medium, 30 hard
+
 
     constructor() {
         super({
@@ -89,8 +89,8 @@ export class level1 extends Phaser.Scene {
             tileWidth: 32,
             tileHeight: 32
         });
+
         const tileset = tmpMap.addTilesetImage('scifi', 'tileset-scifi');
-        console.log(tileset);
         this.ourMap = {
             map: tmpMap,
             layers: LevelFunctionsUpgraded.setupLayer(tileset, this.mapPosition, tmpMap)
@@ -121,20 +121,19 @@ export class level1 extends Phaser.Scene {
             this.tiles.tilesList[figure.x/32 + figure.y/32 * this.ourMap.layers.layerAction.layer.width].playerOnTopList.push(figure);
         });
         LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
-
         // GAME
         this.ourGame = {
             score: this.score,
             scoreText: this.add.text(
                 this.mapPosition.mapPosX + 70, 
                 this.mapPosition.mapPosY - 40,  
-                'Coins collected: ' + this.score
+                'Coins: ' + this.score + '/3'
             ),
             movesLeft: this.movesLeft,
             movesLeftText: this.add.text(
                 this.mapPosition.mapPosX + 280, 
                 this.mapPosition.mapPosY - 40,  
-                'Moves left: ' + this.movesLeft
+                'Steps: ' + this.movesLeft
             ),
             splitFieldsToVisit: this.splitFieldsToVisit,
             queenPos: [startingPosition[0]/32, startingPosition[1]/32],
@@ -211,6 +210,7 @@ export class level1 extends Phaser.Scene {
             }
         });
     }
+
 
     update(): void {
         this.tiles.animatedTiles.forEach(tile => tile.update(11));

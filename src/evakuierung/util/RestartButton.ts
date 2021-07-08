@@ -18,10 +18,10 @@ export class RestartButton {
                 ourGame.movesLeft = 40; // this should be changed if it's changed in level1
             }
             else if(scene.scene.key === 'level2'){
-                ourGame.movesLeft = 45 // this should be changed if it's changed in level2
+                ourGame.movesLeft = 41 // this should be changed if it's changed in level2
             }
             else{
-                ourGame.movesLeft = 70; // this should be changed if it's changed in level3
+                ourGame.movesLeft = 73; // this should be changed if it's changed in level3
             }
             scene.scene.restart();
         });

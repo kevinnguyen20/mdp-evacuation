@@ -17,10 +17,9 @@ export class level2 extends Phaser.Scene {
     private score = 0;
     private winCondition = 8;
     private figureImages: Phaser.Textures.Texture[] = [];
-    private movesLeft = 45; // this should be changed if it's changed in RestartButton.ts
+    private movesLeft = 41; // this should be changed if it's changed in RestartButton.ts
     private splitFieldsToVisit = 4; // this should be changed for balancing part
     private diff = 10; // represents the difficulty set by the Player 10 easy, 20 medium, 30 hard
-
 
 
     constructor() {
@@ -128,13 +127,13 @@ export class level2 extends Phaser.Scene {
             scoreText: this.add.text(
                 this.mapPosition.mapPosX + 70, 
                 this.mapPosition.mapPosY - 40,  
-                'Coins collected: ' + this.score
+                'Coins: ' + this.score + '/3'
             ),
             movesLeft: this.movesLeft,
             movesLeftText: this.add.text(
                 this.mapPosition.mapPosX + 280, 
                 this.mapPosition.mapPosY - 40,  
-                'Moves left: ' + this.movesLeft
+                'Steps: ' + this.movesLeft
             ),
             splitFieldsToVisit: this.splitFieldsToVisit,
             queenPos: [startingPosition[0]/32, startingPosition[1]/32],
