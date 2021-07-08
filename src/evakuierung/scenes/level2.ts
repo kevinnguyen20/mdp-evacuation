@@ -133,7 +133,7 @@ export class level2 extends Phaser.Scene {
             movesLeftText: this.add.text(
                 this.mapPosition.mapPosX + 280, 
                 this.mapPosition.mapPosY - 40,  
-                'Moves left: ' + this.movesLeft
+                'Steps: ' + this.movesLeft
             ),
             splitFieldsToVisit: this.splitFieldsToVisit,
             queenPos: [startingPosition[0]/32, startingPosition[1]/32],

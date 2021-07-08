@@ -503,12 +503,12 @@ export class LevelFunctionsUpgraded {
                 gameOver.play(musicConfig);
                 scene.input.disable;
                 ourGame.gameFinished = true;
-                ourGame.movesLeftText.setText('Moves left: ' + ourGame.movesLeft);
+                ourGame.movesLeftText.setText('Steps: ' + ourGame.movesLeft);
                 ourGame.survivorScoreText.setText('Oh no, you are out of moves. Try again!')
             }
         }
         else{
-            ourGame.movesLeftText.setText('Moves left: ' + ourGame.movesLeft);
+            ourGame.movesLeftText.setText('Steps: ' + ourGame.movesLeft);
         }
     }
     /**
