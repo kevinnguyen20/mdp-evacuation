@@ -21,3 +21,7 @@ Game Over sound: https://opengameart.org/content/game-over-soundold-school by de
 Victory sound: https://opengameart.org/content/victory-2 by jkfite01
 
 Sound on/off button: https://opengameart.org/content/sound-onoff-images by Boogle
+
+Main menu Button/theme : @Krutarth4
+
+Game Theme Canvas : [Menu Canvas](https://labs.phaser.io/index.html?dir=display) by gammafp
