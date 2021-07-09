@@ -53,7 +53,7 @@ export class level2 extends Phaser.Scene {
         this.load.image('alienBlue1', 'assets/sprites/alien_blue_1.png');
         this.load.image('alienBlue2', 'assets/sprites/alien_blue_2.png');
         this.load.image('alienPurple', 'assets/sprites/alien_purple.png');
-        this.load.audio('berghain', './assets/sprites/National Anthem of USSR.mp3');
+        this.load.audio('theme2', './assets/sprites/Arbeiterchor  Arbeiter von Wien.mp3');
     }
 
     init(data): void {
@@ -76,7 +76,29 @@ export class level2 extends Phaser.Scene {
         this.figureImages.push(this.textures.get('alienBlue2'));    
         
         // BACKGROUND MUSIC
-        LevelFunctionsUpgraded.addMusic(this);
+        // LevelFunctionsUpgraded.addMusic(this);
+        const backgroundMusic = this.sound.add('theme2');
+        const musicConfig = {
+            mute: false,
+            volume: 0.14,
+            rate: 1,
+            detune: 0,
+            loop: true,
+            delay: 0
+        }
+        backgroundMusic.play(musicConfig);
+        const soundButton = this.add.image(this.sys.game.config.width as number * 1 / 50 + 100, this.sys.game.config.height as number * 3.5 / 20 + 415,'soundOn').setInteractive();
+        soundButton.on('pointerover', function(){soundButton.setScale(0.85, 0.85);});
+        soundButton.on('pointerout', function(){soundButton.setScale(1, 1);});
+        soundButton.on("pointerdown",()=>{
+            if (soundButton.texture.key == 'soundOn') {
+                soundButton.setTexture('soundOff');
+                this.game.sound.stopAll();
+            } else if (soundButton.texture.key == 'soundOff') {
+                soundButton.setTexture('soundOn');
+                backgroundMusic.play(musicConfig);
+            }
+        });
         
         // MAP
         this.mapPosition = {
