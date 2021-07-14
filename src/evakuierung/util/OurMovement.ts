@@ -7,7 +7,7 @@ import { Figures, LevelFunctionsUpgraded, MapPosition, OurGame, OurMap, Tiles } 
 import { RestartButton } from "../util/RestartButton";
 
 export class OurMovement {
-    public static groupTileVisited : boolean = false;
+    public static groupTileVisited = false;
 
     public static doMove(ourGame: OurGame, 
         figures: Figures, 
@@ -67,7 +67,7 @@ export class OurMovement {
             
             if(!OurMovement.groupTileVisited){
                 this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
-            this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition, figures.figureList);
+                this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition, figures.figureList);
             }
             else{
                 OurMovement.groupTileVisited = false;
