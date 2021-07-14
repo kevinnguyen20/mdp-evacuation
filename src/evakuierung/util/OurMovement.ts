@@ -7,6 +7,8 @@ import { Figures, LevelFunctionsUpgraded, MapPosition, OurGame, OurMap, Tiles } 
 import { RestartButton } from "../util/RestartButton";
 
 export class OurMovement {
+    public static groupTileVisited : boolean = false;
+
     public static doMove(ourGame: OurGame, 
         figures: Figures, 
         tiles: Tiles, ourMap: OurMap, 
@@ -17,51 +19,66 @@ export class OurMovement {
 
         if(direction === 'left') {
             ourGame.queenPos[0] -= 1;
-            figures.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, ourMap, figures.figureList[0], tiles, scene, ourGame, mapPosition);
-            
-            this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
-            this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition); // freshly added
-            //LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);
+            figures.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, ourMap, figures.figureList[0], tiles, scene, ourGame, mapPosition, figures.figureList);
+            if(!OurMovement.groupTileVisited){
+                this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
+                this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition, figures.figureList);
+            }
+            else{
+                OurMovement.groupTileVisited = false;
+            }
   
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);
             LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel, diff);
         }
         else if(direction === 'right') {
             ourGame.queenPos[0] += 1;
-            figures.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, ourMap, figures.figureList[0], tiles, scene, ourGame, mapPosition);
+            figures.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, ourMap, figures.figureList[0], tiles, scene, ourGame, mapPosition, figures.figureList);
 
-            this.moveInGeneratedDirection(false, Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
-            this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition); // freshly added
-            // LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);
+            if(!OurMovement.groupTileVisited){
+                this.moveInGeneratedDirection(false, Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
+                this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition, figures.figureList);
+            }
+            else{
+                OurMovement.groupTileVisited = false;
+            }
 
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);                
             LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel, diff);
         }
         else if(direction === 'down') {
             ourGame.queenPos[1] += 1;
-            figures.figureList[0] = this.movePlayer(true, Figure.STEP_SIZE, ourMap, figures.figureList[0], tiles, scene, ourGame, mapPosition);
+            figures.figureList[0] = this.movePlayer(true, Figure.STEP_SIZE, ourMap, figures.figureList[0], tiles, scene, ourGame, mapPosition, figures.figureList);
 
-            this.moveInGeneratedDirection(true, Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
-            this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition); // freshly added
-            // LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);    
+            if(!OurMovement.groupTileVisited){
+                this.moveInGeneratedDirection(true, Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
+                this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition, figures.figureList);
+            }
+            else{
+                OurMovement.groupTileVisited = false;
+            }
 
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);                
             LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel, diff);
         }
         else if(direction === 'up') {
             ourGame.queenPos[1] -= 1;
-            figures.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, ourMap, figures.figureList[0], tiles, scene, ourGame, mapPosition);
-
-            this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
-            this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition); // freshly added
-            // LevelFunctionsUpgraded.updatePlayerCountText(tiles.tilesList);    
+            figures.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, ourMap, figures.figureList[0], tiles, scene, ourGame, mapPosition, figures.figureList);
+            
+            if(!OurMovement.groupTileVisited){
+                this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
+            this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition, figures.figureList);
+            }
+            else{
+                OurMovement.groupTileVisited = false;
+            } 
             
             LevelFunctionsUpgraded.chainCharacters(figures, tiles);                
             LevelFunctionsUpgraded.winConditionReachedCheck(ourGame, tiles, scene, nextLevel, diff);
         }
     }
 
-    public static moveInGeneratedDirection(
+    private static moveInGeneratedDirection(
         xory: boolean, 
         pos: number, 
         fig: Figures, 
@@ -72,12 +89,12 @@ export class OurMovement {
         mapPosition: MapPosition): void {
         fig.figureList.forEach( (element) =>{
             if(element.isQueen == false){
-                element = this.movePlayer(xory, pos, map, element,tiles, scene, ourGame, mapPosition);
+                element = this.movePlayer(xory, pos, map, element,tiles, scene, ourGame, mapPosition, fig.figureList);
             }
         });
     }
 
-    public static movePlayer(
+    private static movePlayer(
         xory: boolean, 
         pos: number, 
         ourMap: OurMap, 
@@ -85,7 +102,8 @@ export class OurMovement {
         tiles: Tiles, 
         scene: Phaser.Scene, 
         ourGame: OurGame, 
-        mapPosition: MapPosition): Figure {
+        mapPosition: MapPosition,
+        figuresList : Figure[]): Figure {
         let tile:Phaser.Tilemaps.Tile = null;
         let tileAction:Phaser.Tilemaps.Tile = null;
         let tilePr:Phaser.Tilemaps.Tile = null;
@@ -109,7 +127,7 @@ export class OurMovement {
         else {   
             tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playersOnTopCounter--;
             const index: number = tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.indexOf(element);
-            tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.splice(index,1);
+            tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.splice(index, 1);
 
             if(element.isQueen && tiles.queenFieldIndicator != null){
                 tiles.queenFieldIndicator.destroy();
@@ -129,6 +147,11 @@ export class OurMovement {
             const depth = 1;
             if(element.isQueen){
                 tiles.queenFieldIndicator = scene.add.image(mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2, mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2,'red').setDepth(depth);
+                if(tileAction.index == 178 && tileAction.visible){
+                    tileAction.setVisible(false);
+                    OurMovement.collectAllAliens(element, tiles, ourMap, figuresList);
+                    OurMovement.groupTileVisited = true;
+                }
                 if (tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].fragezeichen){
                     tileFr.setVisible(false);
                 }
@@ -165,12 +188,13 @@ export class OurMovement {
      * @param ourGame The game we use
      * @param mapPosition The position on the map we use
      */
-    public static onSplitField(
+    private static onSplitField(
         tiles: Tiles, 
         ourMap : OurMap, 
         scene: Phaser.Scene, 
         ourGame: OurGame, 
-        mapPosition: MapPosition) : void{
+        mapPosition: MapPosition,
+        figures: Figure[]) : void{
 
         tiles.tilesList.forEach(tile => {
             if(tile.splitField){
@@ -178,20 +202,42 @@ export class OurMovement {
 
                 for (let i = 0; i < playersToMove; i++) {
                     if(tile.splitDirection == 0){ //up
-                        this.movePlayer(true, -Figure.STEP_SIZE, ourMap, tile.playerOnTopList[tile.playerOnTopList.length - 1], tiles, scene, ourGame, mapPosition);
+                        this.movePlayer(true, -Figure.STEP_SIZE, ourMap, tile.playerOnTopList[tile.playerOnTopList.length - 1], tiles, scene, ourGame, mapPosition, figures);
                     }
                     else if(tile.splitDirection == 1){ //right
-                        this.movePlayer(false, Figure.STEP_SIZE, ourMap, tile.playerOnTopList[tile.playerOnTopList.length - 1], tiles, scene, ourGame, mapPosition);
+                        this.movePlayer(false, Figure.STEP_SIZE, ourMap, tile.playerOnTopList[tile.playerOnTopList.length - 1], tiles, scene, ourGame, mapPosition, figures);
                     }
                     else if(tile.splitDirection == 2){ //down
-                        this.movePlayer(true, Figure.STEP_SIZE, ourMap, tile.playerOnTopList[tile.playerOnTopList.length - 1], tiles, scene, ourGame, mapPosition);
+                        this.movePlayer(true, Figure.STEP_SIZE, ourMap, tile.playerOnTopList[tile.playerOnTopList.length - 1], tiles, scene, ourGame, mapPosition, figures);
                     }
                     else{ //left
-                        this.movePlayer(false, -Figure.STEP_SIZE, ourMap, tile.playerOnTopList[tile.playerOnTopList.length - 1], tiles, scene, ourGame, mapPosition);
+                        this.movePlayer(false, -Figure.STEP_SIZE, ourMap, tile.playerOnTopList[tile.playerOnTopList.length - 1], tiles, scene, ourGame, mapPosition, figures);
                     }
                 }
             }
         });
         
+    }
+
+
+    private static collectAllAliens(element: Figure, tiles : Tiles, ourMap: OurMap, figures: Figure[]) : void {
+        figures.forEach((fig) => {
+            if(!fig.isQueen){
+                //remove figure from previous tile
+                tiles.tilesList[(fig.x + fig.y * ourMap.layers.layerGround.layer.width)/32].playersOnTopCounter--;
+                const index: number = tiles.tilesList[(fig.x + fig.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.indexOf(fig);
+                tiles.tilesList[(fig.x + fig.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.splice(index, 1);
+
+                //update figure coordinates
+                fig.x = element.x;
+                fig.y = element.y;
+                fig.image.x = element.image.x;
+                fig.image.y = element.image.y;
+
+                //add figure to the new tile
+                tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playersOnTopCounter++;
+                tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.push(fig);
+            }
+        });
     }
 }

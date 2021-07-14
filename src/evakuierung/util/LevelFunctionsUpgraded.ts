@@ -529,6 +529,7 @@ export class LevelFunctionsUpgraded {
                         index++;
                     })
                 })
+                tile.playerOnTopList = [];
                 tile.playersOnTopCounter = 0;
             }
         })
