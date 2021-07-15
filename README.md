@@ -15,11 +15,12 @@ The MDP has been named after Andrei Andrejewitsch Markov and its core principle 
 While in one particular state, the player can change the state by performing a certain action.
 
 # Credits
-Alexander Steffen - Product Owner
-Christoph Rauchegger - Dev
-Georgi Kotsev - MR Manager
-Kevin Nguyen - MR Manager
-Momchil Petrov - Dev
-Phil Neujahr - Dev 
-Krutarth Parwal - Dev
-Dennis Korolevych - Scrum Master
+
+*   Alexander Steffen - Product Owner
+*   Christoph Rauchegger - Dev
+*   Georgi Kotsev - MR Manager
+*   Kevin Nguyen - MR Manager
+*   Momchil Petrov - Dev
+*   Phil Neujahr - Dev 
+*   Krutarth Parwal - Dev
+*   Dennis Korolevych - Scrum Master
