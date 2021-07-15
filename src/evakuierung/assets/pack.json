@@ -13,11 +13,6 @@
       },
       {
         "type": "image",
-        "key": "border",
-        "url": "assets/sprites/zombie_character32x32.png"
-      },
-      {
-        "type": "image",
         "key": "red",
         "url": "assets/sprites/red.png"
       }
