@@ -1,4 +1,3 @@
-
 # Short description
 Evacauate the aliens as quickly as possible.
 
@@ -8,6 +7,9 @@ The fields represent different states that the player can switch to. The probabi
 Action fields are marked with icons that have arrows inside.
 The goal is to reach the exit with as many aliens as possible and within the limit of movements.
 Mind the flames when striving through the field.
+
+# Screenshot
+[](https://git.mtv.tu-berlin.de/modysy-2021sose/modysy-orga/-/wikis/uploads/b09031803a1644d44e29e42ec0830984/image.png)
 
 # Theoretical background
 The theoretical concept that this game is based on is called the Markov decision process.
