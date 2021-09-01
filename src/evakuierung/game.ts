@@ -1,5 +1,4 @@
 import "phaser";
-import { AUTO, Scale } from "phaser";
 
 import { MainMenu } from "./scenes/MainMenu";
 import {LevelMenu} from "./scenes/LevelMenu";
