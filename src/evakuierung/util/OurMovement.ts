@@ -1,10 +1,6 @@
 import { TileParser } from "../util/tileParser";
-import { TilePiece } from "../util/tilePiece";
 import { Figure } from "../util/figure"
-import { AnimatedTile } from "../util/animatedTile";
-
 import { Figures, LevelFunctionsUpgraded, MapPosition, OurGame, OurMap, Tiles } from "../util/LevelFunctionsUpgraded";
-import { RestartButton } from "../util/RestartButton";
 
 export class OurMovement {
     public static groupTileVisited = false;
@@ -223,21 +219,36 @@ export class OurMovement {
     private static collectAllAliens(element: Figure, tiles : Tiles, ourMap: OurMap, figures: Figure[]) : void {
         figures.forEach((fig) => {
             if(!fig.isQueen){
-                //remove figure from previous tile
-                tiles.tilesList[(fig.x + fig.y * ourMap.layers.layerGround.layer.width)/32].playersOnTopCounter--;
-                const index: number = tiles.tilesList[(fig.x + fig.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.indexOf(fig);
-                tiles.tilesList[(fig.x + fig.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.splice(index, 1);
-
-                //update figure coordinates
-                fig.x = element.x;
-                fig.y = element.y;
-                fig.image.x = element.image.x;
-                fig.image.y = element.image.y;
-
-                //add figure to the new tile
-                tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playersOnTopCounter++;
-                tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.push(fig);
+                this.removeFigureFromPreviousTile(ourMap, fig, tiles);
+                this.updateFigureCoordinates(fig, element);
+                this.addFiguretoNewTile(element, ourMap, tiles, fig);
             }
         });
+    }
+
+    private static removeFigureFromPreviousTile(ourMap: OurMap, fig: Figure, tiles: Tiles): void {
+        const width: number = ourMap.layers.layerGround.layer.width;
+        const index: number = (fig.x + fig.y * width)/32;
+        
+        tiles.tilesList[index].playersOnTopCounter--;
+        const indexUpdated: number = tiles.tilesList[index].playerOnTopList.indexOf(fig);
+        tiles.tilesList[index].playerOnTopList.splice(indexUpdated, 1);
+    }
+
+    private static updateFigureCoordinates(fig: Figure, element: Figure): void {
+        fig.x = element.x;
+        fig.y = element.y;
+        fig.image.x = element.image.x;
+        fig.image.y = element.image.y;
+    }
+
+    private static addFiguretoNewTile(element: Figure, ourMap: OurMap, tiles: Tiles, fig: Figure): void {
+        const width: number = ourMap.layers.layerGround.layer.width;
+        const index = (element.x + element.y * width)/32;
+        const targetTile = tiles.tilesList[index];
+        
+        targetTile.playersOnTopCounter++;
+        targetTile.playerOnTopList.push(fig);
+
     }
 }
