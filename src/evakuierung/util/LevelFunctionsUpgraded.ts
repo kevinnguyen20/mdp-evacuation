@@ -5,6 +5,11 @@ import { TileParser } from "./tileParser";
 import { TilePiece } from "./tilePiece";
 import { AnimatedTile } from "../util/animatedTile";
 
+export type Meta = {
+    coordinates: boolean,
+    pos: number
+}
+
 export type Wrapper = {
     ourMap: OurMap,
     tiles: Tiles,
