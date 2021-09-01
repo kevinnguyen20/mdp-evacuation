@@ -89,10 +89,10 @@ export class OurMovement {
         const mapPosition = wrapper.mapPosition;
         const figuresList = wrapper.figures;
         
-        let tile:Phaser.Tilemaps.Tile = null;
-        let tileAction:Phaser.Tilemaps.Tile = null;
-        let tilePr:Phaser.Tilemaps.Tile = null;
-        let tileFr:Phaser.Tilemaps.Tile = null;
+        let tile:Phaser.Tilemaps.Tile;
+        let tileAction:Phaser.Tilemaps.Tile;
+        let tilePr:Phaser.Tilemaps.Tile;
+        let tileFr:Phaser.Tilemaps.Tile;
             
 
         // Determine if which axis we're moving on
@@ -147,22 +147,31 @@ export class OurMovement {
                     }
                 }
             }
-
-            if(!ourGame.gameFinished
-                && TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID
-                && element.isQueen) {
-
-                ourGame.scoreText.setText('Your final score: ' + ourGame.score + "!");
-                ourGame.gameFinished = true;
-            }
-            
-            if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
-                ourMap.layers.layerAction.removeTileAt(tileAction.x, tileAction.y, false, false);
-                ourGame.score += 1;
-                ourGame.scoreText.setText('Coins: ' + ourGame.score + '/3');
-            }
+            this.isGameFinished(wrapper, element, tile);
+            this.isCoin(wrapper, tileAction);
         }
         return element;
+    }
+
+    private static isGameFinished(wrapper: Wrapper, element: Figure, tile: Phaser.Tilemaps.Tile): void {
+        const ourGame = wrapper.ourGame;
+        if(!ourGame.gameFinished
+            && TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID
+            && element.isQueen) {
+
+            ourGame.scoreText.setText('Your final score: ' + ourGame.score + "!");
+            ourGame.gameFinished = true;
+        }
+    }
+
+    private static isCoin(wrapper: Wrapper, tileAction: Phaser.Tilemaps.Tile): void {
+        const ourMap = wrapper.ourMap;
+        const ourGame = wrapper.ourGame;
+        if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
+            ourMap.layers.layerAction.removeTileAt(tileAction.x, tileAction.y, false, false);
+            ourGame.score += 1;
+            ourGame.scoreText.setText('Coins: ' + ourGame.score + '/3');
+        }
     }
 
     private static onSplitField(
