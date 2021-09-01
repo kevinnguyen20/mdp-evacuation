@@ -1,6 +1,6 @@
 import { TileParser } from "../util/tileParser";
 import { Figure } from "../util/figure"
-import { Figures, LevelFunctionsUpgraded, MapPosition, OurGame, OurMap, Tiles } from "../util/LevelFunctionsUpgraded";
+import { Figures, LevelFunctionsUpgraded, MapPosition, OurGame, OurMap, Tiles, Wrapper } from "../util/LevelFunctionsUpgraded";
 
 export class OurMovement {
     public static groupTileVisited = false;
@@ -15,10 +15,22 @@ export class OurMovement {
 
         if(direction === 'left') {
             ourGame.queenPos[0] -= 1;
-            figures.figureList[0] = this.movePlayer(false, -Figure.STEP_SIZE, ourMap, figures.figureList[0], tiles, scene, ourGame, mapPosition, figures.figureList);
+            const wrapper = {
+                ourMap: ourMap,
+                tiles: tiles,
+                scene: scene,
+                ourGame: ourGame,
+                mapPosition: mapPosition,
+                figures: figures.figureList
+            }
+            const figure = {
+                coordinates: false,
+                pos: -Figure.STEP_SIZE
+            }
+            figures.figureList[0] = this.movePlayer(figure, wrapper, figures.figureList[0]);
             if(!OurMovement.groupTileVisited){
                 this.moveInGeneratedDirection(false, -Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
-                this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition, figures.figureList);
+                this.onSplitField(wrapper);
             }
             else{
                 OurMovement.groupTileVisited = false;
@@ -29,11 +41,23 @@ export class OurMovement {
         }
         else if(direction === 'right') {
             ourGame.queenPos[0] += 1;
-            figures.figureList[0] = this.movePlayer(false, Figure.STEP_SIZE, ourMap, figures.figureList[0], tiles, scene, ourGame, mapPosition, figures.figureList);
+            const wrapper = {
+                ourMap: ourMap,
+                tiles: tiles,
+                scene: scene,
+                ourGame: ourGame,
+                mapPosition: mapPosition,
+                figures: figures.figureList
+            }
+            const figure = {
+                coordinates: false,
+                pos: Figure.STEP_SIZE
+            }
+            figures.figureList[0] = this.movePlayer(figure, wrapper, figures.figureList[0]);
 
             if(!OurMovement.groupTileVisited){
                 this.moveInGeneratedDirection(false, Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
-                this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition, figures.figureList);
+                this.onSplitField(wrapper);
             }
             else{
                 OurMovement.groupTileVisited = false;
@@ -44,11 +68,23 @@ export class OurMovement {
         }
         else if(direction === 'down') {
             ourGame.queenPos[1] += 1;
-            figures.figureList[0] = this.movePlayer(true, Figure.STEP_SIZE, ourMap, figures.figureList[0], tiles, scene, ourGame, mapPosition, figures.figureList);
+            const wrapper = {
+                ourMap: ourMap,
+                tiles: tiles,
+                scene: scene,
+                ourGame: ourGame,
+                mapPosition: mapPosition,
+                figures: figures.figureList
+            };
+            const figure = {
+                coordinates: true,
+                pos: Figure.STEP_SIZE
+            }
+            figures.figureList[0] = this.movePlayer(figure, wrapper, figures.figureList[0]);
 
             if(!OurMovement.groupTileVisited){
                 this.moveInGeneratedDirection(true, Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
-                this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition, figures.figureList);
+                this.onSplitField(wrapper);
             }
             else{
                 OurMovement.groupTileVisited = false;
@@ -59,11 +95,23 @@ export class OurMovement {
         }
         else if(direction === 'up') {
             ourGame.queenPos[1] -= 1;
-            figures.figureList[0] = this.movePlayer(true, -Figure.STEP_SIZE, ourMap, figures.figureList[0], tiles, scene, ourGame, mapPosition, figures.figureList);
+            const wrapper = {
+                ourMap: ourMap,
+                tiles: tiles,
+                scene: scene,
+                ourGame: ourGame,
+                mapPosition: mapPosition,
+                figures: figures.figureList
+            }
+            const figure = {
+                coordinates: true,
+                pos: -Figure.STEP_SIZE
+            }
+            figures.figureList[0] = this.movePlayer(figure, wrapper, figures.figureList[0]);
             
             if(!OurMovement.groupTileVisited){
                 this.moveInGeneratedDirection(true, -Figure.STEP_SIZE, figures, tiles, ourMap, scene, ourGame, mapPosition);
-                this.onSplitField(tiles, ourMap, scene, ourGame, mapPosition, figures.figureList);
+                this.onSplitField(wrapper);
             }
             else{
                 OurMovement.groupTileVisited = false;
@@ -85,21 +133,39 @@ export class OurMovement {
         mapPosition: MapPosition): void {
         fig.figureList.forEach( (element) =>{
             if(element.isQueen == false){
-                element = this.movePlayer(xory, pos, map, element,tiles, scene, ourGame, mapPosition, fig.figureList);
+                const wrapper = {
+                    ourMap: map,
+                    tiles: tiles,
+                    scene: scene,
+                    ourGame: ourGame,
+                    mapPosition: mapPosition,
+                    figures: fig.figureList
+                };
+                const figure = {
+                    coordinates: xory,
+                    pos: pos
+                }
+                element = this.movePlayer(figure, wrapper, element);
             }
         });
     }
 
     private static movePlayer(
-        xory: boolean, 
-        pos: number, 
-        ourMap: OurMap, 
-        element: Figure, 
-        tiles: Tiles, 
-        scene: Phaser.Scene, 
-        ourGame: OurGame, 
-        mapPosition: MapPosition,
-        figuresList : Figure[]): Figure {
+        figure: {coordinates: boolean, pos: number}, 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        wrapper: any,
+        element: Figure): Figure {
+
+        const xory = figure.coordinates;
+        const pos = figure.pos;
+
+        const ourMap = wrapper.ourMap;
+        const tiles = wrapper.tiles;
+        const scene = wrapper.scene;
+        const ourGame = wrapper.ourGame;
+        const mapPosition = wrapper.mapPosition;
+        const figuresList = wrapper.figures;
+        
         let tile:Phaser.Tilemaps.Tile = null;
         let tileAction:Phaser.Tilemaps.Tile = null;
         let tilePr:Phaser.Tilemaps.Tile = null;
@@ -176,43 +242,54 @@ export class OurMovement {
         return element;
     }
 
-    /**
-     * This function decides in which direction the figure will be moved after stepping on a split field
-     * @param tiles All tiles in the game
-     * @param ourMap The map we use
-     * @param scene The level we are currently on
-     * @param ourGame The game we use
-     * @param mapPosition The position on the map we use
-     */
     private static onSplitField(
-        tiles: Tiles, 
-        ourMap : OurMap, 
-        scene: Phaser.Scene, 
-        ourGame: OurGame, 
-        mapPosition: MapPosition,
-        figures: Figure[]) : void{
+        wrapper: Wrapper) : void{
+        const tiles: Tiles = wrapper.tiles;
 
         tiles.tilesList.forEach(tile => {
             if(tile.splitField){
-                const playersToMove = Math.floor(tile.splitPercentage * tile.playersOnTopCounter);
+                const perc = tile.splitPercentage;
+                const num = tile.playersOnTopCounter;
+                const playersToMove = Math.floor(perc * num);
 
                 for (let i = 0; i < playersToMove; i++) {
-                    if(tile.splitDirection == 0){ //up
-                        this.movePlayer(true, -Figure.STEP_SIZE, ourMap, tile.playerOnTopList[tile.playerOnTopList.length - 1], tiles, scene, ourGame, mapPosition, figures);
-                    }
-                    else if(tile.splitDirection == 1){ //right
-                        this.movePlayer(false, Figure.STEP_SIZE, ourMap, tile.playerOnTopList[tile.playerOnTopList.length - 1], tiles, scene, ourGame, mapPosition, figures);
-                    }
-                    else if(tile.splitDirection == 2){ //down
-                        this.movePlayer(true, Figure.STEP_SIZE, ourMap, tile.playerOnTopList[tile.playerOnTopList.length - 1], tiles, scene, ourGame, mapPosition, figures);
-                    }
-                    else{ //left
-                        this.movePlayer(false, -Figure.STEP_SIZE, ourMap, tile.playerOnTopList[tile.playerOnTopList.length - 1], tiles, scene, ourGame, mapPosition, figures);
-                    }
+                    const element: Figure = tile.playerOnTopList[tile.playerOnTopList.length - 1];
+                    const figure = {
+                        coordinates: false,
+                        pos: 0
+                    };
+                    const dir = tile.splitDirection;
+
+                    this.direction(figure, dir);
+                    this.movePlayer(figure, wrapper, element);
                 }
             }
         });
         
+    }
+
+    private static direction(figure: {
+        coordinates: boolean, 
+        pos: number}, 
+    direction: number): void {
+        switch (direction) {
+            case 0: //up
+                figure.coordinates = true;
+                figure.pos = -Figure.STEP_SIZE
+                break;
+            case 1: //right
+                figure.coordinates = false;
+                figure.pos = Figure.STEP_SIZE;
+                break;
+            case 2: //down
+                figure.coordinates = true;
+                figure.pos = Figure.STEP_SIZE;
+                break;
+            default: //left
+                figure.coordinates = false;
+                figure.pos = -Figure.STEP_SIZE;
+                break;
+        }
     }
 
 
@@ -246,7 +323,7 @@ export class OurMovement {
         const width: number = ourMap.layers.layerGround.layer.width;
         const index = (element.x + element.y * width)/32;
         const targetTile = tiles.tilesList[index];
-        
+
         targetTile.playersOnTopCounter++;
         targetTile.playerOnTopList.push(fig);
 
