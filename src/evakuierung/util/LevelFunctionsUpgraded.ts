@@ -5,6 +5,15 @@ import { TileParser } from "./tileParser";
 import { TilePiece } from "./tilePiece";
 import { AnimatedTile } from "../util/animatedTile";
 
+export type Wrapper = {
+    ourMap: OurMap,
+    tiles: Tiles,
+    scene: Phaser.Scene,
+    ourGame: OurGame,
+    mapPosition: MapPosition,
+    figures: Figure[]
+}
+
 export type Layers = {
     layerGround: Phaser.Tilemaps.TilemapLayer;
     layerSplit: Phaser.Tilemaps.TilemapLayer;
