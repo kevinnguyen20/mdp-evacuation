@@ -27,6 +27,9 @@ const config: Phaser.Types.Core.GameConfig = {
     render: {
         pixelArt: true,
         transparent: true,
+    },
+    audio: {
+        disableWebAudio: true
     }
 };
 
