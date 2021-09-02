@@ -1,5 +1,5 @@
 export type TilesetTileData = { 
-    [key: number]: { animation?: TileAnimationData } 
+    [key: number]: { animation: TileAnimationData } 
 };
 
 export type TileAnimationData = Array<{ duration: number, tileid: number }>;
