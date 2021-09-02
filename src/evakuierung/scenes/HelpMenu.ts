@@ -1,7 +1,4 @@
-import { Figures, LevelFunctionsUpgraded, MapPosition, OurGame, OurMap, Tiles } from "../util/LevelFunctionsUpgraded";
-
 export class HelpMenu extends Phaser.Scene{
-
     constructor() {
         super({
             key: "HelpMenu"
@@ -14,12 +11,14 @@ export class HelpMenu extends Phaser.Scene{
     }
 
     create(): void{
-        // background canvas
         this.add.sprite(400, 300, 'bg2').setAlpha(0.8);
 
         const x = this.game.renderer.width/2;
         const y = this.game.renderer.height/2;
-        const info = this.add.text(x, y, "The goal of the game is to evacuate as much aliens as possible. Collect coins, avoid splitting your group unnecessarily and rescue the aliens by only having a limited number of moves! Use keys W,A,S,D to navigate.");
+        const info = this.add.text(x, y, "The goal of the game is to evacuate as" +
+        "much aliens as possible. Collect coins, avoid splitting your group "+
+        "unnecessarily and rescue the aliens by only having a limited number of "+
+        "moves! Use keys W,A,S,D to navigate.");
         info.setAlign('center');
         info.setOrigin(0.5,2.5);
         info.setWordWrapWidth(720,true);
@@ -27,8 +26,14 @@ export class HelpMenu extends Phaser.Scene{
         info.setColor("orange");
 
         const y2 = this.game.renderer.height/2 + 50;
-        const infoMDP = this.add.text(x, y2, "The game is based on the stochastical model Markov decision processes (MDP). At each time step the player is in a state. By changing the state there is a possibility of an event occuring that can influence the setting." + 
-        "In this game, these events are splits of the alien's group, bringing them in a group together, collecting coins as a reward or having some of your aliens killed as a punishment. Each split field has its own color depending on how many aliens will be split in the respective direction.");
+        const infoMDP = this.add.text(x, y2, "The game is based on the stochastical"+
+        " model Markov decision processes (MDP). At each time step the player is in "+
+        "a state. By changing the state there is a possibility of an event occuring "+
+        "that can influence the setting. In this game, these events are splits of "+
+        "the alien's group, bringing them in a group together, collecting coins as "+
+        "a reward or having some of your aliens killed as a punishment. Each split "+
+        "field has its own color depending on how many aliens will be split in the "+
+        "respective direction.");
         infoMDP.setAlign('center');
         infoMDP.setOrigin(0.5, 0.6);
         infoMDP.setWordWrapWidth(720,true);
@@ -42,10 +47,10 @@ export class HelpMenu extends Phaser.Scene{
             this.scene.start('MainMenu');
         });
 
-        returnMainMenuButton.on('pointerover', function(pointer){
+        returnMainMenuButton.on('pointerover', function(){
             returnMainMenuButton.setScale(0.85, 0.85);
         });
-        returnMainMenuButton.on('pointerout', function(pointer){
+        returnMainMenuButton.on('pointerout', function(){
             returnMainMenuButton.setScale(1, 1);
         });
 
@@ -55,28 +60,21 @@ export class HelpMenu extends Phaser.Scene{
         // spotlight per click
         const spotlight = this.lights.addLight(400, 300, 280).setIntensity(3);
 
-        this.input.on('pointermove', function (pointer) {
-
+        this.input.on('pointermove', function (pointer: {x: number; y: number}) {
             spotlight.x = pointer.x;
             spotlight.y = pointer.y;
-    
         });
         const colors = [
             0xffffff, 0xff0000, 0x00ff00, 0x00ffff, 0xff00ff, 0xffff00
         ];
         let currentColor = 0;
 
-        this.input.on('pointerdown', function (pointer) {
-
+        this.input.on('pointerdown', function () {
             currentColor++;
-    
             if (currentColor === colors.length)
-            {
                 currentColor = 0;
-            }
     
             spotlight.setColor(colors[currentColor]);
-    
         });
     }
 }
