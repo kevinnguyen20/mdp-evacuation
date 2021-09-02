@@ -31,26 +31,24 @@ export class OurMovement {
     }
 
     private static findOutDirection(direction: string, figure: Meta, ourGame: OurGame): void {
-        if(direction === 'left') {
-            ourGame.queenPos[0] -= 1;
-            figure.coordinates = false,
-            figure.pos = -Figure.STEP_SIZE
-        }
-        else if(direction === 'right') {
-            ourGame.queenPos[0] += 1;
-            figure.coordinates = false,
-            figure.pos = Figure.STEP_SIZE
-        }
-        else if(direction === 'down') {
-            ourGame.queenPos[1] += 1;
-            figure.coordinates = true,
-            figure.pos = Figure.STEP_SIZE
-        }
-        else if(direction === 'up') {
+        let val = 0;
+        if(direction === "up") {
             ourGame.queenPos[1] -= 1;
-            figure.coordinates = true,
-            figure.pos = -Figure.STEP_SIZE
+            val = 0;
         }
+        else if(direction === "right") {
+            ourGame.queenPos[0] += 1;
+            val = 1;
+        }
+        else if(direction === "down") {
+            ourGame.queenPos[1] += 1;
+            val = 2;
+        }
+        else {
+            ourGame.queenPos[0] -= 1;
+            val = 3;
+        }
+        this.updateDirection(figure, val);
     }
 
     private static tileVisited(figure: Meta, figures: Figures, wrapper: Wrapper, nextLevel: number, diff: number): void {
@@ -109,7 +107,11 @@ export class OurMovement {
         }
         // eslint-disable-next-line no-empty
         if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
-        else {   
+        else {
+            const x = element.x;
+            const y = element.y;
+            const width = ourMap.layers.layerGround.layer.width;
+            // const index = (x+y * width) / 32;
             tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playersOnTopCounter--;
             const index: number = tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.indexOf(element);
             tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.splice(index, 1);
@@ -118,12 +120,9 @@ export class OurMovement {
                 tiles.queenFieldIndicator.destroy();
             }
             
-            if(xory === false){                 
-                element.updateCoordinates(pos, 0);   
-            } 
-            else {
+            xory === false ?             
+                element.updateCoordinates(pos, 0):
                 element.updateCoordinates(0, pos);
-            }
 
             tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playersOnTopCounter++;
             tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.push(element);
