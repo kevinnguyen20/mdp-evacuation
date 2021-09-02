@@ -48,7 +48,7 @@ export type Figures = {
 };
 export type Tiles = {
     tilesList: TilePiece[];
-    queenFieldIndicator: Phaser.GameObjects.Image;
+    queenFieldIndicator?: Phaser.GameObjects.Image;
     goalTile: TilePiece;
     animatedTiles: AnimatedTile[];
 };
@@ -453,7 +453,7 @@ export class LevelFunctionsUpgraded {
         tileList.forEach((tile) => {
             while (tile.figureImages.length > 0){
                 const image = tile.figureImages.pop();
-                image.destroy();
+                typeof image === "undefined" ? "" : image.destroy();
             }
             if (tile.playersOnTopCounter> 0){
                 this.placeFigureSpritesOnTile(tile, figurenImages, scene);

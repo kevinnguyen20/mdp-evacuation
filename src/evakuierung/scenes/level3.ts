@@ -121,7 +121,7 @@ export class level3 extends Phaser.Scene {
         const t2 = LevelFunctionsUpgraded.getGoalTile(t1);
         this.tiles = {
             tilesList: t1,
-            queenFieldIndicator: null,
+            queenFieldIndicator: undefined,
             goalTile: t2,
             animatedTiles: []
         };
