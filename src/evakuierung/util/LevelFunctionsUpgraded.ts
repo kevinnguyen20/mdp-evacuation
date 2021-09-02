@@ -5,6 +5,13 @@ import { TileParser } from "./tileParser";
 import { TilePiece } from "./tilePiece";
 import { AnimatedTile } from "../util/animatedTile";
 
+export type TileSet = {
+    tile: Phaser.Tilemaps.Tile,
+    tileAction: Phaser.Tilemaps.Tile,
+    tilePr: Phaser.Tilemaps.Tile,
+    tileFr: Phaser.Tilemaps.Tile
+}
+
 export type Meta = {
     coordinates: boolean,
     pos: number

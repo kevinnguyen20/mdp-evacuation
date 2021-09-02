@@ -1,6 +1,6 @@
 import { TileParser } from "../util/tileParser";
 import { Figure } from "../util/figure"
-import { Figures, LevelFunctionsUpgraded, MapPosition, OurGame, OurMap, Tiles, Wrapper, Meta } from "../util/LevelFunctionsUpgraded";
+import { Figures, LevelFunctionsUpgraded, MapPosition, OurGame, OurMap, Tiles, Wrapper, Meta, TileSet } from "../util/LevelFunctionsUpgraded";
 
 export class OurMovement {
     public static groupTileVisited = false;
@@ -83,73 +83,128 @@ export class OurMovement {
         const ourMap = wrapper.ourMap;
         const tiles = wrapper.tiles;
         const scene = wrapper.scene;
-        const ourGame = wrapper.ourGame;
         const mapPosition = wrapper.mapPosition;
-        const figuresList = wrapper.figures;
-        
-        let tile:Phaser.Tilemaps.Tile;
-        let tileAction:Phaser.Tilemaps.Tile;
-        let tilePr:Phaser.Tilemaps.Tile;
-        let tileFr:Phaser.Tilemaps.Tile;
-            
 
-        // Determine if which axis we're moving on
-        if (xory === false){
-            tile = ourMap.layers.layerGround.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
-            tileAction = ourMap.layers.layerAction.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
-            tilePr = ourMap.layers.layerSplit.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
-            tileFr = ourMap.layers.layerFragezeichen.getTileAtWorldXY(element.image.x+pos, element.image.y, true);
-        } else {
-            tile = ourMap.layers.layerGround.getTileAtWorldXY(element.image.x, element.image.y+pos, true); 
-            tileAction = ourMap.layers.layerAction.getTileAtWorldXY(element.image.x, element.image.y+pos, true);
-            tilePr = ourMap.layers.layerSplit.getTileAtWorldXY(element.image.x, element.image.y+pos, true);
-            tileFr = ourMap.layers.layerFragezeichen.getTileAtWorldXY(element.image.x, element.image.y+pos, true);
-        }
-        // eslint-disable-next-line no-empty
-        if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) === TileParser.WALL_ID) {} //blocked, can't move, do nothing
-        else {
-            const x = element.x;
-            const y = element.y;
+        const tileSet = this.whichAxis(figure, wrapper, element);
+        const tile = tileSet.tile;
+        const tileAction = tileSet.tileAction;
+
+        if (TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) !== TileParser.WALL_ID) {
             const width = ourMap.layers.layerGround.layer.width;
-            // const index = (x+y * width) / 32;
-            tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playersOnTopCounter--;
-            const index: number = tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.indexOf(element);
-            tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.splice(index, 1);
+            let x = element.x;
+            let y = element.y;
+            let index = (x + y*width) / 32;
+            this.removePlayersOnTop(wrapper, index, element);
 
-            if(element.isQueen && tiles.queenFieldIndicator != null){
+            if(element.isQueen && tiles.queenFieldIndicator != null)
                 tiles.queenFieldIndicator.destroy();
-            }
             
             xory === false ?             
                 element.updateCoordinates(pos, 0):
                 element.updateCoordinates(0, pos);
 
-            tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playersOnTopCounter++;
-            tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].playerOnTopList.push(element);
+            x = element.x;
+            y = element.y;
+            index = (x + y*width) / 32;
+            this.updatePlayersOnTop(wrapper, index, element);
 
-
-            const depth = 1;
             if(element.isQueen){
-                tiles.queenFieldIndicator = scene.add.image(mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2, mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2,'red').setDepth(depth);
-                if(tileAction.index == 178 && tileAction.visible){
-                    tileAction.setVisible(false);
-                    OurMovement.collectAllAliens(element, wrapper);
-                    OurMovement.groupTileVisited = true;
-                }
-                if (tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].fragezeichen){
-                    tileFr.setVisible(false);
-                }
-                if(tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].splitField){
-                    ourGame.splitFieldsToVisit--;
-                    if(ourGame.splitFieldsToVisit >= 0){
-                        ourGame.survivorScoreText.setText('Win condition: ' + ourGame.winCond + ' aliens and ' + ourGame.splitFieldsToVisit + ' split fields');
-                    }
-                }
+                const posx = mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2;
+                const posy = mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2;
+                tiles.queenFieldIndicator = scene.add.image(posx, posy,'red').setDepth(1);
+                this.alienGathering(tileSet, element, wrapper);
+                this.isQuestionMark(tileSet, element, wrapper);
+                this.isSplitField(tileSet, element, wrapper);
             }
             this.isGameFinished(wrapper, element, tile);
             this.isCoin(wrapper, tileAction);
         }
         return element;
+    }
+
+    private static isSplitField(tileSet: TileSet, element: Figure, wrapper: Wrapper): void {
+        const tiles = wrapper.tiles;
+        const ourMap = wrapper.ourMap;
+        const ourGame = wrapper.ourGame;
+        const x = element.x;
+        const y = element.y;
+        const width = ourMap.layers.layerGround.layer.width;
+        const index = (x + y*width) / 32
+        if(tiles.tilesList[index].splitField){
+            ourGame.splitFieldsToVisit--;
+            this.printWinCondition(wrapper);
+        }
+    }
+
+    private static printWinCondition(wrapper: Wrapper): void {
+        const ourGame = wrapper.ourGame;
+        const winCond = ourGame.winCond;
+        const fields = ourGame.splitFieldsToVisit;
+        if(ourGame.splitFieldsToVisit >= 0){
+            ourGame.survivorScoreText.setText('Win condition: '+winCond+' aliens and '+fields+' split fields');
+        }
+    }
+
+    private static isQuestionMark(tileSet: TileSet, element: Figure, wrapper: Wrapper): void {
+        const ourMap = wrapper.ourMap;
+        const width = ourMap.layers.layerGround.layer.width;
+        const tiles = wrapper.tiles;
+        const tileFr = tileSet.tileFr;
+        const x = element.x;
+        const y = element.y;
+        const index = (x + y*width) / 32;
+        if (tiles.tilesList[index].fragezeichen)
+            tileFr.setVisible(false);
+    }
+
+    private static alienGathering(tileSet: TileSet, element: Figure, wrapper: Wrapper): void {
+        const tileAction = tileSet.tileAction;
+        if(tileAction.index == 178 && tileAction.visible){
+            tileAction.setVisible(false);
+            OurMovement.collectAllAliens(element, wrapper);
+            OurMovement.groupTileVisited = true;
+        }
+    }
+
+    private static removePlayersOnTop(wrapper: Wrapper, index: number, element: Figure): void {
+        const tiles = wrapper.tiles;
+        tiles.tilesList[index].playersOnTopCounter--;
+        const val = tiles.tilesList[index].playerOnTopList.indexOf(element);
+        tiles.tilesList[index].playerOnTopList.splice(val, 1);
+    }
+
+    private static updatePlayersOnTop(wrapper: Wrapper, index: number, element: Figure): void {
+        const tiles = wrapper.tiles;
+        tiles.tilesList[index].playersOnTopCounter++;
+        tiles.tilesList[index].playerOnTopList.push(element);
+    }
+
+    private static whichAxis(figure: Meta, wrapper: Wrapper, element: Figure): TileSet {
+        const xory = figure.coordinates;
+        const pos = figure.pos;
+        const retval = xory === false ?
+            this.updateTile(wrapper, pos, 0, element):
+            this.updateTile(wrapper, 0, pos, element);
+        return retval;
+    }
+
+    private static updateTile(wrapper: Wrapper, pos1: number, pos2: number, element: Figure): TileSet {
+        const ourMap = wrapper.ourMap;
+        const x = element.image.x;
+        const y = element.image.y;
+
+        const tile = ourMap.layers.layerGround.getTileAtWorldXY(x+pos1, y+pos2, true);
+        const tileAction = ourMap.layers.layerAction.getTileAtWorldXY(x+pos1, y+pos2, true);
+        const tilePr = ourMap.layers.layerSplit.getTileAtWorldXY(x+pos1, y+pos2, true);
+        const tileFr = ourMap.layers.layerFragezeichen.getTileAtWorldXY(x+pos1, y+pos2, true);
+
+        const tileSet = {
+            tile: tile,
+            tileAction: tileAction,
+            tilePr: tilePr,
+            tileFr: tileFr
+        }
+        return tileSet;
     }
 
     private static isGameFinished(wrapper: Wrapper, element: Figure, tile: Phaser.Tilemaps.Tile): void {
