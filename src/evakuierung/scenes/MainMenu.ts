@@ -30,7 +30,8 @@ export class MainMenu extends Phaser.Scene{
 
         // audio and music
         // this.load.audio('berghain', './assets/sprites/National Anthem of USSR.mp3');
-        this.load.audio('berghain', './assets/sprites/Grand Theft Auto 4 Theme Song.mp3');
+        // this.load.audio('berghain', './assets/sprites/Grand Theft Auto 4 Theme Song.mp3');
+        this.load.audio('berghain', './assets/sprites/Dua Lipa - Levitating.mp3');
         this.load.audio('gameOver', './assets/sprites/GameOver.wav');
         this.load.audio('victory', './assets/sprites/Victory.wav');
         this.load.image('soundOn', './assets/sprites/soundOnBlack.png');
@@ -126,7 +127,7 @@ export class MainMenu extends Phaser.Scene{
         levelButton.setInteractive();
         levelButton.on("pointerdown",()=>{
             this.scene.start('LevelMenu', {diff: diff});
-            // backgroundMusic.stop();
+            backgroundMusic.stop();
         });
         levelButton.on('pointerover', function(){levelButton.setScale(0.85, 0.85)});
         levelButton.on('pointerout', function(){ levelButton.setScale(1, 1)});
@@ -154,7 +155,7 @@ export class MainMenu extends Phaser.Scene{
                 this.game.sound.stopAll();
             } else if (soundButton.texture.key == 'soundOff') {
                 soundButton.setTexture('soundOn');
-                // backgroundMusic.play(musicConfig);
+                backgroundMusic.play(musicConfig);
             }
         });
 
@@ -165,7 +166,7 @@ export class MainMenu extends Phaser.Scene{
         helpButton.on('pointerout', function(){helpButton.setScale(1, 1);});
         helpButton.on("pointerdown",()=>{
             this.scene.start('HelpMenu');
-            // backgroundMusic.stop();
+            backgroundMusic.stop();
         });
 
         const difficulty = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2+250,'difficulty').setDepth(1);
