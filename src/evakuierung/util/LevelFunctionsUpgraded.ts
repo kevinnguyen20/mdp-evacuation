@@ -10,13 +10,11 @@ export type TileSet = {
     tileAction: Phaser.Tilemaps.Tile,
     tilePr: Phaser.Tilemaps.Tile,
     tileFr: Phaser.Tilemaps.Tile
-}
-
+};
 export type Meta = {
     coordinates: boolean,
     pos: number
-}
-
+};
 export type Wrapper = {
     ourMap: OurMap,
     tiles: Tiles,
@@ -24,8 +22,7 @@ export type Wrapper = {
     ourGame: OurGame,
     mapPosition: MapPosition,
     figures: Figure[]
-}
-
+};
 export type Layers = {
     layerGround: Phaser.Tilemaps.TilemapLayer;
     layerSplit: Phaser.Tilemaps.TilemapLayer;
@@ -37,29 +34,24 @@ export type Layers = {
     layerPunishment: Phaser.Tilemaps.TilemapLayer;
     layerFragezeichen: Phaser.Tilemaps.TilemapLayer;
 };
-
 export type OurMap = {
     map: Phaser.Tilemaps.Tilemap;
     layers: Layers;
 };
-
 export type MapPosition = {
     mapPosX: number;
     mapPosY: number;
 };
-
 export type Figures = {
     figureInitCount: number;
     figureList: Figure[];
 };
-
 export type Tiles = {
     tilesList: TilePiece[];
     queenFieldIndicator: Phaser.GameObjects.Image;
     goalTile: TilePiece;
     animatedTiles: AnimatedTile[];
 };
-
 export type OurGame = {
     score: number;
     scoreText: Phaser.GameObjects.Text;
