@@ -5,7 +5,7 @@ export class Figure{
     public x: number;
     public y: number;
     public isQueen: boolean;
-    public image: Phaser.GameObjects.Image;
+    public image!: Phaser.GameObjects.Image;
 
     constructor(x: number, y: number, isQueen:boolean){
         this.x = x;
