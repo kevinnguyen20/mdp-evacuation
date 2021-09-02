@@ -57,6 +57,7 @@ export class TileParser {
         if(tileID === 153) return TileParser.DIRECTION[1]; //gruen  rechts
         if(tileID === 150) return TileParser.DIRECTION[2]; //weiS   unten
         if(tileID === 166) return TileParser.DIRECTION[3]; //rot    links
+        return 0;
     }
 
     /**
