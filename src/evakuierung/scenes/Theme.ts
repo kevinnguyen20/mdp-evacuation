@@ -1,16 +1,13 @@
 export class Theme extends Phaser.Scene{
-    public i ;
-    public hsv;
-    public text1;
+    public i;
     constructor() {
         super({
             key: "Theme"
         });
         this.i = 0;
-
     }
+
     preload(): void{
-        
         this.load.image('bg', ['assets/sprites/theme/rock-ore.jpg', 'assets/sprites/theme/rock-ore-n.jpg']);
         this.load.image('particle', 'assets/sprites/yellow.png');
         this.load.image('returnMainMenuButton', './assets/sprites/returnMainMenu.png');
@@ -19,8 +16,8 @@ export class Theme extends Phaser.Scene{
         this.load.image('alienBlue1', 'assets/sprites/alien_blue_1.png');
         this.load.image('alienBlue2', 'assets/sprites/alien_blue_2.png');
         this.load.image('alienPurple', 'assets/sprites/alien_purple.png');
-        // for the buttons
 
+        // for the buttons
         this.load.image('play_button','./assets/sprites/theme/play_button.png');
         this.load.image('levels_button', './assets/sprites/theme/levels_button.png')
         this.load.image('level1_button','./assets/sprites/theme/level1_button.png');
@@ -45,11 +42,9 @@ export class Theme extends Phaser.Scene{
 
         this.load.image('blueFlare', 'assets/sprites/theme/blue-flare.png');
         this.load.image('whiteFlare', 'assets/sprites/theme/white-flare.png');
-
-
     }
-    create(): void{
 
+    create(): void{
         const hoversprite = this.add.sprite(this.game.renderer.width/2-(220) , this.game.renderer.height/2-200,'alien');
         hoversprite.setScale(2);
         hoversprite.setDepth(0.9);
@@ -74,28 +69,21 @@ export class Theme extends Phaser.Scene{
         // spotlight per click
         const spotlight = this.lights.addLight(400, 300, 280).setIntensity(3);
 
-        this.input.on('pointermove', function (pointer) {
-
+        this.input.on('pointermove', function (pointer: {x: number; y: number}) {
             spotlight.x = pointer.x;
             spotlight.y = pointer.y;
-    
         });
         const colors = [
             0xffffff, 0xff0000, 0x00ff00, 0x00ffff, 0xff00ff, 0xffff00
         ];
         let currentColor = 0;
 
-        this.input.on('pointerdown', function (pointer) {
-
+        this.input.on('pointerdown', function () {
             currentColor++;
-    
             if (currentColor === colors.length)
-            {
                 currentColor = 0;
-            }
     
             spotlight.setColor(colors[currentColor]);
-    
         });
 
         // flare feature
@@ -115,7 +103,6 @@ export class Theme extends Phaser.Scene{
         const flare2 = this.add.image(-400,  this.game.renderer.height/2-250, 'blueFlare').setBlendMode('difference').setDepth(2);
         
         emitter.startFollow(flare1);
-
         this.tweens.add({
             targets: [ flare1,flare2 ],
             x: 2000,
@@ -124,10 +111,7 @@ export class Theme extends Phaser.Scene{
             repeat: -1
         });
 
-
         // difficulty feature
-
-
         let diff = 30;
 
         const playButton = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2 - 90,'play_button');
@@ -152,7 +136,6 @@ export class Theme extends Phaser.Scene{
         levelButton.on('pointerout', function(){ levelButton.setScale(1, 1)});
 
         // background music
-
         const backgroundMusic = this.sound.add('berghain');
         const musicConfig = {
             mute: false,
@@ -249,13 +232,8 @@ export class Theme extends Phaser.Scene{
             hard.setVisible(false);
             difficultytxt.setText('Current difficulty: hard')
         });
- 
-       
- 
-
 
         // back to main menu 
-
         const backButton = this.add.image(this.game.renderer.width/2-250, this.game.renderer.height/2+250,'returnMainMenuButton');
         backButton.setInteractive();
         backButton.on("pointerdown",()=>{
@@ -263,9 +241,5 @@ export class Theme extends Phaser.Scene{
         });
         backButton.on('pointerover', function(){backButton.setScale(0.85, 0.85);});
         backButton.on('pointerout', function(){backButton.setScale(1, 1);});
-
-
     }
-
-
 }

@@ -1,18 +1,16 @@
 import { TileParser } from "../util/tileParser";
-import { TilePiece } from "../util/tilePiece";
 import { Figure } from "../util/figure"
-import { AnimatedTile } from "../util/animatedTile";
 
 import { Figures, LevelFunctionsUpgraded, MapPosition, OurGame, OurMap, Tiles } from "../util/LevelFunctionsUpgraded";
 import { RestartButton } from "../util/RestartButton";
 import { OurMovement } from "../util/OurMovement";
 
 export class level3 extends Phaser.Scene {
-    private ourGame: OurGame;
-    private mapPosition: MapPosition;
-    private tiles: Tiles;
-    private figures: Figures;
-    private ourMap: OurMap;
+    private ourGame!: OurGame;
+    private mapPosition!: MapPosition;
+    private tiles!: Tiles;
+    private figures!: Figures;
+    private ourMap!: OurMap;
 
     private score = 0;
     private winCondition = 8;   
@@ -56,7 +54,7 @@ export class level3 extends Phaser.Scene {
         this.load.audio('theme3', './assets/sprites/Auferstanden aus Ruinen National Anthem of the German Democratic Republic English Lyrics.mp3');
     }
 
-    init(data): void {
+    init(data: { diff: number; }): void {
         this.data.set('playerScore', 0);
         this.data.set('playerWinningScore', 8);
         this.diff = data.diff;

@@ -4,11 +4,9 @@ export class MainMenu extends Phaser.Scene{
         super({
             key: "MainMenu"
         });
-        
-
     }
+
     preload(): void{
-        
         this.load.image('bg', ['assets/sprites/theme/rock-ore.jpg', 'assets/sprites/theme/rock-ore-n.jpg']);
         this.load.image('particle', 'assets/sprites/yellow.png');
         this.load.image('returnMainMenuButton', './assets/sprites/returnMainMenu.png');
@@ -17,8 +15,8 @@ export class MainMenu extends Phaser.Scene{
         this.load.image('alienBlue1', 'assets/sprites/alien_blue_1.png');
         this.load.image('alienBlue2', 'assets/sprites/alien_blue_2.png');
         this.load.image('alienPurple', 'assets/sprites/alien_purple.png');
+        
         // for the buttons
-
         this.load.image('play_button','./assets/sprites/theme/play_button.png');
         this.load.image('levels_button', './assets/sprites/theme/levels_button.png')
         this.load.image('level1_button','./assets/sprites/theme/level1_button.png');
@@ -30,9 +28,7 @@ export class MainMenu extends Phaser.Scene{
         this.load.image('hard', './assets/sprites/theme/hard_button.png');
         this.load.image('help_button', './assets/sprites/theme/help_button.png');
 
-
         // audio and music
-
         this.load.audio('berghain', './assets/sprites/National Anthem of USSR.mp3');
         this.load.audio('gameOver', './assets/sprites/GameOver.wav');
         this.load.audio('victory', './assets/sprites/Victory.wav');
@@ -40,14 +36,11 @@ export class MainMenu extends Phaser.Scene{
         this.load.image('soundOff', './assets/sprites/soundOffBlack.png');
 
         // for the animation flares
-
         this.load.image('blueFlare', 'assets/sprites/theme/blue-flare.png');
         this.load.image('whiteFlare', 'assets/sprites/theme/white-flare.png');
-
-
     }
-    create(): void{
 
+    create(): void{
         const hoversprite = this.add.sprite(this.game.renderer.width/2-(220) , this.game.renderer.height/2-200,'alien');
         hoversprite.setScale(2);
         hoversprite.setDepth(0.9);
@@ -72,25 +65,19 @@ export class MainMenu extends Phaser.Scene{
         // spotlight per click
         const spotlight = this.lights.addLight(400, 300, 280).setIntensity(3);
 
-        this.input.on('pointermove', function (pointer) {
-
+        this.input.on('pointermove', function (pointer: {x: number; y: number}) {
             spotlight.x = pointer.x;
             spotlight.y = pointer.y;
-    
         });
         const colors = [
             0xffffff, 0xff0000, 0x00ff00, 0x00ffff, 0xff00ff, 0xffff00
         ];
         let currentColor = 0;
 
-        this.input.on('pointerdown', function (pointer) {
-
+        this.input.on('pointerdown', function () {
             currentColor++;
-    
             if (currentColor === colors.length)
-            {
                 currentColor = 0;
-            }
     
             spotlight.setColor(colors[currentColor]);
     
@@ -98,7 +85,6 @@ export class MainMenu extends Phaser.Scene{
 
         // flare feature
         const particles = this.add.particles('whiteFlare');
-
         const emitter = particles.createEmitter({
             lifespan: 1000,
             speed: { min: 100, max: 200 },
@@ -113,7 +99,6 @@ export class MainMenu extends Phaser.Scene{
         const flare2 = this.add.image(-400,  this.game.renderer.height/2-250, 'blueFlare').setBlendMode('difference').setDepth(2);
         
         emitter.startFollow(flare1);
-
         this.tweens.add({
             targets: [ flare1,flare2 ],
             x: 2000,
@@ -122,15 +107,11 @@ export class MainMenu extends Phaser.Scene{
             repeat: -1
         });
 
-
         // difficulty feature
-
-
         let diff = 30;
 
         const playButton = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2 - 90,'play_button');
         const levelButton = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2-10,'levels_button').setDepth(1);
-        
 
         // PLAY BUTTON
         playButton.setInteractive()
@@ -150,7 +131,6 @@ export class MainMenu extends Phaser.Scene{
         levelButton.on('pointerout', function(){ levelButton.setScale(1, 1)});
 
         // background music
-
         const backgroundMusic = this.sound.add('berghain');
         const musicConfig = {
             mute: false,
@@ -186,7 +166,6 @@ export class MainMenu extends Phaser.Scene{
             backgroundMusic.stop();
         });
 
-
         const difficulty = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2+250,'difficulty').setDepth(1);
         const easy = this.add.image(this.game.renderer.width/2-200, this.game.renderer.height/2+250,'easy').setDepth(1);
         const medium = this.add.image(this.game.renderer.width/2, this.game.renderer.height/2+250,'medium').setDepth(1);
@@ -195,7 +174,6 @@ export class MainMenu extends Phaser.Scene{
         medium.setVisible(false);
         hard.setVisible(false);
         const difficultytxt = this.add.text(this.game.renderer.width/2- 110, this.game.renderer.height/2+200, 'Current difficulty: easy');
-
 
         difficulty.setInteractive();
         easy.setInteractive();
@@ -247,9 +225,5 @@ export class MainMenu extends Phaser.Scene{
             hard.setVisible(false);
             difficultytxt.setText('Current difficulty: hard')
         });
- 
-
     }
-
-
 }

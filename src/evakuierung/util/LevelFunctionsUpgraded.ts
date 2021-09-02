@@ -104,7 +104,7 @@ export class LevelFunctionsUpgraded {
      * @returns the goal Tile
      */
     public static getGoalTile(tileList: TilePiece[]): TilePiece {
-        let goal = null;
+        let goal!: TilePiece;
         tileList.forEach((tile) => {
             if (tile.tileType[2] === true)
                 goal = tile;
@@ -239,7 +239,7 @@ export class LevelFunctionsUpgraded {
         const figList = fig.figureList;
         const goal = tiles.goalTile;
 
-        const arr = [];
+        const arr: number[] = [];
         let x = 0;
         figList.forEach((element) => {
             if (element.x === goal.tileCoordinates[0] && element.y === goal.tileCoordinates[1] && !element.isQueen) {
@@ -261,7 +261,7 @@ export class LevelFunctionsUpgraded {
      * @returns valid/invalid move
      */
     public static queenValidMoveCheck(xory: boolean, pos: number, map: OurMap, queen: Figure): boolean {
-        let tile: Phaser.Tilemaps.Tile = null;
+        let tile!: Phaser.Tilemaps.Tile;
         const layer = map.layers.layerGround;
 
         tile = xory ? tile = layer.getTileAtWorldXY(queen.image.x, queen.image.y + pos, true) :
