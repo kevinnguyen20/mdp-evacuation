@@ -58,7 +58,7 @@ export class OurMovement {
             
         if(!OurMovement.groupTileVisited){
             this.moveInGeneratedDirection(figure, figures, wrapper);
-            this.onSplitField(wrapper);
+            this.onSplitField(figure, wrapper);
         }
         else
             OurMovement.groupTileVisited = false;
@@ -134,7 +134,7 @@ export class OurMovement {
                 tiles.queenFieldIndicator = scene.add.image(mapPosition.mapPosX + element.x + Figure.STEP_SIZE / 2, mapPosition.mapPosY + element.y + Figure.STEP_SIZE / 2,'red').setDepth(depth);
                 if(tileAction.index == 178 && tileAction.visible){
                     tileAction.setVisible(false);
-                    OurMovement.collectAllAliens(element, tiles, ourMap, figuresList);
+                    OurMovement.collectAllAliens(element, wrapper);
                     OurMovement.groupTileVisited = true;
                 }
                 if (tiles.tilesList[(element.x + element.y * ourMap.layers.layerGround.layer.width)/32].fragezeichen){
@@ -158,25 +158,32 @@ export class OurMovement {
         if(!ourGame.gameFinished
             && TileParser.tileIDToAPIID_scifiLVL_Ground(tile.index) == TileParser.STOP_ID
             && element.isQueen) {
-
-            ourGame.scoreText.setText('Your final score: ' + ourGame.score + "!");
-            ourGame.gameFinished = true;
+            this.updateFinishedGame(wrapper);
         }
+    }
+
+    private static updateFinishedGame(wrapper: Wrapper): void {
+        const ourGame = wrapper.ourGame;
+        ourGame.scoreText.setText('Your final score: ' + ourGame.score + "!");
+        ourGame.gameFinished = true;
     }
 
     private static isCoin(wrapper: Wrapper, tileAction: Phaser.Tilemaps.Tile): void {
         const ourMap = wrapper.ourMap;
-        const ourGame = wrapper.ourGame;
         if(TileParser.tileIDToAPIID_scifiLVL_Action(tileAction.index) == TileParser.ACTIONFIELD_ID) {
             ourMap.layers.layerAction.removeTileAt(tileAction.x, tileAction.y, false, false);
-            ourGame.score += 1;
-            ourGame.scoreText.setText('Coins: ' + ourGame.score + '/3');
+            this.updateScore(wrapper);
         }
     }
 
-    private static onSplitField(
-        wrapper: Wrapper) : void{
-        const tiles: Tiles = wrapper.tiles;
+    private static updateScore(wrapper: Wrapper): void {
+        const ourGame = wrapper.ourGame;
+        ourGame.score += 1;
+        ourGame.scoreText.setText('Coins: ' + ourGame.score + '/3');
+    }
+
+    private static onSplitField(figure: Meta, wrapper: Wrapper) : void{
+        const tiles = wrapper.tiles;
 
         tiles.tilesList.forEach(tile => {
             if(tile.splitField){
@@ -184,15 +191,12 @@ export class OurMovement {
                 const num = tile.playersOnTopCounter;
                 const playersToMove = Math.floor(perc * num);
 
-                for (let i = 0; i < playersToMove; i++) {
-                    const element: Figure = tile.playerOnTopList[tile.playerOnTopList.length - 1];
-                    const figure = {
-                        coordinates: false,
-                        pos: 0
-                    };
+                for (let i=0; i<playersToMove; i++) {
+                    const index = tile.playerOnTopList.length;
+                    const element = tile.playerOnTopList[index-1];
                     const dir = tile.splitDirection;
 
-                    this.direction(figure, dir);
+                    this.updateDirection(figure, dir);
                     this.movePlayer(figure, wrapper, element);
                 }
             }
@@ -200,7 +204,7 @@ export class OurMovement {
         
     }
 
-    private static direction(figure: Meta, direction: number): void {
+    private static updateDirection(figure: Meta, direction: number): void {
         switch (direction) {
             case 0: //up
                 figure.coordinates = true;
@@ -222,17 +226,20 @@ export class OurMovement {
     }
 
 
-    private static collectAllAliens(element: Figure, tiles : Tiles, ourMap: OurMap, figures: Figure[]) : void {
+    private static collectAllAliens(element: Figure, wrapper: Wrapper) : void {
+        const figures = wrapper.figures;
         figures.forEach((fig) => {
             if(!fig.isQueen){
-                this.removeFigureFromPreviousTile(ourMap, fig, tiles);
+                this.removeFigureFromPreviousTile(wrapper, fig);
                 this.updateFigureCoordinates(fig, element);
-                this.addFiguretoNewTile(element, ourMap, tiles, fig);
+                this.addFiguretoNewTile(element, wrapper, fig);
             }
         });
     }
 
-    private static removeFigureFromPreviousTile(ourMap: OurMap, fig: Figure, tiles: Tiles): void {
+    private static removeFigureFromPreviousTile(wrapper: Wrapper, fig: Figure): void {
+        const ourMap = wrapper.ourMap;
+        const tiles = wrapper.tiles;
         const width: number = ourMap.layers.layerGround.layer.width;
         const index: number = (fig.x + fig.y * width)/32;
         
@@ -248,7 +255,9 @@ export class OurMovement {
         fig.image.y = element.image.y;
     }
 
-    private static addFiguretoNewTile(element: Figure, ourMap: OurMap, tiles: Tiles, fig: Figure): void {
+    private static addFiguretoNewTile(element: Figure, wrapper: Wrapper, fig: Figure): void {
+        const ourMap = wrapper.ourMap;
+        const tiles = wrapper.tiles;
         const width: number = ourMap.layers.layerGround.layer.width;
         const index = (element.x + element.y * width)/32;
         const targetTile = tiles.tilesList[index];
