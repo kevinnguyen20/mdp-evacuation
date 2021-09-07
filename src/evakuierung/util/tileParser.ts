@@ -1,8 +1,7 @@
+import { OurMap } from "./LevelFunctionsUpgraded";
 import { TilePiece } from "./tilePiece";
 
 export class TileParser {
-
-
     // API Codes
     public static readonly WALL_ID = 9;
     public static readonly START_ID = 10;
@@ -13,24 +12,8 @@ export class TileParser {
     public static readonly PORTAL_BLUE_ID = 13;
     public static readonly PORTAL_ORANGE_ID = 14;
     // ----- Probability -----
-    public static readonly PROBABILITY: number[] = [0,15,30,55] //TODO Repair the array
     public static readonly DIRECTION: number[] = [0,1,2,3] 
 
-
-    
-    
-    constructor() {
-        // maybe pass level informations, so we can determine the Layer in here?
-    }
-
-    // as the Tileset is the same in every Level, the TileIDs are in every Level the same
-
-    // Want to add new Tiles to map? 
-    // open Tiled, click on the Tile (down-right corner) u want to add and count +1 to the TileID
-
-    /**
-     * Use only the Ground-Layer Tiles as Input
-     */
     public static tileIDToAPIID_scifiLVL_Ground(tileID: number): number {
         if(tileID === 5 || tileID === 18 || tileID === 43)  return TileParser.WALL_ID;
         if(tileID === 1 || tileID === 2 || tileID === 15 || tileID === 16) return TileParser.START_ID;
@@ -38,9 +21,6 @@ export class TileParser {
         return -1;
     }
 
-    /**
-     * Use only the Action-Layer Tiles as Input
-     */
     public static tileIDToAPIID_scifiLVL_Action(tileID: number): number {
         if(tileID === 155 || tileID === 156|| tileID === 157|| tileID === 158|| tileID === 159|| tileID === 160) return TileParser.COIN_ID;
         if(tileID === 93) return TileParser.PORTAL_BLUE_ID;
@@ -48,10 +28,6 @@ export class TileParser {
         return -1;
     }
 
-
-    /**
-     * Use only the Direction-Layer Tiles as Input
-     */
     public static tileIDToAPIID_scifiLVL_Direction(tileID:number): number {
         if(tileID === 151) return TileParser.DIRECTION[0]; //hellblau oben
         if(tileID === 153) return TileParser.DIRECTION[1]; //gruen  rechts
@@ -60,68 +36,38 @@ export class TileParser {
         return 0;
     }
 
-    /**
-     * Split layer parser
-     * @param tileID The id of the respective tile
-     * @returns True if it is part of the split layer
-     */
     public static tileIDToAPIID_scifiLVL_Split(tileID:number): boolean {
-        if(tileID === 179 || tileID === 180 || tileID === 181 || tileID === 182 || tileID === 99) return true;
-        return false; 
+        return (tileID === 179 || tileID === 180 
+            || tileID === 181 || tileID === 182 
+            || tileID === 99);
     }
 
     public static tileIDToAPIID_scifiLVL_SplitPercentage(tileID:number): number {
-        if(tileID == 166) return 0.25; //red
-        else if(tileID == 164) return 0.4; //yellow
-        else if(tileID == 150) return 0.5; //white
-        else if(tileID == 153) return 0.8; //green
+        if(tileID === 166) return 0.25; //red
+        else if(tileID === 164) return 0.4; //yellow
+        else if(tileID === 150) return 0.5; //white
+        else if(tileID === 153) return 0.8; //green
         else return 1;
     }
 
-    /**
-     * 
-     * @param tileID ID of the Tile
-     * @returns true if punishmentTile
-     */
     public static TileIDToAPIID_scifiLVL_Punishment(tileID:number): boolean {
-        if(tileID == 169) return true;
-        else return false;
+        return tileID === 169;
     }
 
     public static TileIDToAPIID_scifiLVL_Fragezeichen(tileID:number): boolean {
-        if(tileID == 99) return true;
-        else return false;
+        return tileID === 99;
     }
 
-    /**
-     * @param layerGround groundLayer des Levels, um herauszufinden welcher Tile eine Wand, Ziel und Start ist 
-     * @returns tileTuple, access the tiles in the tileTuple with coordinates, e.g. tileTuple[x+y*tilemapwidth], 
-     *          wobei das erste Tile oben links ist, x=0 und y=0 ist oben links
-     */
-    public static tileTupleAPI (layerGround: Phaser.Tilemaps.TilemapLayer, layerAction: Phaser.Tilemaps.TilemapLayer, layerSplit: Phaser.Tilemaps.TilemapLayer, layerDirection: Phaser.Tilemaps.TilemapLayer, layerPercentage: Phaser.Tilemaps.TilemapLayer, layerPunishment: Phaser.Tilemaps.TilemapLayer, layerFragezeichen: Phaser.Tilemaps.TilemapLayer) : TilePiece[] {
+    public static tileTupleAPI (ourMap: OurMap) : TilePiece[] {
+        const layerDirection = ourMap.layers.layerDirection;
+        const layerFragezeichen = ourMap.layers.layerFragezeichen;
+        const layerAction = ourMap.layers.layerAction;
+        const layerPercentage = ourMap.layers.layerPercentage;
+        const layerPunishment = ourMap.layers.layerPunishment;
+        const layerSplit = ourMap.layers.layerSplit;
+        
         const tileTuple: TilePiece[] = [];
-       
-        layerGround.forEachTile((tile) => {
-            const index: number = this.tileIDToAPIID_scifiLVL_Ground(tile.index);
-            if(index === this.WALL_ID)
-                tileTuple.push(new TilePiece(
-                    [tile.pixelX, tile.pixelY], 
-                    [true, false, false]
-                ));
-
-            else if (index === this.STOP_ID)
-                tileTuple.push(new TilePiece(
-                    [tile.pixelX, tile.pixelY], 
-                    [false, false, true]
-                ));
-
-            else {
-                tileTuple.push(new TilePiece( //its a normal field
-                    [tile.pixelX, tile.pixelY], 
-                    [false, false, false]
-                ));
-            }
-        });
+        this.ground(ourMap, tileTuple);
 
         layerAction.forEachTile((tile) => { //check if it is an actionField
             const index: number = this.tileIDToAPIID_scifiLVL_Action(tile.index);
@@ -163,8 +109,29 @@ export class TileParser {
             tile.pixelX = tile.pixelX -2;
             tile.pixelY = tile.pixelY -2;
         })
-        
-
         return tileTuple;      
+    }
+
+    private static ground(ourMap: OurMap, tileTuple: TilePiece[]): void {
+        const layerGround = ourMap.layers.layerGround;
+        layerGround.forEachTile((tile) => {
+            const index = this.tileIDToAPIID_scifiLVL_Ground(tile.index);
+            let arr!: boolean[];
+            switch (index) {
+                case this.WALL_ID:
+                    arr = [true, false, false];
+                    break;
+                case this.STOP_ID:
+                    arr = [false, false, true];
+                    break;
+                default:
+                    arr = [false, false, false];
+                    break;
+            }
+            tileTuple.push(new TilePiece(
+                [tile.pixelX, tile.pixelY],
+                arr
+            ));
+        });
     }
 }
