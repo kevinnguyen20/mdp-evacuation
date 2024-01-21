@@ -51,7 +51,7 @@ export class level2 extends Phaser.Scene {
         this.load.image('alienBlue1', 'assets/sprites/alien_blue_1.png');
         this.load.image('alienBlue2', 'assets/sprites/alien_blue_2.png');
         this.load.image('alienPurple', 'assets/sprites/alien_purple.png');
-        this.load.audio('theme2', './assets/sprites/Arbeiterchor  Arbeiter von Wien.mp3');
+        this.load.audio('theme2', './assets/sprites/synthwavehouse.mp3');
     }
 
     init(data: { diff: number; }): void {

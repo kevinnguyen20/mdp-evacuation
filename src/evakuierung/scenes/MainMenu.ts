@@ -29,10 +29,7 @@ export class MainMenu extends Phaser.Scene{
         this.load.image('help_button', './assets/sprites/theme/help_button.png');
 
         // audio and music
-        // this.load.audio('berghain', './assets/sprites/National Anthem of USSR.mp3');
-        // this.load.audio('berghain', './assets/sprites/Grand Theft Auto 4 Theme Song.mp3');
-        // this.load.audio('berghain', './assets/sprites/Dua Lipa - Levitating.mp3');
-        this.load.audio('berghain', './assets/sprites/Panjabi MC  - Mundian To Bach Ke.mp3');
+        this.load.audio('berghain', './assets/sprites/synthwavehouse.mp3');
         this.load.audio('gameOver', './assets/sprites/GameOver.wav');
         this.load.audio('victory', './assets/sprites/Victory.wav');
         this.load.image('soundOn', './assets/sprites/soundOnBlack.png');

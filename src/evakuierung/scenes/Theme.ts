@@ -32,7 +32,7 @@ export class Theme extends Phaser.Scene{
 
         // audio and music
 
-        this.load.audio('berghain', './assets/sprites/National Anthem of USSR.mp3');
+        this.load.audio('berghain', './assets/sprites/synthwavehouse.mp3.mp3');
         this.load.audio('gameOver', './assets/sprites/GameOver.wav');
         this.load.audio('victory', './assets/sprites/Victory.wav');
         this.load.image('soundOn', './assets/sprites/soundOnBlack.png');
