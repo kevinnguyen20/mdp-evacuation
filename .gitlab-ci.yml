@@ -6,6 +6,8 @@ stages:
 build:
   stage: compile
   script:
+    - "npm install"
+    - "npm prune"
     - "npm run build"
   cache:
     key: "modysy-miniproject"
