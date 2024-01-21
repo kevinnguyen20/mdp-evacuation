@@ -1,4 +1,4 @@
-import { Tilemaps } from "phaser";
+import { Scene, Tilemaps } from "phaser";
 import { TilesetTileData } from "./animatedTile";
 import { Figure } from "./figure";
 import { TileParser } from "./tileParser";
@@ -311,135 +311,182 @@ export class LevelFunctionsUpgraded {
         });
     }
 
-    public static setupLayer(tileset: Tilemaps.Tileset, coordinates: MapPosition, tmpMap: Phaser.Tilemaps.Tilemap): Layers{
+    public static setupLayer(tileset: Tilemaps.Tileset | null, coordinates: MapPosition, tmpMap: Phaser.Tilemaps.Tilemap): Layers {
         const x = coordinates.mapPosX;
         const y = coordinates.mapPosY;
+
+        if (!tileset) {
+            return {
+                layerAction: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, ""),
+                layerDesign: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, ""),
+                layerDirection: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, ""),
+                layerFragezeichen: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, ""),
+                layerGround: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, ""),
+                layerPercentage: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, ""),
+                layerPerspective: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, ""),
+                layerPunishment: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, ""),
+                layerSplit: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, "")
+
+            }
+        } else {        
+            const tmplayerGround = tmpMap.createLayer(
+                'Ground',
+                tileset,
+                x,
+                y
+            );
+
+            const tmplayerFragezeichen = tmpMap.createLayer(
+                'Fragezeichen',
+                tileset,
+                x,
+                y
+            );
+            
+            const tmpPunishment = tmpMap.createLayer (
+                'Punishment',
+                tileset,
+                x,
+                y
+            )
+            const tmplayerSplit = tmpMap.createLayer(
+                'Split',
+                tileset,
+                x,
+                y
+
+            );
+
+            const tmplayerAction = tmpMap.createLayer(
+                'Action',
+                tileset,
+                x,
+                y
+            );
+
+            const tmplayerDesign = tmpMap.createLayer(
+                'Design',
+                tileset,
+                x,
+                y
+            );
+
+            const tmplayerPerspective = tmpMap.createLayer(
+                'Perspective',
+                tileset,
+                x,
+                y
+            );
+
+            const tmplayerDirection = tmpMap.createLayer(
+                'Direction',
+                tileset,
+                x,
+                y
+            )
+
+            if (tmplayerDirection) {
+                tmplayerDirection.setVisible(false);
+            }
+            
+            const tmplayerPercentage = tmpMap.createLayer(
+                'splitPercentage',
+                tileset,
+                x,
+                y
+            );
         
-        const tmplayerGround = tmpMap.createLayer(
-            'Ground',
-            tileset,
-            x,
-            y
-        );
+            if (tmplayerAction && tmplayerDesign && tmplayerDirection && tmplayerFragezeichen && tmplayerGround && tmplayerPercentage && tmplayerPerspective && tmplayerSplit && tmpPunishment) {
+                tmplayerFragezeichen.setDepth(10);
+                tmplayerGround.setDepth(0);
+                tmplayerSplit.setDepth(3);
+                tmplayerAction.setDepth(1);
+                tmplayerDesign.setDepth(2);
+                tmplayerPercentage.setDepth(4);
+                tmplayerPerspective.setDepth(20);
+            }
 
-        const tmplayerFragezeichen = tmpMap.createLayer(
-            'Fragezeichen',
-            tileset,
-            x,
-            y
-        );
-        
-        const tmpPunishment = tmpMap.createLayer (
-            'Punishment',
-            tileset,
-            x,
-            y
-        )
-        const tmplayerSplit = tmpMap.createLayer(
-            'Split',
-            tileset,
-            x,
-            y
+            // eslint-disable-next-line prefer-const
+            /*
+            let layers: Layers = {
+                layerGround: tmplayerGround,
+                layerProbability: tmplayerProbability,
+                layerDesign: tmplayerDesign,
+                layerAction: tmplayerAction,
+                layerPerspective: tmplayerPerspective
+            }*/
 
-        );
-
-        const tmplayerAction = tmpMap.createLayer(
-            'Action',
-            tileset,
-            x,
-            y
-        );
-
-        const tmplayerDesign = tmpMap.createLayer(
-            'Design',
-            tileset,
-            x,
-            y
-        );
-
-        const tmplayerPerspective = tmpMap.createLayer(
-            'Perspective',
-            tileset,
-            x,
-            y
-        );
-
-        const tmplayerDirection = tmpMap.createLayer(
-            'Direction',
-            tileset,
-            x,
-            y
-        )
-        tmplayerDirection.setVisible(false);
-        
-        const tmplayerPercentage = tmpMap.createLayer(
-            'splitPercentage',
-            tileset,
-            x,
-            y
-        );
-        tmplayerFragezeichen.setDepth(10);
-        tmplayerGround.setDepth(0);
-        tmplayerSplit.setDepth(3);
-        tmplayerAction.setDepth(1);
-        tmplayerDesign.setDepth(2);
-        tmplayerPercentage.setDepth(4);
-        tmplayerPerspective.setDepth(20);
-
-        // eslint-disable-next-line prefer-const
-        /*
-        let layers: Layers = {
-            layerGround: tmplayerGround,
-            layerProbability: tmplayerProbability,
-            layerDesign: tmplayerDesign,
-            layerAction: tmplayerAction,
-            layerPerspective: tmplayerPerspective
-        }*/
-
-        return {
-            layerGround: tmplayerGround,
-            layerSplit: tmplayerSplit,
-            layerDesign: tmplayerDesign,
-            layerAction: tmplayerAction,
-            layerPerspective: tmplayerPerspective,
-            layerDirection: tmplayerDirection,
-            layerPercentage: tmplayerPercentage,
-            layerPunishment: tmpPunishment,
-            layerFragezeichen: tmplayerFragezeichen
-        };
+            if (tmplayerAction && tmplayerDesign && tmplayerDirection && tmplayerFragezeichen && tmplayerGround && tmplayerPercentage && tmplayerPerspective && tmplayerSplit && tmpPunishment) {
+                return {
+                    layerGround: tmplayerGround,
+                    layerSplit: tmplayerSplit,
+                    layerDesign: tmplayerDesign,
+                    layerAction: tmplayerAction,
+                    layerPerspective: tmplayerPerspective,
+                    layerDirection: tmplayerDirection,
+                    layerPercentage: tmplayerPercentage,
+                    layerPunishment: tmpPunishment,
+                    layerFragezeichen: tmplayerFragezeichen
+                };
+            } else {
+                return {
+                    layerAction: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, ""),
+                    layerDesign: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, ""),
+                    layerDirection: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, ""),
+                    layerFragezeichen: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, ""),
+                    layerGround: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, ""),
+                    layerPercentage: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, ""),
+                    layerPerspective: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, ""),
+                    layerPunishment: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, ""),
+                    layerSplit: new Phaser.Tilemaps.TilemapLayer(new Scene, new Tilemaps.Tilemap(new Scene, new Tilemaps.MapData), 0, "")
+    
+                }
+            }
+        }
     }
 
 
-    public static activateAnimations(tileset: Tilemaps.Tileset, map: Tilemaps.Tilemap, animatedTiles: AnimatedTile[]): void {
+    public static activateAnimations(tileset: Tilemaps.Tileset | null, map: Tilemaps.Tilemap, animatedTiles: AnimatedTile[]): void {
+        if (!tileset) {
+            return;
+        }
         const tileData = tileset.tileData as TilesetTileData;
         for (const tileid in tileData) {
-            map.getLayer("Action").data.forEach(tileRow => {
-                tileRow.forEach(tile => {
-                    if (tile.index - tileset.firstgid === parseInt(tileid, 10)) {
-                        animatedTiles.push(
-                            new AnimatedTile(
-                                tile,
-                                tileData[tileid].animation,
-                                tileset.firstgid
-                            )
-                        );
-                    }
+            const actionLayer = map.getLayer("Action");
+            if (actionLayer) {
+                // map.getLayer("Action").data.forEach(tileRow => {
+                actionLayer.data.forEach(tileRow => {    
+                    tileRow.forEach(tile => {
+                        if (tile.index - tileset.firstgid === parseInt(tileid, 10)) {
+                            animatedTiles.push(
+                                new AnimatedTile(
+                                    tile,
+                                    tileData[tileid].animation,
+                                    tileset.firstgid
+                                )
+                            );
+                        }
+                    });
                 });
-            });
+            }
 
-            map.getLayer("Punishment").data.forEach(tileRow => {
-                tileRow.forEach(tile => {
-                    if (tile.index - tileset.firstgid === parseInt(tileid, 10)) {
-                        animatedTiles.push(
-                            new AnimatedTile(
-                                tile,
-                                tileData[tileid].animation,
-                                tileset.firstgid
-                            )
-                        );
-                    }
+            const punishmentLayer = map.getLayer("Punishment");
+            if (punishmentLayer) {
+                // map.getLayer("Punishment").data.forEach(tileRow => {
+                punishmentLayer.data.forEach(tileRow => {
+                    tileRow.forEach(tile => {
+                        if (tile.index - tileset.firstgid === parseInt(tileid, 10)) {
+                            animatedTiles.push(
+                                new AnimatedTile(
+                                    tile,
+                                    tileData[tileid].animation,
+                                    tileset.firstgid
+                                )
+                            );
+                        }
+                    });
                 });
-            });
+            }
 
         }
     }
@@ -556,7 +603,9 @@ export class LevelFunctionsUpgraded {
         })
 
         if (!queenAlive) {
-            scene.input.keyboard.enabled = false;
+            if (scene.input.keyboard) {
+                scene.input.keyboard.enabled = false;
+            }
             const survivorScoreText = ourGame.survivorScoreText;
             scene.game.sound.stopAll();
             const gameOver = scene.sound.add('gameOver');

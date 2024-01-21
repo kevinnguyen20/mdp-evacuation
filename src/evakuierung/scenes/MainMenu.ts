@@ -84,8 +84,17 @@ export class MainMenu extends Phaser.Scene{
         });
 
         // flare feature
-        const particles = this.add.particles('whiteFlare');
-        const emitter = particles.createEmitter({
+        // const particles = this.add.particles('whiteFlare');
+        // const emitter = particles.createEmitter({
+        //     lifespan: 1000,
+        //     speed: { min: 100, max: 200 },
+        //     angle: 240,
+        //     gravityY: 300,
+        //     rotate: { start: 0, end: 360 },
+        //     scale: { start: 0.5, end: 0 },
+        //     blendMode: 'difference'
+        // });
+        const emitter = this.add.particles(undefined, undefined, 'whiteFlare', {
             lifespan: 1000,
             speed: { min: 100, max: 200 },
             angle: 240,
@@ -98,15 +107,14 @@ export class MainMenu extends Phaser.Scene{
         const flare1 = this.add.image(-400,  this.game.renderer.height/2-250, 'whiteFlare').setBlendMode('difference').setDepth(2);
         const flare2 = this.add.image(-400,  this.game.renderer.height/2-250, 'blueFlare').setBlendMode('difference').setDepth(2);
         
-        // emitter.startFollow(flare1);
-        emitter.startFollow({ x: flare1.x, y: flare1.y });
+        emitter.startFollow(flare1);
         this.tweens.add({
             targets: [ flare1,flare2 ],
             x: 2000,
             duration: 6000,
             ease: 'Power1',
             repeat: -1
-        } as any);
+        });
 
         // difficulty feature
         let diff = 30;

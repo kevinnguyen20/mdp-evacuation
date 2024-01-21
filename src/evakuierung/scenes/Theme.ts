@@ -87,9 +87,19 @@ export class Theme extends Phaser.Scene{
         });
 
         // flare feature
-        const particles = this.add.particles('whiteFlare');
+        // const particles = this.add.particles('whiteFlare');
 
-        const emitter = particles.createEmitter({
+        // const emitter = particles.createEmitter({
+        //     lifespan: 1000,
+        //     speed: { min: 100, max: 200 },
+        //     angle: 240,
+        //     gravityY: 300,
+        //     rotate: { start: 0, end: 360 },
+        //     scale: { start: 0.5, end: 0 },
+        //     blendMode: 'difference'
+        // });
+
+        const emitter = this.add.particles(undefined, undefined, 'whiteFlare', {
             lifespan: 1000,
             speed: { min: 100, max: 200 },
             angle: 240,

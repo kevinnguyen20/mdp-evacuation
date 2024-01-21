@@ -22,7 +22,7 @@ export class HelpMenu extends Phaser.Scene{
         info.setAlign('center');
         info.setOrigin(0.5,2.5);
         info.setWordWrapWidth(720,true);
-        info.setFontSize(23);
+        info.setFontSize(18);
         info.setColor("orange");
 
         const y2 = this.game.renderer.height/2 + 50;
@@ -37,7 +37,7 @@ export class HelpMenu extends Phaser.Scene{
         infoMDP.setAlign('center');
         infoMDP.setOrigin(0.5, 0.6);
         infoMDP.setWordWrapWidth(720,true);
-        infoMDP.setFontSize(23);
+        infoMDP.setFontSize(18);
         infoMDP.setColor("yellow");
         const returnMainMenuButton = this.add.image(this.game.renderer.width/2+250,this.game.renderer.height/2+250,'returnMainMenuButton2')
         returnMainMenuButton.setInteractive();

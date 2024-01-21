@@ -62,7 +62,9 @@ export class level2 extends Phaser.Scene {
 
     create(): void {
         this.game.sound.stopAll();
-        this.input.keyboard.enabled = true;
+        if (this.input.keyboard) {
+            this.input.keyboard.enabled = true;
+        }
         this.cameras.main.setZoom(1.2,1.2);
         
         this.figureImages.push(this.textures.get('alienGreen1'));
@@ -174,61 +176,63 @@ export class level2 extends Phaser.Scene {
         LevelFunctionsUpgraded.addReturnButton(this);
         LevelFunctionsUpgraded.createPlayerCountText(this.tiles.tilesList, this.add);
         
-        this.input.keyboard.on('keydown-A', () =>{
-            if(LevelFunctionsUpgraded.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
-                if(!this.ourGame.gameFinished){
-                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'left', this.mapPosition, 3, this.diff);
-                    LevelFunctionsUpgraded.groupOnBestrafungsFeld(this.tiles.tilesList, this.figures);
-                    LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);
-                    LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
-                    this.ourGame.movesLeft--;
-                    LevelFunctionsUpgraded.checkMovesLeft(this, this.ourGame);
-                    LevelFunctionsUpgraded.queenAliveCheck(this, this.ourGame, this.figures);
+        if (this.input.keyboard) {
+            this.input.keyboard.on('keydown-A', () =>{
+                if(LevelFunctionsUpgraded.queenValidMoveCheck(false, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
+                    if(!this.ourGame.gameFinished){
+                        OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'left', this.mapPosition, 3, this.diff);
+                        LevelFunctionsUpgraded.groupOnBestrafungsFeld(this.tiles.tilesList, this.figures);
+                        LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);
+                        LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
+                        this.ourGame.movesLeft--;
+                        LevelFunctionsUpgraded.checkMovesLeft(this, this.ourGame);
+                        LevelFunctionsUpgraded.queenAliveCheck(this, this.ourGame, this.figures);
+                    }
                 }
-            }
-        });
+            });
 
-        this.input.keyboard.on('keydown-D', () =>{
-            if (LevelFunctionsUpgraded.queenValidMoveCheck(false, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
-                if(!this.ourGame.gameFinished){
-                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'right', this.mapPosition, 3, this.diff);
-                    LevelFunctionsUpgraded.groupOnBestrafungsFeld(this.tiles.tilesList, this.figures);
-                    LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);
-                    LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
-                    this.ourGame.movesLeft--;
-                    LevelFunctionsUpgraded.checkMovesLeft(this, this.ourGame);
-                    LevelFunctionsUpgraded.queenAliveCheck(this, this.ourGame, this.figures);
+            this.input.keyboard.on('keydown-D', () =>{
+                if (LevelFunctionsUpgraded.queenValidMoveCheck(false, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
+                    if(!this.ourGame.gameFinished){
+                        OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'right', this.mapPosition, 3, this.diff);
+                        LevelFunctionsUpgraded.groupOnBestrafungsFeld(this.tiles.tilesList, this.figures);
+                        LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);
+                        LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
+                        this.ourGame.movesLeft--;
+                        LevelFunctionsUpgraded.checkMovesLeft(this, this.ourGame);
+                        LevelFunctionsUpgraded.queenAliveCheck(this, this.ourGame, this.figures);
+                    }
                 }
-            }
-        });
+            });
 
-        this.input.keyboard.on('keydown-S', () =>{
-            if (LevelFunctionsUpgraded.queenValidMoveCheck(true, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
-                if(!this.ourGame.gameFinished){
-                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'down', this.mapPosition, 3, this.diff);
-                    LevelFunctionsUpgraded.groupOnBestrafungsFeld(this.tiles.tilesList, this.figures);
-                    LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);
-                    LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
-                    this.ourGame.movesLeft--;
-                    LevelFunctionsUpgraded.checkMovesLeft(this, this.ourGame);
-                    LevelFunctionsUpgraded.queenAliveCheck(this, this.ourGame, this.figures);
+            this.input.keyboard.on('keydown-S', () =>{
+                if (LevelFunctionsUpgraded.queenValidMoveCheck(true, Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
+                    if(!this.ourGame.gameFinished){
+                        OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'down', this.mapPosition, 3, this.diff);
+                        LevelFunctionsUpgraded.groupOnBestrafungsFeld(this.tiles.tilesList, this.figures);
+                        LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);
+                        LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
+                        this.ourGame.movesLeft--;
+                        LevelFunctionsUpgraded.checkMovesLeft(this, this.ourGame);
+                        LevelFunctionsUpgraded.queenAliveCheck(this, this.ourGame, this.figures);
+                    }
                 }
-            }
-        });
+            });
 
-        this.input.keyboard.on('keydown-W', () =>{
-            if (LevelFunctionsUpgraded.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
-                if(!this.ourGame.gameFinished){
-                    OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'up', this.mapPosition, 3, this.diff);
-                    LevelFunctionsUpgraded.groupOnBestrafungsFeld(this.tiles.tilesList, this.figures);
-                    LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);
-                    LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
-                    this.ourGame.movesLeft--;
-                    LevelFunctionsUpgraded.checkMovesLeft(this, this.ourGame);
-                    LevelFunctionsUpgraded.queenAliveCheck(this, this.ourGame, this.figures);
+            this.input.keyboard.on('keydown-W', () =>{
+                if (LevelFunctionsUpgraded.queenValidMoveCheck(true, -Figure.STEP_SIZE, this.ourMap, this.figures.figureList[0])){
+                    if(!this.ourGame.gameFinished){
+                        OurMovement.doMove(this.ourGame, this.figures, this.tiles, this.ourMap, this, 'up', this.mapPosition, 3, this.diff);
+                        LevelFunctionsUpgraded.groupOnBestrafungsFeld(this.tiles.tilesList, this.figures);
+                        LevelFunctionsUpgraded.updatePlayerCountText(this.tiles.tilesList);
+                        LevelFunctionsUpgraded.visualizePlayerCount(this.tiles.tilesList, this.figureImages, this);
+                        this.ourGame.movesLeft--;
+                        LevelFunctionsUpgraded.checkMovesLeft(this, this.ourGame);
+                        LevelFunctionsUpgraded.queenAliveCheck(this, this.ourGame, this.figures);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
 

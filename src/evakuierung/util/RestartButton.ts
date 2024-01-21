@@ -5,7 +5,9 @@ export class RestartButton {
         restartButton.setInteractive();
         restartButton.on('pointerup', () => {
             scene.game.sound.stopAll();
-            scene.input.keyboard.enabled = true;
+            if (scene.input.keyboard) {
+                scene.input.keyboard.enabled = true;
+            }
             ourGame.gameFinished = false;
             ourGame.score = 0;
             if(scene.scene.key === 'level1'){
