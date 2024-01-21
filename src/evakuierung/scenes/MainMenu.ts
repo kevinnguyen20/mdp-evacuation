@@ -98,14 +98,15 @@ export class MainMenu extends Phaser.Scene{
         const flare1 = this.add.image(-400,  this.game.renderer.height/2-250, 'whiteFlare').setBlendMode('difference').setDepth(2);
         const flare2 = this.add.image(-400,  this.game.renderer.height/2-250, 'blueFlare').setBlendMode('difference').setDepth(2);
         
-        emitter.startFollow(flare1);
+        // emitter.startFollow(flare1);
+        emitter.startFollow({ x: flare1.x, y: flare1.y });
         this.tweens.add({
             targets: [ flare1,flare2 ],
             x: 2000,
             duration: 6000,
             ease: 'Power1',
             repeat: -1
-        });
+        } as any);
 
         // difficulty feature
         let diff = 30;
