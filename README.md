@@ -24,3 +24,5 @@ While in one particular state, the player can change the state by performing a c
 *   Phil Neujahr - Dev 
 *   Krutarth Parwal - Dev
 *   Dennis Korolevych - Scrum Master
+
+Click [here](https://pr.mtv.tu-berlin.de/modysy-2021sose/markov-decision-processes-2/master/) to play the game!
